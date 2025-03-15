@@ -1,0 +1,339 @@
+# Missing data and multiple imputation
+Most of our datasets so far were a blessing to have. Sure, we sometimes had to clean, transform, and process our data but we were relatively spared of one common inconvenience, missing data. While you could simply ignore that some of your values are missing, this ignorance could potentially introduce some bias in your estimates and lead to reduced statistical power. In this part. 
+
+  1. **I briefly discuss what we could consider when confronted with missing data**.
+  2. **I will shortly show how to inspect missing values. Specifically, how much data is missing, what variables may relate to missing values in another variable (plotting these patterns using the [VIM package](https://cran.r-project.org/web/packages/VIM/index.html)), and the patterns of missingness: Missing Completely at Random, Missing at Random, and Missing Not at Random.** 
+  3. **Finally, I introduce the multiple imputation procedure and use and demonstrate the** [mice package](https://cran.r-project.org/web/packages/mice/index.html), step-by-step.
+
+## Missing data
+
+### Listwise deletion and single (mean) imputation
+Let it be known, the best way to handle missing data is to put efforts into avoiding it in the first place. That being said, perhaps the easiest option to deal with missing values, is to exclude incomplete cases (**listwise deletion**). For example.
+```{r message=FALSE, warning=FALSE}
+mydata = data.frame(x = c(1,2,NA,3,4,5),
+                    y = c(NA,2,3,NA,4,5)
+                    )
+
+mydata_no_NA = mydata[complete.cases(mydata), ] # To apply listwise deletion
+head(mydata_no_NA)
+```
+
+**However**, depending on the number of excluded cases, **the statistical power may drop notably**. Moreover, it could create **additional inconveniences** such as **unbalanced designs** (e.g., notably more participants in one group compared to others) and bias in your estimated outcomes including **inflation of standard errors**.
+
+In short, listwise deletion **could be ill-advised sometimes**. Alternatively we can also start thinking about **filling in the empty values** but here we are confronted with two questions. **First**, if we start filling in empty values, what would be the amount of missing data where, if we would consider to do so, becomes *unacceptable*? This is a question of ongoing debate, hence my suggestion would be to look up simulation studies or related work. **Second**, if we impute our data we need to decide with what we fill in our missing values. 
+
+One intuitive candidate would be the variable's mean. **However, if we simply use the mean, we fill in the gaps with something uninformative**. In addition, remember that to compute the variance, we divide differences between values and the mean by the amount of complete cases. Therefore, we end up underestimating to a certain extent our standard errors.   
+
+To deal with this issue, we can **fill in the empty values with multiple plausible values** instead of one and the same. This is where **multiple imputation comes into view**.
+
+## Multiple imputation
+In **Multiple imputation**, missing values will be imputed (i.e., filled in) across multiple simulated and complete datasets. From there we can pool the results and inspect the extent of overlap in each simulated dataset. This in itself **sounds straightforward but various aspects should be considered**. I will guide you through step-by-step. Let's assume we have the following data with missing values in two predictors and an outcome. Off note, **missing values in predictor variables will be imputed and these imputed values will be used in later analyses** (see later on) by the mice() function. **Missing values in the outcome will also be imputed by the mice() function but these will not be used in later analyses**. Note that I also created a variable named *auxiliary*, its relevance will become clear later on. 
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+set.seed(902)
+# Create the dataset
+n = 500
+predictor1 = rnorm(n)
+predictor2 = rnorm(n)
+auxiliary = rnorm(n)
+outcome = 0.5 * predictor1 + 0.3 * predictor2 + rnorm(n)
+mydata = data.frame(outcome, predictor1, predictor2, auxiliary)
+
+# Now, introduce missing values based on the variable  "auxiliary" (so that the absence of values correlates to this "auxiliary" variable, as explained later on)
+# Below I applied my own rule, predictors and outcomes are set NA based on the value of "auxiliary" (based on the quantile of its values)
+
+mydata = mydata %>% mutate(
+  across(c("predictor1","predictor2"),
+         ~ ifelse(auxiliary < quantile(auxiliary, 0.25), NA, .)  
+         ),
+  outcome = ifelse(auxiliary < quantile(auxiliary, 0.10), NA, outcome)
+)
+head(mydata)
+```
+
+### before mice: Check missing values
+**Alright, before we begin with the mice function()**, it is always a good idea to check how much missing values we have. Here we can ask questions like how many missing values we have per variable of interest and whether missing values in one variable are related to other variables. For my missing value checking needs, I like to use the aggr() function from the **VIM package**.
+```{r message=FALSE, warning=FALSE}
+library(VIM)
+aggr(mydata, col = c('red', 'green'), # Colored this way so that red will represent the missing values and green the present ones in the right side of the plot
+     numbers = TRUE,
+     sortVars = TRUE,
+     labels = names(mydata),
+     cex.axis = 0.7,
+     gap = 3,
+     ylab = c("Proportion of missing values", "Missingness Pattern")
+)
+```
+
+On the left side of the plot you see the proportion of missing data but I imagine the right side requires more explanation.
+The vertical axis shows the frequency of each missing pattern. So we can distinguish three patterns in our case. The most common one (75%) is when all values are present (they are all colored green). The next pattern (15%) is that there is missing values in both predictor1 and predictor2 (they are colored red) but not in the outcome and auxiliary variable. Finally, in 10% of the cases, there are missing values in all but the auxiliary variable. Altogether, the patterns suggests that the occurrence of missing values clusters around the auxiliary variable (it is always present). **If missing values are related to measured ("observed") variables, just like in our case, we can take it as an indication of Missing at Random (MAR).** 
+
+#### before mice: Missing (Not) (Completely) at Random
+The MAR pattern we encounter in our plot is one of the three **forms of missingness** and **multiple imputations assumes that the data are missing either completely at random (MCAR) or at least at random (MAR)**. However, if the missing pattern would be **Missing Not at Random**, we may run into trouble. We describe the pattern of missingness as MNAR if missing values are notably related to a variable that we did not measure (unobserved, outside our dataset). If we run mice with MNAR, we may end up with biased outcomes. 
+
+**So you may be wondering, how do we know what type of missingness we have?** Let's start with MCAR, one of the most common ways to test for this type of missingness is to use **Little's MCAR test**. This can be done using the mcar_test() function from the [naniar](https://search.r-project.org/CRAN/refmans/naniar/html/mcar_test.html) package. If the test is **not significant** based on the provided *p* value, it would suggest that the data could be MCAR.
+```{r}
+library(naniar)
+mcar_test(mydata)
+```
+
+Since the test is significant, the test suggests either MAR or MNAR. **However**, regardless of the outcome, I would advise some caution when interpreting this test. MCAR is unlikely in most cases because missingness is typically related to variables. Also, like many other tests, Little’s MCAR test can be sensitive to sample size as in larger samples, p values are more likely to drop below 0.05.
+
+Therefore, in most cases, it comes down to either MNAR and MAR. To decide whether the pattern of missingess is MAR or MNAR, we can **visualize and inspect patterns** in missing values like what we before using the VIM package. **In addition**, You could consider to fit logistic regression models in which missing values in a given variable are predicted by another variable. For example, say we want to test whether the occurrence of missing values (yes or no) in predictor1 is predicted by the predictor2.
+```{r}
+# For demonstration purpose I temporarily make a binomial variable that indicates whether the value of predictor1 is missing or not
+temp_mydata = mydata %>% mutate(missing_predictor1 = ifelse(is.na(predictor1),1,0))
+
+# Fit the logistic regression
+options(scipen=999)
+summary(
+ glm(missing_predictor1 ~ predictor2, family = "binomial", data=temp_mydata) 
+)
+```
+
+However, note that you test for a *linear corelation*, so you might miss out on other forms of association. 
+
+### mice decissions: joint modeling versus fully conditional specification
+We determined that the *pattern of missingness* is (likely) MAR and that multiple imputation would be deemed an adequate procedure given the number of missing values. 
+
+A next decision is to decide which imputation method to take. In multiple imputation, we have **joint modeling** which assumes a multivariate distribution of all variables to be used to sample the missing values. In practice, missing values are most commonly sampled from a multivariate **normal** distribution. However, since categorical variable do not follow a multivariate normal distribution, you **might consider not to go with joint modeling when your data is a mix of categorical and continuous variables**. **Instead, if you do have a mix, the second option of fully conditional specification (FCS) might be preferred**. In short, FCS specifies a regression model in which missing values are predicted by taking the other variables from your dataset as predictors. This missing value procedure is repeated until convergence. 
+
+**The mice package uses FCS** and you have to resort to other packages such as [Amelia](https://cran.r-project.org/web/packages/Amelia/index.html) (which assumes **multivariate normality**) if you want to perform joint modelling. The focus of this part is on the mice package given its common use and flexibility, and hence I will go with FCS. 
+
+### mice decisions: number of imputations
+A final decision before I put everything into practice: the number of imputed datasets. To my knowledge, there are no strict rules regarding this number. What sometimes is considered to take the percentage of missingness in your dataset as the number of imputation. For example, if you would have **across all your variables of interest** a total of 35% missing data, you could consider to use 35 imputations. **However, this does not guarantee that this number will lead to stable results**. My advice is that you can consider this rule to decide the number. After you ran the mice, you could then repeat and check whether the obtained results are similar if you would increase the number of imputations. I will consider this in the practical example. 
+
+### Practical example
+The mice() function will ask for a *couple of ingredients*. First we will need to define **a predictor matrix**. In the predictor matrix you want to specify the variables you want to include as predictors for the missing values. With our dataset provided at the start of section, we could use every variable. To set a predictor matrix, we can use the conveniently named **make.predictorMatrix() function** from the mice package
+```{r message=FALSE, warning=FALSE}
+library(mice)
+predictor_matrix = make.predictorMatrix(mydata)
+```
+Of note, if you would have a variable that is not at all useful as a predictor of missing values, we could have done something like: *predictor_matrix[, "the variable you do not want to use as a predictor"] = 0*
+
+Next, mice will ask what imputation method to use per variable in your dataset. This will follow the same order as the variables in the dataset so in our case: *outcome, predictor1, predictor2, and auxiliary*. As imputation method we can choose between various options including **"pmm"** (predictive mean matching for **numerical variables**), **"logreg"** (logistic regression; for **binary variables**), **"polreg"** (polytomous regression for **unordered factor variables having three levels or more**), **"polyr"** ("proportional odds models for **ordered factors having three levels or more**). In addition, you can use **""** for variables that have no missing values. [A full overview is provided here (click here)](https://search.r-project.org/CRAN/refmans/mice/html/mice.html). 
+
+All variables are numerical in our example, and therefore I could use the "pmm" method for each variable
+```{r message=FALSE, warning=FALSE}
+imputation_method = c("pmm", #outcome
+                      "pmm", # predictor1
+                      "pmm", # predictor2
+                      "" # auxiliary which does not have missing values
+                      )
+```
+
+Next, we have to decide on the number of imputed datasets. As I said before there are no strict rules. **We could start with 25 imputation** as we have 25% of missing values in total (25% in both predictor1 and predictor2, 10% in the outcome, and 0% in the auxiliary variable). Later on, I will inspect whether results change notably when setting a higher number of imputations.
+```{r message=FALSE, warning=FALSE}
+n_imputations = 25
+```
+
+Alright, let's run the mice() function using the above ingredients. Note that you could also set a seed.
+```{r message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, results="hide"}
+mice_data = mice(
+  data = mydata,
+  m = n_imputations,
+  seed = 97531,
+  predictorMatrix = predictor_matrix
+)
+```
+
+Our original as well as 25 imputed complete datasets, are now stored in a special type of container so to speaks, a **mids object**. 
+
+Before we conduct further analysis with our imputed datasets, we should check the convergence of the imputation algorithm. Convergence can be visualized in the following way: for each iteration (i.e., times the imputation algorithm created an imputed dataset), you note down the mean and the standard deviation of the imputed variables. For this purpose, we could use something simple like the plot() function
+```{r message=FALSE, warning=FALSE}
+plot(mice_data)
+```
+
+To conclude whether or not the imputation algorithm converged, we can focus on the line overlap and whether they show a similar extent of variability. Additionally, I will also look whether the range of the mean and standard deviation of the imputed variables resembles that of the mean/standard deviation of the observed variables. Let's quickly check the observed means and standard deviations.
+```{r message=FALSE, warning=FALSE}
+library(psych)
+describe(mydata[,c("outcome", "predictor1", "predictor2")])[c("mean","sd")]
+```
+
+Ok, let us also inspect our plot. the lines show some overlap, the variability (the range in mean and standard deviation) seems not to be "large". The lines "zigzag" as expected and do not appear to follow a pattern (e.g., a strong decrease or increase with increasing number of iteration), which is good. Comparing the observed means/standard deviations with that of imputed values, all look ok except for the mean of the outcome which is  -0.08 while the range in the mean of the imputed values are -0.5 to 0.4. **This is not necessarily a "bad" thing as it could be that the imputations reduced some bias that we would otherwise have in the observed mean (since listwise deletion was applied to get its average)**. 
+For now I don't see notable indications for non-convergence. **Later on I will repeat the mice procedure with different seeds to see if results are similar**. **Next to the mean and standard deviations**, we should also zoom in on **the distribution** of the imputed values compared to the observed ones. Here we could the densityplot() function and. Since I want to three distributions (outcome, predictor1, predictor2), I will use the plot_grid() function from the cowplot package to combine the density plots into one. 
+```{r message=FALSE, warning=FALSE}
+library(cowplot)
+cowplot::plot_grid( densityplot(mice_data, ~outcome),
+                    densityplot(mice_data, ~predictor1),
+                    densityplot(mice_data, ~predictor2),
+                    ncol=2, nrow=2)
+
+```
+
+Overall, I will deem it "acceptable". The outcome variable shows the least overlap between the observed and imputed distribution, as expected based on mean, but it does not seem problematic based on visual inspection. **Again**, there can be some differences between the imputed and observed variables without providing any problem.
+
+#### Pooling the results 
+We are finally ready to run our analysis model. **At least, in our case as we intend to run a general linear regression model.** **However**, if you would use other types of regression models such as logistic regression, you would need to remove any NA in the outcome as the model cannot handle NA's directly.
+
+**If you would intend to run a model that cannot handle missing values in the outcome**, you need to **"open" your mice mids object** to reveal the dataset containing the original and imputed data. Then you would need to **remove instances were the outcome is missing**. Finally you would need to **transform the dataset back to a mids object**. For the purpose of "opening" the original mids object, you can use the **complete() function** from the mice package. For illustration purposes it would look something like this. **Note that I will not run the code below as I intend to use general linear regression.**
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+library(mice)
+
+# Open the mids object
+mice_data_long = complete(mice_data, action = "long", include = TRUE)
+
+# Remove NA in the OUTCOME variable (here "outcome")
+library(dplyr)
+mice_data_long = mice_data_long %>% filter(!is.na(outcome))
+
+# Transform back to a mids object
+mice_data = as.mids(mice_data_long)
+```
+
+**Back to our case where we do not need to remove the missing values in the outcomes**. We now have to specify our imputation model and this should be as similar to the analysis model that you had in mind. If you want to add quadratic terms in your analysis model then you also have to include them in your imputation model. Here, I want to fit the following model:
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+lm(outcome ~ predictor1 * predictor2, data = mydata)
+```
+
+**Therefore**,our imputation should have **at least** the main effects of predictor1 and predictor2, and their interaction effect, on the same outcome. **Important to note, the imputation model is allowed to have extra variables and this is the moment where I finally spoil the purpose of my auxiliary variable**. **Auxiliary variables are usually not of interest** for your analysis per se **but these variables may relate to missingness and missing variables.** Therefore they may aid to approximate more the assumption of MAR. You could especially **consider to add auxiliary variables when** your *pattern of missingness* resembles more the **missing not at random state**. Of course, later on, you could always run mice with and without auxiliary variables to check whether results remain similar. **In our example I will add the auxiliary variable to my imputation model**. 
+```{r message=FALSE, warning=FALSE}
+my_mice_model = with(mice_data, 
+     lm( outcome ~ predictor1 * predictor2 + auxiliary )) # we have to use "with" since mice_data is a mids object
+
+summary(my_mice_model)
+```
+
+Now we can pool together the results
+```{r message=FALSE, warning=FALSE}
+pooled_estimates = pool(my_mice_model)
+```
+
+To deliver the finishing touches, I will put the above results in a separate dataset and compute the lower and upper bounds of the 95% confidence intervals of the estimated pooled coefficients.
+```{r message=FALSE, warning=FALSE}
+pooled_results = data.frame(
+  summary(pooled_estimates)     
+                              ) %>%
+  mutate(CI_lower =  estimate - 1.96*(sqrt(pooled_estimates$pooled$ubar)),
+         CI_upper = estimate + 1.96*(sqrt(pooled_estimates$pooled$ubar)))
+```
+
+**Now we can check whether the above pooled results resemble those we would obtain without multiple imputation.**
+```{r message=FALSE, warning=FALSE}
+mymodel_no_mice = lm( outcome ~ predictor1 * predictor2 + auxiliary ) # The model with automatically drop missing values so we do not need to do it ourselves
+
+data.frame(
+estimate = mymodel_no_mice$coefficients,
+std.error = summary(mymodel_no_mice)$coefficients[, "Std. Error"],
+statistic = summary(mymodel_no_mice)$coefficients[, "t value"],
+p.value = summary(mymodel_no_mice)$coefficients[, "Pr(>|t|)"],
+CI_lower = confint(mymodel_no_mice)[,1],
+CI_upper = confint(mymodel_no_mice)[,2]
+)
+```
+
+Overall, they look notably similar. If this was not the case, we could have to rethink every decision made up till this point. And there you have it, our outcome, obtained with **our specific seed of 97531.** 
+
+**Now it is best to check whether our outcomes remain relatively robust across different runs of mice**
+
+#### Checking the robustness of the results
+Like me, you may start wondering about **at least two questions**. What is **the extend of similarity in our results** if we used different seeds? Also, would we get different results if we would **increase the number of iterations** (here above 25)? Essentially, it falls down to rerunning our mice procedure a given number of times. 
+
+**Concerning the extent of similarity in our results**, we could use a set of different seeds **or** we could remove the seeds altogether. In the example below, I will remove the seed and (for) loop through 100 runs of the mice procedure (in practice, try a higher value such as 500 or more), and store the results (as a data frame object) in a so called list variable.
+```{r message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, results="hide"}
+# To store the results of the imputed datasets and to determine the number of runs
+container_results=list()
+n_runs = 100 # In practice, try larger values (e.g., above 500)
+
+for(i in 1:n_runs){
+  
+# Run the mice but without a seed  
+mice_data = mice(
+  data = mydata,
+  m = n_imputations,
+  predictorMatrix = predictor_matrix,
+)
+  
+
+# Fit the imputation models (Again, depending on your model, remove NA in the outcome first!)
+my_mice_model = with(mice_data, 
+                     lm( outcome ~ predictor1 * predictor2 + auxiliary )
+                     )
+
+
+pooled_estimates = pool(my_mice_model)
+
+# Here instead in "pooled_results" like I did before, I will store the each dataset object to my outcome_container
+container_results[[i]] =
+       data.frame(
+         summary(pooled_estimates)     
+       ) %>%
+         mutate(CI_lower =  estimate - 1.96*(sqrt(pooled_estimates$pooled$ubar)),
+                CI_upper = estimate + 1.96*(sqrt(pooled_estimates$pooled$ubar)))
+}
+```
+
+Good, now I can retrieve each estimate per dataset, per run, that is stored in my list, and simply plot them. 
+```{r message=FALSE, warning=FALSE}
+# Combine all data frames in the list into one data frame
+pooled_estimates_across_runs = bind_rows(container_results, .id = "run")
+
+# Plot the estimates across datasets
+library(ggplot2)
+library(plotly)
+
+ggplotly(
+pooled_estimates_across_runs %>% ggplot(aes(y=estimate, x = term, color=term)) +
+  geom_point() + xlab("") +
+  theme(axis.text.x  = element_blank() )
+)
+```
+
+There is a bit of variation in the estimations but all could be deemed robust. Of course, feel free to check other aspects such as the similarity in confidence intervals, and so on.
+
+**Regarding the second question, about the number of iterations**, we started with 25 iterations as as there was on average 25% of missing values in our dataset (a common but not very strict rule). We could increase the amount of iterations.
+
+In the example below, I set the seed back to the original value of 97531 and I will loop through six different numbers of iterations (i.e., the original 25, 30, 35, 40, 45, and 50). As before I will save the results to a list object and plot the estimates across datasets. The code is mostly similar to the one above but note that I now loop across the the numbers of iterations. Additionally, I made a variable *mycount* which will be used within the (for) loop to store each imputed "outcome dataset". 
+```{r message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, results="hide"}
+# To store the results of the imputed datasets and to determine the number of runs
+container_results=list()
+n_imputations = c(25, 30, 35, 40, 45, 50) 
+mycount = 1 # since the for loop does not loop anymore through the values 1,2,3,... this will be used to store the "outcome datasets" at the end of the loop
+
+
+for(i in seq_along(n_imputations)){
+  
+# Put the seed back to the original (if you want to report results based on this specific seed)
+mice_data = mice(
+  data = mydata,
+  m = n_imputations[i], # On the first run this will be 25, on the second, 30, and so on.
+  seed = 97531,
+  predictorMatrix = predictor_matrix,
+)
+  
+
+# Fit the imputation models (Again, depending on your model, remove NA in the outcome first!)
+my_mice_model = with(mice_data, 
+                     lm( outcome ~ predictor1 * predictor2 + auxiliary )
+                     )
+
+
+pooled_estimates = pool(my_mice_model)
+
+
+container_results[[mycount]] =
+       data.frame(
+         summary(pooled_estimates)     
+       ) %>%
+         mutate(CI_lower =  estimate - 1.96*(sqrt(pooled_estimates$pooled$ubar)),
+                CI_upper = estimate + 1.96*(sqrt(pooled_estimates$pooled$ubar)))
+
+mycount = mycount+1 # To update it so that in the next run, a new outcome dataset is stored to the list
+
+}
+```
+
+Plot it like before. 
+```{r message=FALSE, warning=FALSE}
+# Plotting the estimates
+library(ggplot2)
+library(plotly)
+
+ggplotly(
+  pooled_estimates_across_runs %>% ggplot(aes(y=estimate, x = term, color=term)) +
+    geom_point() + xlab("") +
+    theme(axis.text.x  = element_blank() )
+)
+```
+
+And there you have it. 

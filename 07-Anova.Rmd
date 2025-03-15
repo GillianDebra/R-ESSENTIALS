@@ -1,0 +1,505 @@
+# Anova
+In linear regression the goal is to "forcefully" draw a straight line (the slope) by using the full range of your continuous predictor (your whole x-axis). But what if our predictor is a categorical variable, a variable that offers only a few discrete values, two, three, or a few categories? Instead of estimating a slope, the focus shifts to comparing group means, corresponding to the levels of your categorical predictors.
+
+This part will tackle a special case of linear regression, the analysis of variance, or ANOVA for short. ANOVA tests if the group means per categorical variable (e.g., the experimental vs control condition) differ statistically from one another. ANOVA does this by comparing the variance between each group to the variance within groups, hence the name. 
+
+you can consider using ANOVA when all of your predictors are categorical and you want to see whether there exist statistically significant differences (based on *p* value) in the mean of the outcome per category. This part will all be about making contrasts, comparing groups to one another.
+
+  1. **We start with how contrasts are created to allow comparing groups.** Two common ones, **sum and treatment contrasts**, will be discussed. Along the lines, I will tell you the story of **dummy-coding**
+  2. **Then we finally conduct our first ANOVA with one factor and multiple factors**. From the **omnibus test** I will show some **post-hoc group comparisons techniques**, how to **create your own contrasts** using the **linearhypothesis() function**, and how to calculate some **effect sizes**.
+  3. **Finally, I will discuss multivariate ANOVA (MANOVA)**. You will learn how to create your own **outcome contrast matrix** to test specific "effects" and hypotheses.
+
+## Sum and Treatment Contrasts
+As I mentioned earlier, ANOVA is all about comparing groups by e.g., making contrasts between them. Knowledge about how R contrasts groups is important if we want to properly interpret the output of ANOVA and if we want to flexibly create our own contrasts and restrictions (as part of *hypothesis testing*). Before conducting a series of ANOVAs (and special types), I will first discuss two common types of contrasts: **treatment contrasts** and **sum contrasts**. **When treatment contrasts are applied to your factor or categorical variables**, **the default in R**, all of your categories will be **compared to a reference category** (i.e., shown as the intercept of your model).
+
+Say I have a dataset containing a factor variable with three categories The mean scores of these factors are 20,60, and 10, respectively. When you fit a regression model with the factor as the predictor, and you do not change the default treatment contrasts, R will take a reference category to which all other categories are contrasted to. 
+```{r message=FALSE, warning=FALSE}
+set.seed(999)
+mydata = data.frame(
+  
+  score = c( rnorm(20,20,0.001), rnorm(20,60,0.001), rnorm(20,10,0.001) ),
+  factor_variable = factor( rep(c(" A"," B", " C"   ),  each = 20 ) )
+
+  )
+
+mymodel = lm(score ~ factor_variable, data=mydata)
+```
+
+What category will be the reference? By default, R will select the reference category alphabetically or based on the lowest value **if you have unordered factors**, so it will choose category "A" here. If you want another reference category like "B", you can use the relevel() function.
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+mymodel = lm(score ~ relevel(factor_variable, ref=" B"), data = mydata)
+# Disclaimer. I will NOT run the above code. The reference category will still be "A" in the parts below
+```
+
+Now, with treatment contrasts, category "B" (with an average score of 60) will be contrasted with the reference category "A" (20). Similarly, category "C" (10) will be contrasted with factor "A". If I were to call for the coefficients, I can expect the values 20 (the reference), 40 (since factor B is, on average, 40 units higher than the reference), and - 10 (same reasoning). Let's check.
+```{r}
+round( coef(mymodel), 0)
+```
+
+You can also check how treatment contrasts handles our factor variable by running the **contrasts() function**. This can come in handy when I'll later reveal how you can create your own contrasts and restrictions to test specific group comparisons. For clarity purposes, I will discuss the output of the contrasts() function in the section: *Making your own specific hypotheses and contrasts*. 
+```{r message=FALSE, warning=FALSE}
+contrasts(mydata$factor_variable)
+```
+
+Moving on to **sum contrasts**, these will **compare (contrast) each category to the overall mean**. If you use these type of contrasts then the sum of estimated coefficients will equal zero. As I discuss later on, this type of contrasts is required when conducting **type III ANOVA**. Recall that the means of our factors are 20,60, and 10, therefore the overall mean is 30. Now, the values of our coefficients will be different compared to the (default) threatment contrasts. For starters, the first coefficient will not be the mean of factor "A" but the overall mean (i.e., 30). The second coefficient will be difference between the first category "A" and the overall mean (i.e., 20-30 = -10). The value of the third and last coefficient will be the difference between the second category "B" and the overall mean (60-30 = 30).
+
+What about the coefficient of category "C"? It is hidden but we can easily uncover it. According to sum contrasts, the coefficient for the remaining category ("C") is the value that makes the sum of the estimated coefficients (i.e., -10 and 30), zero. In other words you get the following equation: -10 + 30 + *coefficient for factor "C"* = 0. Just to be clear, the value of coefficient "C" is -20.
+
+All is good and well but how do we set sum contrasts? We can change contrasts both "locally" (per individual variable) and "globally" (for all variables at once). **Note that you set contrasts before you fit your regression models**. 
+```{r message=FALSE, warning=FALSE}
+# "Locally" setting contrasts per variable
+contrasts(mydata$factor_variable) = contr.sum(3) # 3 since we this variable has three levels/categories
+
+# "Globally" setting contrasts that will apply to all variables
+options(contrasts = c("contr.sum", "contr.sum"))
+  # the first "contr.sum" applies it to categorical variables
+  # the second "contr.sum" applies it to ordered factor variables (ordered() instead of factor() )
+```
+
+Now you may be wondering, what contrasts to use? Without making your own custom contrasts (which is also a possibility), in my experience, the default treatment contrasts are fine and intuitive to interpret. **However**, as I will bring up later, if you want to **test interaction effects**, you might want to consider to set sum contrasts (when thinking about using a type III ANOVA).
+
+### Dummy-coding 
+One small thing, you may have heard about dummy coding or that you need to dummy-code your variables. There might a bit of confusing surrounding this topic, so let me clarify. **Dummy coding** is often deemed synonymous with the aforementioned **treatment contrasts**. **Technically, however, dummy coding can refer to any contrasts that use non-negative binary values**. Other contrasts such as sum contrasts (with negative binary values) are not dummy coded. Personally, to avoid confusing, I prefer to use the terms treatment, sum, or "custom" coded and I would say something like "you should contrast code your variables" (then you still can decide how to).
+
+However, when you fit regression models using lm(), lmer(), or aov() (I will demonstrate this function later on), **R will automatically create contrasts (i.e., contrast code your factors)**. In regression models and ANOVA, this will be the treatment contrasts by default. 
+
+So **within R** you typically do not need to add contrast coded variables to your dataset for use in your ANOVAs. However, it still doesn't hurt to do so if you want to share analysis scripts across software (Stata, SPSS, Mplus, and so on) and if you want to create your own special contrasts.
+
+I will quickly show you how to add contrast coded variables to your datasets. First, contrast coding identical to treatment contrasts (or "dummy-coding" as many people would call it).
+```{r}
+library(dplyr)
+
+set.seed(999)
+mydata = data.frame(
+  score = c( rnorm(20,20,0.001), rnorm(20,60,0.001), rnorm(20,10,0.001) ),
+  factor_variable = factor( rep(c(" A"," B", " C"   ),  each = 20 )  )
+) %>%
+  mutate(
+         treatment_B = ifelse(factor_variable==" B",1,0),
+         treatment_C = ifelse(factor_variable==" C",1,0)
+           )
+
+mymodel = lm(score ~ factor_variable, data = mydata) # To show that R automatically (by default) use treatment contrast coding
+mymodel_dummy = lm(score ~ treatment_B + treatment_C, data = mydata) # treatment_A is the reference so I can leave that out
+
+round( coef(mymodel), 0)
+round( coef(mymodel_dummy), 0)
+```
+
+Sum coding.
+```{r}
+set.seed(999)
+library(dplyr)
+mydata = data.frame(
+  score = c(rnorm(20,20,0.001), 
+            rnorm(20,60,0.001), 
+            rnorm(20,10,0.001)),
+  factor_variable = factor(rep(c("A", "B", "C"), each = 20))
+) %>%
+  mutate(
+    sum_A = ifelse(factor_variable == "A", 1, 
+                   ifelse(factor_variable == "C", -1, 0)),
+    sum_B = ifelse(factor_variable == "B", 1, 
+                   ifelse(factor_variable == "C", -1, 0))
+  )
+
+contrasts(mydata$factor_variable) = contr.sum(3)
+
+mymodel = lm(score ~ factor_variable, data = mydata)
+mymodel_contrast = lm(score ~ sum_A + sum_B, data = mydata)
+
+round(coef(mymodel), 0)
+round(coef(mymodel_contrast), 0)
+```
+
+## One-way ANOVA
+For now let's leave the contrasts for a bit. They will come back later if I demonstrate how you can flexible compare groups. Moving on to actually conducting an ANOVA, starting off with the classic example of one categorical variable in a simple linear regression. 
+
+I will use the build in iris dataset to test whether the average sepal length differs per species, per group so to speak. Before we conduct the ANOVA it never hurts to plot the outcome per group. For this purpose, I personally like to create violin plots
+```{r message=FALSE, warning=FALSE}
+library(pacman)
+p_load(dplyr, ggplot2)  
+
+mydata = iris
+
+mydata %>% ggplot(aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin(alpha=0.6) + geom_boxplot(alpha = 0.8) + stat_summary(fun = "mean")  +
+  theme_classic() + theme(legend.position = "none")
+```
+
+To conduct the ANOVA, we can use the **aov() function** and enter a regression formula just like we've done before to compute regression models. Here you can choose whether you want to directly conduct an ANOVA or make a linear regression model first. One important detail, make sure that your predictor variables are factors as the aov() function requires this.
+```{r}
+# Feeding the regression formula directly to aov()
+myanova = aov(Sepal.Length ~ Species, data = mydata)
+summary(myanova)
+
+# Or compute a separate regression model first
+mymodel = lm(Sepal.Length ~ Species, data = mydata)
+myanova = aov(mymodel)  
+summary(myanova)
+```
+
+Time for summary output. We receive the degrees of freedom, the sum of squares (i.e., total variance between the overall mean and the means per group), the mean of the sum of squares (i.e., the sum of squares divided by the degrees of freedom of each parameter, except for the residuals), *F*- and *p* values. The *p* value suggests that the mean in outcome of **at least** one group is statistically significantly different from the others. Indeed, the aov() function has conducted the omnibus test to test whether at least one group-comparison is different. Nice, but what groups are statistically significant different from each other?
+
+### Post-hoc group-comparisons
+There exist a couple of group-comparison methods to determine which pair of groups are statistically significantly different, after you have done the omnibus test (post-hoc). Let's start with a popular one, the **Tukey Honest Significant Differences test** for multiple pairwise-comparisons of our groups (I know, a mouthful). This method is called through the TukeyHSD() function. This test can be recommended if you have **equal sample size per group** (and if e.g., the groups are **sufficiently normal distributed**).
+```{r}
+TukeyHSD(myanova)
+```
+
+Conveniently, we receive the difference in sepal length, the *p* value per group comparison, and the corresponding 95% confidence interval. Note that the *p* values are adjusted for multiple comparisons.
+
+Other methods in context of one-way ANOVA include the **Bonferroni correction**(a classic), which could be ok if you have a **small number of group comparisons** (e.g., three) but but may be conservative otherwise. A less conservative post-hoc comparison test is the **Holm correction** and the **Benjamini-Hochberg correction**, which is even less conservative to the Bonferroni and Holm (which could be recommended if you have large sample and a lot of group comparisons). To do the above tests you use **pairwise.t.test() function** and specify the *p* value adjustment method.
+```{r message=FALSE, warning=FALSE, eval = FALSE}
+options(scipen=999) # prevents the scientific notation
+pairwise.t.test(mydata$Sepal.Length, mydata$Species, p.adj = "bonf") # Outcome ; predictor ; adjustment method
+pairwise.t.test(mydata$Sepal.Length, mydata$Species, p.adj = "holm")
+pairwise.t.test(mydata$Sepal.Length, mydata$Species, p.adj = "BH")
+```
+
+### Making your own specific hypotheses and contrasts.
+All of the above methods create their own group-comparisons by using contrasts (which I explained in detail at the start of this part). However, if desired, you can flexibly manipulate the contrasts, and make your very own group-comparisons for whatever differences you want to test with any restrictions or *"special rule"* you can imagine.  
+
+In this part we will create combinations of specific group-comparisons that we we want to test separately or simultaneously. This will also yield knowledge relevant for special types of ANOVA (see later on). 
+  1. Create a **"contrast matrix"** that will be made up with **"contrast/restriction vectors"**. These contrast matrices will reflect the specific group-comparisons that we want
+  2. Conduct the specific (or combinations of) group-comparison(s) using the **linearhypothesis() function** from the **car package**
+
+Before you create your own contrast matrix, it could be handy to have a look at the coefficients of your regression model. Indeed, we will work with **the coefficients of our factors** and specifically the order of coefficients. Let's keep the model from before with the three species of flowers.    
+```{r}
+mydata = iris
+mymodel = lm(Sepal.Length ~ Species, data = mydata)
+coef(mymodel)
+```
+
+Note that the regression model used treatment contrasts as by default. I got three coefficients/categories: Setosa (the intercept, hence the "reference category" when using treatment contrasts), versicolor, and virginica. These categories/groups can be represented as a vector, a "contrast/restriction vector" so to speak, that looks like: c(*category 1*, *category 2*,*categoy 3*). Importantly, I can easily manipulate the categories within the matrix/restriction vector. You can "activate" and "deactivate" a category by asigning a "0" or "1" to it.
+
+For example, the vector (0,1,0) will "activate" "category 2" (i.e., the coefficient will be multiplied by 1) while "category 3" will be "deactivated" (since this coefficient will be multiplied with 0). The linearHypothesis() function will take this contrast/restriction matrix made up from contrast/restriction vectors (in our example binded by the rbind function) and read it as: test whether the coefficient/ the average of "category 2" (versicolor) is different from zero. **Remember, we work with coefficients** (differences with the reference category) so *different from zero* actually means **different from the average of the reference category** (setosa flowers).
+```{r}
+restriction = rbind(
+           c(0,1,0)
+)
+
+library(car)
+linearHypothesis(mymodel, hypothesis.matrix = restriction, test="F")
+```
+
+We can also combine multiple "contrast/restriction" vectors to a create a restriction matrix that tests multiple group-comparisons **simultaneously**. For example, we can recreate the omnibus test based on a treatment contrast style .
+```{r}
+restriction = rbind(
+           c(0,1,0),
+           c(0,0,1)
+)
+
+library(car)
+linearHypothesis(mymodel, hypothesis.matrix = restriction, test="F")
+```
+
+Another thing that we can do is to make contrasts between groups (similar to sum contrasts). Have a look at this vector: (0,1,-1). We "activate category 2" but now we asign a negative value to "category 3". This can be interpret as a contrast between "category 2" and "category 3, so does the average of versicolor differ from virginica? Let's find out:
+```{r}
+restriction = rbind(
+           c(0,1,-1)
+)
+
+linearHypothesis(mymodel, hypothesis.matrix = restriction, test="F")
+```
+
+#### Let us get creative with hypothesis testing
+Alright, I promised that we can get creative with hypothesis testing did I not? Well, to give a couple of examples, **suppose**, for some reason, that we want to test whether the category "versicolor" is five times larger than the reference category "setosa". 
+
+We already know that by default R uses treatment contrasts and that setosa will be the reference category (since "s" comes first in the alphabet). Now for the restriction/contrast vector, did you thought of using something like:
+```{r message=FALSE, warning=FALSE}
+restriction = rbind( c(0,5,0) )
+```
+
+Well, I get why you would think so but this would test whether the coefficient (i.e., the **difference in mean between versicolor and setosa**) of the versicolor group times five is zero. **This is not the same as testing whether the mean for versicolor is five times that of the reference setosa**
+
+**Instead**, to get the *"a specific group (and not a difference score) is five time larger than..."* part, we can use the **rhs** argument. If we set a prespecified value to rhs, it will test whether a linear combination of the coefficients equals your prespecified value. Therefore, if we "activate" versicolor, "deactivate" virginica, and set to rhs to be the coefficient for versicolor times five, we will test whether versicolor is five times larger than the reference. 
+```{r message=FALSE, warning=FALSE}
+restriction = rbind(
+  c(0,1,0)
+)
+library(car)
+linearHypothesis(mymodel, hypothesis.matrix = restriction, rhs = coef(mymodel)[1]*5, test="F") # with coef(mymodel)[1] being the versicolor category
+```
+
+**Another example**, suppose I want to test whether the sum of the coefficients of "versicolor" and "virginica" is 10. In this case we need to use both these categories so we will need to activate both of them. Remember that the rhs argument allows to test whether the linear combination equals a value. Therefore, if we activate "versicolor", activate "virginica", and set rhs to 10, we will test whether the sum of these coefficients is 10.
+```{r message=FALSE, warning=FALSE}
+restriction = rbind(
+  c(0,1,1)
+)
+library(car)
+linearHypothesis(mymodel, hypothesis.matrix = restriction, test="F", rhs = 10)
+```
+
+### Effect sizes
+Continuing the spirit from the last part, it is useful to include effect sizes next to the common F statistics obtained from your output. Several effect sizes are appropriate to use in the context of ANOVA. Let's start with perhaps the most known effect size Cohen's d which is the difference between the group means divided by the pooled standard deviations of the groups. We can use the **cohens_d() function** from our old acquaintance, the **effectsize package**, to compute this effect size. Before you use this function, make sure you (temporarily) remove categories until you have two groups as an error is outputted otherwise. 
+```{r}
+library(dplyr)
+library(effectsize)
+
+mydata = iris
+mydata_temp = mydata %>% filter(!Species=="virginica") # the cohens_d functions asks for exactly two groups, hence I temporarily filter out "virginica" as an example
+
+cohens_d(Sepal.Length ~ Species, data = mydata_temp) 
+```
+
+Moving on. Similar to the discussed semi-partial R² in linear regressions (with continuous predictors), in the ANOVA context, we have **the (partial) eta-squared** and **the omega-squared measure**. The eta-squared measures shows the proportion of total variance explained **by your (one) factor variable** whereas the partial eta-squared shows the proportion of variance explained by **a specific factor** after controlling for others. **However, as (partial) eta-squared is biased and with this bias decreasing the more the size of your groups increases**, you could consider the omega-square measure instead (especially in "small" sample sizes). To compute these effect sizes, you can consider The **eta_squared() and omega_squared() function** from the **effectsize package**.
+```{r message=FALSE, warning=FALSE}
+library(effectsize)
+
+myanova = aov(Sepal.Length ~ Species, data = iris)
+eta_squared(myanova)
+omega_squared(myanova)  
+```
+
+**One thing I want to notice**. Recently, [the use eta-squared in ANOVA from a mixed-effects model has been criticized (click here)](https://journalofcognition.org/articles/10.5334/joc.409). As discussed in the previous part, effect sizes in mixed-effects models should acknowledge that there is a fixed and random effects part. **If you want to compute the (partial) eta-squared in mixed-effects models that include a 2 x 2 design (i.e., two categorical predictors with two levels)**, It is recommended to use the sum contrast coding and to use the cluster-mean centered outcome variables to obtain **eta-squared within**. Full details are provided in the linked article, the reference to this article is shown at the end of this part.
+
+## Two-way ANOVA
+Let's add an extra categorical variable to the equation. Suppose we also included the location of the flower (location "a","b",..."e"). Now we can test the main effect of species and location on sepal length as well the interaction effect between these two predictors.
+```{r warning=FALSE}
+mydata = iris
+mydata$Location = factor(rep(c("a","b","c","d","e"), each = 10))
+
+mydata %>% ggplot(aes(x = Species, y = Sepal.Length, fill = Species)) +
+  geom_violin(alpha=0.6) + geom_boxplot(alpha = 0.8) + stat_summary(fun = "mean")  +
+  facet_wrap(~Location) +
+  theme_classic() + theme(legend.position = "none")
+
+mymodel = lm(Sepal.Length ~ Species * Location, data = mydata)
+coef(mymodel)
+```
+
+Since we used the default treatment contrasts, note that our "reference category" consists of two variables: the *setosa* flower measured on location *"a"*. The Coefficient  versicolor shows the difference between itself and the reference flower *setosa* at the reference location *"a"*. Similarly, the coefficient "c" shows the difference between itself and the reference location *"a"* in the reference flower setosa. If we look at the coefficients for interaction terms, say virginica and location d, then it shows how the difference between virginica and setosa, differs at location "c" compared to location *"a"*.
+
+Since we have more factors and an interaction effect, a novel decision will pop up. What type of ANOVA do we want to use? 
+
+### Four different types of ANOVA
+Since we introduced an interaction effect to our regression models and ANOVA, it may be a good time to acknowledge the existence of different types of ANOVA. The aov() function we used so far computes the **type I ANOVA** which tests each factor in the order you specified in the model (handy if the order of factors is crucial). Next to type I, you also have type II, III, and IV. The **type II ANOVA** tests each main effect while adjusting for other main effects (**however it ignores all interactions so not suitable when interactions are included**). **Type III** tests each of yours factors accounting for all others, including interactions. If you consider to go for type III (since you want to include interactions), **use sum contrasts instead of the default treatment contrasts**. Finally, **type IV**, could be considered when you have complex models with categories or category combinations that are empty (no data). 
+
+To access type II to IV, you can use the **Anova() function** from the **car package**.
+```{r}
+# Type II ANOVA
+mymodel = lm(Sepal.Length ~ Species * Location, data = mydata)
+Anova(mymodel, type="II") # the type ignoring the interaction
+
+# Type III ANOVA
+options(contrasts = c("contr.sum", "contr.sum"))
+Anova(mymodel, type="III") # the type you should use with sum  contrasts, see above
+```
+
+The difference between type II and type III ANOVA will depend on how "strong" the interaction effect in your models will be. For the remainder of the examples I will use type III as it is a flexible approach (i.e., it has no strong assumptions or limitations). 
+
+Irrespective of your choice of ANOVA type, the model will conduct an omnibus test. Therefore, once again, we need to dive deeper into individual post-hoc group-comparisons.   
+
+### Two-way ANOVA: Post-hoc comparisons 
+
+Instead of the pairwise t tests that we did with one-way ANOVA, I prefer to use the emmeans() function from the [emmeans package](https://cran.r-project.org/web/packages/emmeans/index.html). This function allows to do comparisons in the main effects: comparing the petal length of species with one another per location and comparing location with one another per species, and interaction effects: compare the difference in petal length of species across different locations. Similar to the pairwise.t.test() function, we can choose how we want to adjust the *p* value (Bonferroni, Benjamini-Hochberg, etc.).
+
+Now you could approach the group-comparisons in different ways. For example, you could check whether the interaction effect is statistically significant in your regression model or ANOVA (or if you deem it yourself sufficiently significant). If so, you can zoom in how the mean of sepal length differs per species but **within** each location, and how it differs per location **within** each species. **That way, when checking the main effects, you involve the other variable**. In addition, you could look more to the interaction effect to **check whether combinations between species and locations differ between all other combinations**
+
+```{r message=FALSE, warning=FALSE}
+mydata = iris
+mydata$Location = factor(rep(c("a","b","c","d","e"), each = 10))
+mymodel = lm(Sepal.Length ~ Species * Location, data = mydata)
+
+library(emmeans)
+
+emmeans(mymodel, pairwise ~ Location | Species, adjust = "Tukey") # Main effect: differences between locations WITHIN species
+emmeans(mymodel, pairwise ~ Species | Location, adjust = "Bonferroni") 
+emmeans(mymodel, pairwise ~ Species * Location, adjust = "BH") # interaction effect: comparing combinations to all other combinations
+```
+
+Instead, if you deem the interaction effect "not significant", you could also decide to skip the interaction effect and to keep the main effects separate of the other variable that is, you don't look at species within locations or locations within different species but across locations or species.  
+```{r message=FALSE, warning=FALSE}
+emmeans(mymodel, pairwise ~ Species, adjust = "Holm") 
+emmeans(mymodel, pairwise ~ Location, adjust = "Holm") 
+```
+
+So far we've dealth with groups manifesting in our predictors. Depending on our data, what we can also can do is to simultaneously compare different **combinations/groups in our outcome** as well. A special type of ANOVA can be found within the multivariate (i.e., multiple outcomes/dependent variables) regression models. One that is relatively robust against one not to be ignored issue.
+
+## MANOVA
+When you consider to use a classic univariate repeated measures design with factors that have over two levels, you may encounter a violation of the assumption of **sphericity**. Violation of sphericity could confer a risk for unreliable *p* values. As an attempt to detect violations herein, you could consider to use e.g., Mauchly's test for sphericity. Unfortunately, like with many other statistical tests, the reliability of these depend on different factors including your sample size, the degree of departure from a normal distribution, and so on. In short, it is a tricky situation.
+
+In context of e.g., experiments with a within-subject design (the same subject goes through all or multiple experimental conditions) and where you would consider to aggregate your data across conditions, the method of multivariate analysis of variance (MANOVA). In a MANOVA multiple outcomes/dependent variables are analyzed simultaneously.
+
+The MANOVA typically yields the following steps.
+  1. **Transform the data in wide format with the outcome - commonly a repeated measure from the same subject - aggregated across conditions**
+  2. Create contrast matrices for **the outcomes**
+  3. Compute multivariate linear regression models and include the contrast matrices from step two. 
+
+For the data I created myself. As the first step I will transform, or rather *reshape*, the data to wide format with the outcome "score" aggregated and spread across the the variable "condition_numbers". As you may recall from the previous part, I prefer to use the **dcast() function** from the **reshape2 package()** to reshape from long to wide.
+```{r}
+set.seed(987)
+mydata = data.frame(
+  participant = rep(c(1:100), times = 30),
+  score = round( c(rnorm(100,10,3),  rnorm(100,5,1.5),  rnorm(100, 20,5) ), 2  ),
+  condition_numbers = factor( rep( c("1","2","3"), each = 100) )
+)
+
+# Reshape to wide format with the outcome aggregated and spread across condition
+library(reshape2)
+mydata = dcast(participant ~ condition_numbers, data=mydata, value.var="score", mean)
+names(mydata)[2:ncol(mydata)] = paste0("Condition_" , colnames(mydata)[2:ncol(mydata)]  ) # to rename "1" to "Condition_1", etc.
+```
+
+To create a contrast matrix for the outcomes, we can think in terms of vectors as we have done at the beginning of this part. Just like before we will work with coefficients. Different this time that we will have to model a multivariate regression model since our outcome "score" is spread across the multiple levels of "condition_number". A multivariate regression model takes the form of a classic linear regression but with multiple outcomes which I will bind together using the cbind() function.
+```{r}
+mymodel = lm(cbind(Condition_1, Condition_2, Condition_3) ~ 1, data = mydata)  
+coef(mymodel)
+```
+
+The coefficients tells us that there are three of them. Now,we can visualize the outcome contrast matrix like this.
+![](images/ANOVA/Manova_1.png)
+
+Our job will be to replace the x to **activate or deactivate a given or multiple condition(s)**. In other words, you will decide what part of the outcome you want to include and what parts you want to compare (all will become clear later on). However, the rules here are a bit different compared to the predictor contrast vectors and matrices. There is no treatment or sum contrast coding with a reference, at least not on the outcomes. Also, **the sum of the values in the vector must be zero in most cases**.
+
+Say I want to compare *Condition_1* with *Condition_2*. We can asign the value "1" to *Condition_1* and a "-1" to *Condition_2*, or vice versa. We are not interested in *Condition_3* so multiplying it with zero will *deactivate it*. We get the vector c(1,-1,0) in which *condition_1* will be **multiplied with 1** (it remains alive), condition_2 will be **multiplied with -1** (it also remains alive but it becomes negative, a contrast), and condition_3 is temporarily erased from existence as it **multiplied with zero**. The end product is the difference between *Condition_1* and *Condition_2*
+![](images/ANOVA/Manova_2.png)
+
+We feed the above vector to the (outcome) contrast matrix which I will call M. Within a classic linear regression model we multiply our outcome spread across Condition with our freshly created contrast matrix. Since we only created one vector, we will end up with a univariate regression, hence ANOVA. 
+```{r}
+# Contrast "Condition_1" vs "Condition_2"
+diff = c(1,-1,0)
+M = cbind(diff)
+mymodel = lm(cbind(Condition_1, Condition_2, Condition_3) %*% M ~ 1, data = mydata)
+anova(mymodel)
+```
+
+Let's briefly check what the (outcome) contrast matrix did to our outcome within the regression.
+```{r}
+cbind(mydata$Condition_1, mydata$Condition_2, mydata$Condition_3)  %*% M
+```
+
+Indeed, our vector *(1,-1,0)* created the difference between *Condition_1* and *Condition_2* and this difference was then used within the regression. 
+
+Alright, next example. Let's say we to compare *Condition_3* with the average of *Condition_1* and *Condition_2*. In this case we will need to "activate" all of our conditions so nothing will be multiplied by zero. There are different ways to compute an average. We could multiply *Condition_3* with two and contrast it with *Condition_1* and *Condition_2*. Doing so makes the outcome within *Condition_2* twice as high in value. Alternatively, we can half the values of *Condition_1* and *Condition_2* by multiplying them by 0.5. Either way, it creates an equal fight since *Condition_3* will be up against both (i.e., the sum of) *Condition_1* and *Condition_2* and it **respects the rule that the sum of values inside the vector is zero**.
+![](images/ANOVA/Manova_3.png)
+
+```{r}
+# Contrast "Condition_3" vs the average between "Condition_1" and "Condition_2"
+diff = c(-0.5,-0.5,1)
+M = cbind(diff)
+mymodel = lm(cbind(Condition_1, Condition_2, Condition_3) %*% M ~ 1, data = mydata)
+anova(mymodel)
+```
+
+Last example with one outcome variable, Up till now, we have only included one vector inside the (outcome) contrast matrix, and therefore we did not end up with a multivariate regression. Say you want to compare some conditions to one another.  
+![](images/ANOVA/Manova_4.png)
+
+```{r}
+# Contrast all
+diff1 = c(1,-1,0)
+diff2 = c(1,0,-1)
+M = cbind(diff1, diff2)
+mymodel = lm(cbind(Condition_1, Condition_2, Condition_3) %*% M ~ 1, data = mydata)
+anova(mymodel, test="Wilks")
+```
+
+We keep more than one outcome (i.e., two differences). One thing to note, the Anova() function will not anymore accept the classic F test statistic (or chi-squared test statistic). In the context of MANOVA, four common test statistics are used: the Pillai-Bartlett trace (coded as "pillai" within anova), Wilk's likelihood ration ("Wilks"), Hoteling-Lawley trace ("Hoteling-Lawley"), and Roy's Largest Root ("Roy"). Like with many tests, the power of these tests can depend on different factors including the sample size, (multivariate) normal distribution of outcomes, and so on. Therefore, at the moment of writing this guide, I cannot claim the superiority of one test above another. 
+
+### Practical example Manova: two outcome variables
+Let's introduce the case of two outcomes variables. Suppose we receive data from a (quasi) experimental study. Participants went through two conditions, *condition_X* and *condition_Y* with two and three levels, respectively. In addition, participants' gender was to be used as a predictor of the outcome. 
+
+Like always we transform to wide format and aggregate our outcome across *condition_X* and *condition_Y*.
+```{r message=FALSE, warning=FALSE}
+set.seed(112358)
+options(contrasts = c("contr.sum", "contr.sum"))
+n_ID = 120  # Increase number of IDs
+n_rep = 60  # Repetitions per ID
+tot = n_ID * n_rep  # Total number of rows
+
+mydata = data.frame(
+  ID = rep(1:n_ID, each = n_rep),
+  outcome = runif(tot, 500, 1000),
+  condition_X = rep(c("absent", "present"), each = n_rep/2, times = n_ID),
+  condition_Y = rep(rep(c("low", "medium", "high"), each = n_rep/6), times = 2 * n_ID),
+  gender = rep(c("males", "female") , each = 3600)
+)
+
+# Long to wide
+library(reshape2)
+mydata = dcast(data = mydata, ID + gender ~ condition_X + condition_Y, value.var = "outcome", fun.aggregate = mean)
+names(mydata)[3:ncol(mydata)] = c("abs_l", "abs_m", "abs_h", "pres_l","pres_m","pres_h")
+```
+
+Given the outcome (spreaded over two variables) and predictor we can test several things:
+  1. Main effects in the outcomes
+  2. Interaction effects in the  outcomes
+  3. Main effect in the predictor
+  4. Interaction effects between outcomes and predictor
+
+In the remainder of this part, I will show you how to test each of these objectives and a way that does **all in one go** (without any outcome contrast matrix).
+
+First things first, I will fit a multivariate linear regression without a contrast matrix to extract the coefficients so that I know what to place where.
+```{r}
+mymodel = lm( cbind(  abs_l, abs_m, abs_h, pres_l, pres_m, pres_h ) ~ gender , data = mydata )
+coef(mymodel)
+```
+
+Alright, notice that *condition_X's* "absent" level is spread across condition_Y's low, medium, and high levels. The same goes for *condition_X's* "present" level. Now, if we want to test the main effect of *condition_X* on the outcome we will need to look at the intercept. Specifically, we will need to test whether the difference between *condition_X*'s "absent" level is statistically significantly different from its "present" level. We could use the following outcome contrast matrix.
+![](images/ANOVA/Manova_5.png)
+
+```{r}
+diff = c(1, 1, 1, -1, -1, -1)
+M = cbind(diff)
+mymodel = lm( cbind(  abs_l, abs_m, abs_h, pres_l, pres_m, pres_h ) %*% M ~ gender , data = mydata )
+Anova(mymodel, type="III", test="F")
+```
+
+As told before, the intercept will show you the main effect of *condition_X* but what about gender? **Well this can be considered the interaction effect between gender and condition_X on the outcome, we have estimated a main effect and an interaction effect.**
+
+Good, onto *condition_Y* which has three levels "low", "medium", and "high" spread across the two levels of *condition_X*. The main effect here will be difference between these levels but there is a nuance You need only two out of three potential contrasts. If you know that low levels are not **statistically significantly different** from medium levels and that low levels are not **statistically significantly different** from high levels, then medium levels will not be **statistically significantly different** from high levels.
+![](images/ANOVA/Manova_6.png)
+
+```{r}
+# Main effect
+diff1 = c( 1, -1, 0, 1, -1, 0 ) # low vs medium
+diff2 = c( 1, 0, -1, 1, 0, -1 ) # low vs high
+M = cbind(diff1, diff2)
+mymodel = lm( cbind(  abs_l, abs_m, abs_h, pres_l, pres_m, pres_h ) %*% M ~ gender , data = mydata )
+Anova(mymodel, type="III", test="Wilks") # Just for demonstration purposes I switch the test statistic
+```
+
+Again, the intercept shows the main effect and gender will show the interaction between itself and condition_Y. 
+
+We can also have a look at the interaction between the outcome variables. In other words, is the difference *condition_X*'s "absent" and "present" levels, different over the levels of condition_y? To make a outcome contrast matrix for the interactions within outcome variables, you typically mirror the values (the "1" and "-1") as shown below.
+
+![](images/ANOVA/Manova_7.png)
+
+```{r}
+# Interaction and three-way interaction
+diff1 = c( 1, -1, 0, 1, -1, 0 ) # high vs low
+diff2 = c( 0, 1, -1, 0, -1, 1 ) # high vs medium
+M = cbind(diff1, diff2)
+mymodel = lm( cbind(  abs_l, abs_m, abs_h, pres_l, pres_m, pres_h ) %*% M ~ gender , data = mydata )
+Anova(mymodel, type="III", test="Hotelling-Lawley") # Just for demonstration purposes I switch the test statistic
+```
+
+The intercepts shows the interaction effect, and *gender* now shows the three-way interaction between itself and *outcome_X*, and *outcome_Y*.
+
+Now, what if we want to look at the main effect of gender (i.e., separate from other variables)? **This is will be the exception in which the sum of the values within the outcome contrast matrix is not zero.** Specifically, I will set all values to 1/6 which will average the prediction of gender over each of our outcome variables.
+
+```{r}
+diff = c(1/6, 1/6, 1/6, 1/6, 1/6, 1/6 ) # high vs low
+M = diff
+mymodel = lm( cbind(  abs_l, abs_m, abs_h, pres_l, pres_m, pres_h ) %*% M ~ gender , data = mydata )
+aov(mymodel, test="F") 
+```
+
+I end this part with a neat trick. What if you could do all of the above without a single (outcome) contrast matrix? What is needed is a so called **idata** and **idesign**. The **idata** is a simple data frame object in which you specify your the variables that are contained within your conjoined outcome (here *condition_X* and *condition_Y*). In essence you recreate the following as a data set:
+![](images/ANOVA/Manova_8.png)
+
+```{r}
+condition_X = factor(   rep(c("absent","present"), each = 3), levels = c("absent","present")   )
+condition_Y = factor(   rep(c("low","medium", "high"), times = 2), levels = c("low","medium", "high")   )
+
+idata = data.frame( condition_X, condition_Y )
+
+mymodel = lm(cbind(  abs_l, abs_m, abs_h, pres_l, pres_m, pres_h ) ~ gender, data=mydata )
+Anova(mymodel, type="III", idata=idata, idesign=~condition_X*condition_Y, test="Wilks")
+```
+
+## Referred article
+
+(see the section concerning effect sizes):
+Brysbaert, M., & Debeer, D. (2025). How to Run Linear Mixed Effects Analysis for Pairwise Comparisons? A Tutorial and a Proposal for the Calculation of Standardized Effect Sizes. *Journal of cognition, 8*(1), 5. [https://doi.org/10.5334/joc.409](https://doi.org/10.5334/joc.409)

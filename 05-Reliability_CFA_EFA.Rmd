@@ -1,0 +1,301 @@
+# Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis
+By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization... For the remaining parts, I shift the focus more into data analysis, and this mainly from a "investigation/research/testing" view. 
+
+This particular part may interest you, in particular if you are affiliated with fields such as Psychology. In those fields, you may be confronted with questionnaires that are presumed to measure something... often an abstract construct. Questionnaires often include multiple items that are presumed to represent the constructs the questionnaire are presumed to measure. For example, items like "happy", "energized", "relaxed", "calm", could be presumed to reflect the construct "positive affect". 
+
+The question arises, do you have some indications for the consistency of these questionnaires? Do the questionnaire items **reliably** tap onto the assumed construct? Can our questionnaire items be summarized in factors ("more latent constructs") and in how may? 
+
+In this part I'll go over **reliability, confirmatory factor analysis, and exploratory factor analysis**. Specifically:
+
+  1. **Starting with a classic (but debated) indicator of reliability, Cronbach's alpha.**. We will compute this indicator using the [psych package](https://cran.r-project.org/web/packages/psych/index.html) and I'll show you how to compute it by hand. 
+  2. **We explore McDonald's Omega reliability indicator as an alternative to Cronbach's alpha**. During this part I will use the [lavaan package](https://lavaan.ugent.be/) and the [semTools package](https://cran.r-project.org/web/packages/semTools/index.html) to introduce you to **Confirmatory Factor Analysis**, **factor loadings (checking tau equivalence)**, **CFA fit indicators and how we could improve them**.
+  3. **How to conduct an Exploratory Factor Analysis to unveil the underlying structure of the data**. We will briefly discuss **some** considerations concerning this kind of analysis including **multicollinearity (variance inflation factors), multivariate normallity (Mardia's skewness and kurtosis)**, and **univariate/multivariate outliers (mahalanobis distance)**. I'll also briefly discuss some methods that gives us suggestions regarding the number of factors we could restrain (**scree plots, parallel analysis, Minimal Average Potential**). We end with a small demonstration using the fa() function from the psych package.  
+
+## Cronbach's alpha
+Starting off with one of the most popular indicators of internal consistency (reliability). Over the years, this indicator was not spared of criticism [click here for an example](https://www.doi.org/10.1037/met0000144). Nevertheless, I will show you how to compute it. I will use the **psych package** and a [free online dataset, click here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0199750). This dataset contains items that "belong" to the same presumed construct. 
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+library(pacman)
+pacman::p_load(psych, dplyr, haven) 
+
+mydata = read_sav("data_files/pone.0199750.s001.sav") 
+
+alpha(mydata)
+```
+
+Note that you receive a lot of output. The (raw) alpha is printed at the top of the output. You could also skip most of it and ask for what you want. For example:
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+alpha(mydata)[["total"]][["raw_alpha"]]
+alpha(mydata)[["total"]][["std.alpha"]]
+```
+
+The above looks a bit complicated with all those brackets. here is a trick to it.
+Suppose I ran the following code:
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+alpha_output = alpha(mydata)
+```
+Now I click on the freshly created alpha_output object (Environment window, top right). It looks something like this:
+![](images/Reliability/Reliability_01.png)
+<br>
+<br>
+
+Click on total, then click on raw_alpha. On the bottom you should see: *"alpha_output[["total"]][["raw_alpha"]]"*. Nnow you can copy-paste the *[["total"]][["raw_alpha"]]* part into R. "This store as an object and click" strategy works in variety of contexts such as with regression models.   
+![](images/Reliability/Reliability_02.png)
+<br>
+<br>
+
+### Alpha by hand
+If desired we could also compute the Cronbach's alpha ourselves without fancy packages. Just for fun and educational purposes, I will demonstrate how.
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+# Formula Cronbach's alpha: (N)/(N-1) * ( (VARIANCE SUM SCORE ACROSS ITEMS - VARIANCE SUM SCORE PER ITEM)/VARIANCE SUM SCORE ACROSS ITEMS )
+  
+  # ingredients:
+    N = ncol(mydata) # N
+    variance_sum_across_items = var( rowSums(mydata) ) # VARIANCE SUM SCORE ACROSS ITEMS
+    variance_sum_per_item = sum(  diag(var(mydata, na.rm = TRUE))  ) # VARIANCE SUM SCORE PER ITEM
+    
+  # Put the above in the formula:
+    (N)/(N-1) * ( (variance_sum_across_items - variance_sum_per_item)/variance_sum_across_items )
+```
+
+## Omega 
+As I told you earlier, there is a bit of commotion surrounding whether or not it is appropriate to use Cronbach's alpha. It has been put forward that alpha holds several strong assumptions, some that likely do not apply to the majority of data. A classic example, Cronbach's alpha assumes **(essential) tau equivalence**, meaning that all items contribute equally to the construct being measured (i.e., similar factor loadings, a similar "weight" so to speak).. 
+
+What can we use instead? 
+
+One popular alternative, McDonald's omega, relaxes the assumption of (essential) tau equivalence. A variety of packages allow to compute this indicator, even the psych package. For simplicity, I will use the **lavaan and semtools packages** to use the **reliability() function** which can compute both Cronbach's alpha and McDonald's omega. To do so, we will have to walk into **C**onfirmatory **F**actor **A**nalysis territory. 
+
+First things first, the **psych package may interfere with certain functions from semTools** so I will unload it. Yes, packages in R may sometimes interfere with one another. If this occurs, you typically receive a message in the Console (bottom left) telling you that some function is masked from a given package.
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+detach("package:psych", unload = TRUE)
+```
+
+To use the reliability() function from semTools, we have to "define" a model, tell R to run a CFA using the "defined" model. When "defining" a model for a CFA or structural equation model, we need to tell R which variables we want to include, what variables are so called manifest or latent (see later parts), how variables relate to one another (regressions), and so on. In context of CFA, I will need to tell that there is a **(latent) construct/factor** (the thing that the questionnaire is presumed to tap into) and that all my items, the **(manifest) observed** item scores/factors, reflect/**load on** this latent construct/factor. To define our model:
+
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+  p_load(lavaan, semTools)
+  mymodel = '
+  
+  # Here I defined a latent factor (which I arbitrarily named "DEP") and told R that the following manifest factors (here the variables from my dataset) load on this latent factor.
+  # The names of the manifest factors must match those in your dataset !
+  # the "=~" sign denotes a "latent construct reflected by manifest factors relation"
+  
+  DEP =~ BDI1 + BDI2 +  BDI3 +  BDI4 +  BDI5 +  BDI6 +  BDI7 +  
+  BDI8 +  BDI9 +  BDI10 +  BDI11 +  BDI12 +  BDI13 +  BDI14 + 
+  BDI15 +  BDI16 +  BDI17 +  BDI18 +  BDI19 +  BDI20 +  BDI21
+  '
+```
+
+Now I will have to enter this model in a CFA (using the lavaan package). In the code below I specify certain options. I enable standardized output (discussed later on), use listwise deletion of empty values, and use the Maximum Likelihood with Robust Estimations method. If all goes well, we can compute the omega by putting this CFA object in the reliability() function. **Importantly, for now I will temporarily ignore the output of my CFA object (i.e., it's summary). However, I highly recommend to always look at the output first (as I do later on)**
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+  mycfa=cfa(mymodel, data = mydata, std.lv=TRUE, missing = "direct", estimator = "MLR")
+  reliability(mycfa)
+```
+
+Glance over the output of reliability(), you see alpha, omega, omega2, omega3, and avevar. Avevar is the average variance extracted, not a reliability measure but an indication of how much variance is attributable to the common factor. Notice that we have three omega's. In short, The first one (**omega**) "controls" for other (latent) factors, the second one (**omega2**) does not, the third one (**omega3**) has a denuminator that equals the sum of all elements in the variance-covariance matrix of item scores. **Omega and omega2 likely differ** when you define **more than one latent factor and** there is **multi-dimensionality** in the manifest factors/items(e.g., items loading notably on more latent factors). 
+
+You can also request a spread (e.g., confidence intervals) surrounding our omega using the [MBESS package](https://cran.r-project.org/web/packages/MBESS/index.html). In the example below I will use a bootstrap of **5 (purely for demonstration purposes) but in practice consider to go for a higher number (e.g., 500 or more)**.
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+  library(MBESS)
+  ci.reliability(data = mydata, type = "omega", interval.type = "perc", B=5, conf.level = 0.95)
+    # applying a bootstrap of 5 bootstrap runs (consider 500+) and a percental CI type
+```
+
+**It is very important to note that we used a fairly simple model with continuous variables and only one latent construct (i.e., a unidimensional model).** Other types of models exist such as those including categorical variables, multiple factors, and hierarchical factor models. Covering all of these would be exhaustive for the purposis of this guide. However, I will direct to the work [Flora, 2020](https://doi.org/10.1177/2515245920951747) who provides a detailed background and examples in R. The reference to this article is provided at the end of this part.
+
+### Fit indices and how to potentially improve model fit
+As I said before, I ignored the output from my CFA object, but you really should not. For starters, we should check the model fit. The model fit refers to how closely your data matches the model you defined (the relations of the model). **important to realize, a "good fitting model" does not prove that your defined model is a "good", "realistic" or proven model**. 
+
+To see how well your model fits your data we start by requesting model fit indicators. Sometimes you may want to improve these fit indicators. After all, they could affect the value of your omega. While we're at it we can also inspect the factor loadings. This way we can also check cronbach's alpha assumption of (essential) tau equivalence. 
+
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+  summary(mycfa, fit.measures=TRUE, standardized=TRUE) 
+  # fit.measures will show the model fit indicators such as RMSSEA and CFI
+```
+
+Alright, a lot of output. Recall that output interpretation is beyond the scope of this guide but I note two things:
+  1. you could argue that there is room for improvement based on multiple fit indicators. Some would argue that the **CFI and TLI should preferably be above .90, perhaps even above .950.** Further, The RMSEA looks "ok" but **some would prefer this value below 0.05.** Of course there is not really a real cut-off, only conventions.
+  2. The factor loadings (see "Latent Variables" in the output) are not equal. This can be taken as a violation of the tau equivalence assumption, so Cronbach's alpha may not be that appropriate to report. 
+  
+Next to the above two points, notice that the current values of alpha and omega are very similar. However, sometimes it could be that notable differences emerge upon improving your model fit.
+
+How do we do that?
+
+**Well a straightforward way is to can inspect the residual correlations in the CFA object** and "adjust/account" for (manifest) variables show a... "notable" correlation. High residual correlations may indicate to some items sare unique variance, that is, variance that is not explained by the latent construct (extra variance beyond the latent construct so to speak). Let's have a look at the residual correlations and note correlations of at least say .075 (**arbitrary example**).
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+  options(scipen=999) # Disables the scientific notation
+  residuals(mycfa, type = "cor")$cor # For visual inspection of 
+  
+  # TIP, since I have a lot of correlations visual inspection of correlations >.075 becomes cumbersome
+  # Below a code that will prompt a window showing the variables with correlations above .075
+View(
+  data.frame(  as.table(residuals(mycfa, type = "cor")$cov)  )
+  %>% filter(Freq>0.075) %>% # with Freq being the correlations. Unfortunately this will output duplicates so I will filter them out
+    mutate(is_duplicated = ifelse(duplicated(Freq)==TRUE , "yes","no"    )) %>% # i.e., yes to duplicate correlations
+  filter(!is_duplicated =="yes") # get rid of duplicates
+)
+```
+My code tells me yhat there are 13 (unique) correlations above .075. Remember the step where we defined a model for the CFA (I called this "mymodel")? Within this model definition, I will also add that the correlations between the *13 (manifest) factors* are correlated. Then I'll check my CFA model output again.
+
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+mymodel = '
+  DEP =~ BDI1 + BDI2 +  BDI3 +  BDI4 +  BDI5 +  BDI6 +  BDI7 +  
+  BDI8 +  BDI9 +  BDI10 +  BDI11 +  BDI12 +  BDI13 +  BDI14 + 
+  BDI15 +  BDI16 +  BDI17 +  BDI18 +  BDI19 +  BDI20 +  BDI21
+  
+  # the ~~ stands for correlation. So I tell R to consider their correlations these (and to not set them to 0 by default)
+  
+  BDI10 ~~ BDI1
+  BDI4 ~~  BDI2
+  BDI5 ~~  BDI3
+  BDI7 ~~  BDI3
+  BDI9 ~~  BDI3
+  BDI6 ~~  BDI5
+  BDI8 ~~  BDI5
+  BDI17 ~~ BDI11
+  BDI19 ~~ BDI3
+  BDI16 ~~ BDI15
+  BDI20 ~~ BDI15
+  BDI18 ~~ BDI16
+  BDI20 ~~ BDI16
+  '
+
+mycfa=cfa(mymodel, data = mydata, std.lv=TRUE, missing = "direct", estimator = "MLR")
+summary(mycfa, fit.measures=TRUE, standardized=TRUE)
+```
+
+Ok, the model fit indicators did improve a bit. Did the omega change? 
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+reliability(mycfa)
+```
+
+There is bigger difference between alpha and omega but it is not that... "notable". Of course, what is small or large (there is a reason you often see me put "" around certain words)? From my own experience, the omega sometimes changes "a little", sometimes more "notably". Various factors likely play a role in this, e.g., in how far Cronbach's alpha held assumptions are violated.
+
+
+## Exploratory factor analysis
+Until now, we assumed that we knew the number of factors and constructs that could explain our data. This is especially clear in CFA where we define our models and say how many (latent) factors there are and what loads on them (**but again, a model that fit does not mean a confirmed true model**). Still, what if you don't know? You receive a couple of questionnaire items **and**, for whatever reason, you want to try to identify what variables/factors could explain patterns of (co)relations between your variables. For this purpose we could conduct an **e**xploratory **f**actor **a**nalysis (EFA). In the following parts I will use the PoliticalDemocracy dataset which is a built-in dataset from the lavaan package. Note that I renamed the last variables.
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+mydata = PoliticalDemocracy
+names(mydata)[9:ncol(mydata)] = c("y9", "y10", "y11")
+```
+
+Alright, now before you plan to conduct an EFA, **always check your data**. Several points need to be considered before conducting an EFA. For example, the sample size (sometimes debated), missing data, **multicollinearity**, skewness and kurtosis (whether our variables resemble a **univariate/multivariate normal distribution**), (univariate/multivariate) outliers, and so on. 
+
+Here I want to quickly inspect the last three points: multicollinearity, the distribution of the data, and outliers. These may help us determine what methods to consider when conducting our EFA later on.  
+
+### EFA check: multicollinearity
+How would you inspect multicollinearity between your variables? Did you spontaneously think about a correlation matrix? **Well, you might miss out on multicollinearity** as correlation matrices might miss complex interactions among multiple variables. **Correlations could be "low" but that does not necessarily imply the absence of multicollinearity**.
+
+As an extra indicator, we can use the **variance inflation factor (VIF)** using the **vif()** function from the [car package](https://cran.r-project.org/web/packages/car/index.html). In short, the VIF indicates whether the variance of a **regression coefficient** is inflated due to inter-correlations between predictors in a regression model. A VIF around 1 suggests "no" multicollinearity, a VIF between 1-5 suggests "moderate" multicollinearity. However, a VIF of **5 and above** as suggests "high" multicollinearity. For example, a VIF of 5 suggests that the variance of that predictor is 5 times the value it would be without multicollinearity. 
+
+I admit that VIF is more typically used in regression analysis rather than factor analysis. Still it can provide useful if you use it before you conduct your EFA. Spoilers for the upcoming part about linear regression but to compute the VIF, I will fit a linear model in which one variable of my dataset is regressed on all remaining ones. To regress one variable on all others, I will create a text that shows the formula for the linear regression model. That text object is then restyled to not be read as a text but as a formula so it can be used in the lm() function to fit a simple linear model.
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+mylm = lm(
+as.formula(
+  # A text that will look like y1 ~ y1 + y2 + ... y11. This text will be "restyled" as a formula (basicially dropping the "" signs)
+paste( colnames(mydata)[1], "~",
+  paste(colnames(mydata)[2:(ncol(mydata))], collapse ="+"),
+  sep = ""
+      )
+      )
+, data = mydata)
+```
+
+Now we can put our linear model in the vif() function, as simple as that.
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+library(car)
+vif(mylm)
+```
+
+### EFA check: univariate/multivariate normal distribution
+Skewness and kurtosis affect correlations (**especially Pearson correlations**), and therefore EFA. If you detect "notable" skewness and/or kurtosis, you might want to consider looking into e.g., Spearman or polychoric correlations instead of Pearson ones. Important to know, **both** the univariate distribution of your individual variables and the multivariate distribution of your data, can play a role. Think of a multivariate distribution as multidimensional overview of combinations (cross-points of the values of multiple variables). Univariate distributions can be plotted on a (2D) histogram that only has one axis, multivariate distributions have multiple axes (one per variable) so it looks multidimensional. Here an example of a bivariate normal distribution [from Wikipedia](https://en.wikipedia.org/wiki/Multivariate_normal_distribution)
+![](images/Reliability/Reliability_03.png)
+
+Univariate distributions can be inspected by histograms or by calculation of the skew and kurtosis. Multivariate distributions - and whether they resemble a "normal gaussian distribution" - can be checked with the **mardia()** function from the **psych package**.
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+library(psych)
+mardia(mydata)
+```
+
+The output shows the multivariate kurtosis, skewness, and corresponding *p* values. If you want to follow convention, then *p* values above .05 on kurtosis and/or skewness are deemed to suggest a multivariate normal distribution.
+
+### EFA check: univariate/multivariate outliers
+Correlations are sensitive to "notable" data values that are much "larger" or "smaller" in value, as compared to others. Consequently, EFA can be affected by outliers as well. You can spot univariate outliers (i.e., "extreme values" in one variable) using **e.g., box plots**. 
+
+Then you have multivariate outliers which are "extremities" in the combinations of two or more variables. A simple example, suppose you measure height and weight in a human adult population. Some people are 1.98 meters tall, some people weight 53 kilograms. Now imagine a person who is both 1.98 meters tall and (only) weights 53 kilograms. This could be considered as an "outlying" combination. 
+
+Multivariate outliers can be checked by the **Mahalanobis distance** using the mahalanobis() function. We'll feed this function the mean per variable and the covariance between all variables. Afterwards, we can test whether a given distance score is "statistically significantly different" compared to others. Commonly, a chi-square test with k-1 degrees of freedom (here our number of variables -1) is used to test the Mahalanobis distance, with statistically significant differences noted by *p* values below or equal to .001. In the example below I will put these distances in a dataframe object, add p-values, and an indicator of whether these are significant (thus "outliers").
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+mydistances = data.frame(
+  distance = mahalanobis(mydata, center = colMeans(mydata), cov = cov(mydata))
+)
+mydistances$pvalues = pchisq(q = mydistances$distance, df = ncol(mydata)-1, lower.tail = FALSE) 
+mydistances = mydistances %>% mutate(outlier = ifelse(  pvalues<=0.001,"outlier","not outlier"))
+```
+
+### EFA: how many factors?
+Asking the big questions: what is the number of factors that "sufficiently" explain our data? Several indications can give use an idea including the on **scree plots depicting eigenvalues** and **parallel analysis**. 
+
+#### EFA: scree plots with eigenvalues
+Scree plots are line  plots showing and connecting eigenvalues. Eigenvalues represent the amount of variance explained by each factor. You can compute the eigenvalues using the **eigenComputes() function** from the [nFactors package](https://cran.r-project.org/web/packages/nFactors/index.html). To this function I will enter my dataset and specify to use the (Pearson) correlation matrix from that dataset (the function will automatically compute it for me) instead of a covariance matrix.
+```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+library(nFactors)
+myeigenvalues = eigenComputes(mydata, cor = TRUE)
+```
+
+**In case you deem your variables not sufficiently univariate/multivariate normal distributed**, you could e.g. compute the polychoric correlations using the **polychoric()** function from the **psych package**, store these correlations in a separate variable, and enter that variable in eigenComputes(). We could also use e.g., Spearman correlations which already have a built-in option within eigenComputes(): *eigenComputes(mydata, cor = TRUE, method="spearman")*.  
+
+Ok, let's create the scree plot. Commonly, the number of factors to be retained is conventionally deemed to be the number of eigenvalues above the value 1. I will be use the ggplot2 package (see also the previous part) to make the plot.
+
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+  # First I make a dataset containing the eigenvalues and the amount of variables (to create the x- and y-axis)
+library(ggplot2)
+  data.frame( 
+  variable = 1:ncol(mydata),
+  eigenvalues = myeigenvalues) %>% # From I create the scree plot
+  ggplot(aes(x=variable, y=eigenvalues)) +
+  geom_point(size = 2, color="red",alpha=0.8) +
+  geom_line(color="red", alpha=0.8) +
+  geom_hline(aes(yintercept=1), linetype="dashed") +
+  theme_minimal()
+```
+
+#### EFA: parallel analysis
+Parallel analysis simultaneously simulates the eigenvalues based on both our own observed data (like we did above) and by those based on a simulated dataset that is parallel to our own observed data. To determine the number of factors to retain, we have to look at the number of factors above those of the simulated data. We can use the **fa.parallel()** function from the **psych package** to run this function with principal components analysis, common factor analysis, or both.  
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+fa.parallel(mydata, fa = "pc", cor = "cor", n.iter=500) 
+  # Pearson correlations by default but this can be modified
+  # fa both will output both principal components and principal factor analysis
+
+```
+
+#### EFA: Minimum Average Partial (correlations)
+The last technique that I want to discuss, **the M**inimum **A**verage **P**artial, is used to select the number of factors with the smallest mean partial correlation. Partial correlations measure the relation between variables, while adjusting for the influence of other variables. These partial correlations progress to 0 with a more *optimal* number of factors. We can use the **VSS()function** from the **psych package**
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+VSS(cor(mydata))
+```
+
+You will receive a plot and plenty of output. The Velicer MAP achieved a minimum (partial correlation) with 2 factors. Note that you also get the **B**ayesian **I**nformation **C**riterium (BIC) as well as the sample adjusted version (SABIC). These suggests 2 (Velicer MAP), and 6 (BIC and SABIC) factors. Of course, six factors maybe a bit too much with our dataset of 11 variables. 
+
+### EFA example
+Finally, we arrive at running the EFA. Before we can run it we need to consider two additional points (almost there). On one hand, we will need to choose what factor extraction method to use. This includes principal components, maximum likelihood (which some recommend when data is "suficiently" normal distributed), principal axis factoring (which some recommend if the data is not), and more. One another hand, we need to decide what factor rotation methods to use to enhance the factor interpret ability. We have orthogonal rotation which assumes that factors are not correlated. We also have oblique factor rotation which assumes inter-factor correlations. The psych packages includes various rotation methods. Popular ones include the "oblimin" (oblique factor rotation) and "varimax" (orthogonal). Just as an example I will go with Maximumlikelihood and varimax factor rotation, and enter 2 factors.
+
+```{r eval=TRUE, message=TRUE, warning=FALSE, include=TRUE}
+fa(mydata, nfactors=2,fm="ML", rotate="varimax")
+```
+Lots of output. From to the top you see the factor loadings (PA1-PA2), communalities (h2), uniqueness values (u2), and complexity (com). Scroll down, the "Proportion var" indicates that the first factor "explains" 44% of the total variance, the second factor 26%.
+
+## Referred article
+
+(McDonald's omega reliability index)
+Flora, D. B. (2020). Your coefficient alpha is probably wrong, but which coefficient omega is right? A tutorial on using R to obtain better reliability estimates. *Advances in Methods and Practices in Psychological Science, 3*(4), 484–501. [https://doi.org/10.1177/2515245920951747](https://doi.org/10.1177/2515245920951747)
+
+
+
+
+
+
+
+
+
+
+
