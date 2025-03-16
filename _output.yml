@@ -1,5 +1,7 @@
 bookdown::bs4_book:
   css: style.css
+  includes:
+    in_header: "header.html"
   theme:
     primary: "#0d48a2"
   repo: https://github.com/GillianDebra/R-ESSENTIALS.git
