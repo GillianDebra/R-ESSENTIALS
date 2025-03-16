@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Gillian Debra" />
+
+
+<meta name="date" content="2025-03-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="loading-datafiles.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.2/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Delighted to have you!<br>Welcome to:</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#what-to-expect"><i class="fa fa-check"></i>What to expect</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-and-r-version"><i class="fa fa-check"></i>Packages and R version</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="loading-datafiles.html"><a href="loading-datafiles.html"><i class="fa fa-check"></i><b>1</b> Loading datafiles</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="loading-datafiles.html"><a href="loading-datafiles.html#working-directory"><i class="fa fa-check"></i><b>1.1</b> Working directory</a></li>
+<li class="chapter" data-level="1.2" data-path="loading-datafiles.html"><a href="loading-datafiles.html#loading-different-types-of-data-files"><i class="fa fa-check"></i><b>1.2</b> Loading different types of data files</a></li>
+<li class="chapter" data-level="1.3" data-path="loading-datafiles.html"><a href="loading-datafiles.html#loading-multiple-files-same-extension-at-once"><i class="fa fa-check"></i><b>1.3</b> Loading multiple files (same extension) at once</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><i class="fa fa-check"></i><b>2</b> Communicate with others: a quick glance at R projects and R markdown</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#r-projects"><i class="fa fa-check"></i><b>2.1</b> R projects</a></li>
+<li class="chapter" data-level="2.2" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#r-markdown-brief"><i class="fa fa-check"></i><b>2.2</b> R Markdown (brief)</a></li>
+<li class="chapter" data-level="" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#a-heading-level-two"><i class="fa fa-check"></i>A heading (level two)</a>
+<ul>
+<li class="chapter" data-level="" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#another-heading-level-three"><i class="fa fa-check"></i>Another heading (level three)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html"><i class="fa fa-check"></i><b>3</b> Data cleaning and descriptive statistics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#access-different-parts-of-a-dataset"><i class="fa fa-check"></i><b>3.1</b> Access different parts of a dataset</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#viewing-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Viewing the data</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#several-examples"><i class="fa fa-check"></i><b>3.1.2</b> Several examples</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#mathematical-calculations-in-r"><i class="fa fa-check"></i><b>3.2</b> Mathematical calculations in R</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#sum"><i class="fa fa-check"></i><b>3.2.1</b> Sum</a></li>
+<li class="chapter" data-level="3.2.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#average"><i class="fa fa-check"></i><b>3.2.2</b> Average</a></li>
+<li class="chapter" data-level="3.2.3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#variance-standard-deviation-and-correlations"><i class="fa fa-check"></i><b>3.2.3</b> Variance, standard deviation, and correlations</a></li>
+<li class="chapter" data-level="3.2.4" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#other-calculations-and-the-describe-function"><i class="fa fa-check"></i><b>3.2.4</b> Other calculations and the describe function(!)</a></li>
+<li class="chapter" data-level="3.2.5" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#what-if-there-are-missing-values"><i class="fa fa-check"></i><b>3.2.5</b> What if there are missing values?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#correlation-matrices-and-visualisation"><i class="fa fa-check"></i><b>3.3</b> Correlation matrices and visualisation</a></li>
+<li class="chapter" data-level="3.4" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-a-more-modern-approach-to-shape-data-."><i class="fa fa-check"></i><b>3.4</b> Dplyr, a more modern approach to shape data (!).</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-filter"><i class="fa fa-check"></i><b>3.4.1</b> Dplyr: Filter</a></li>
+<li class="chapter" data-level="3.4.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-select"><i class="fa fa-check"></i><b>3.4.2</b> Dplyr: Select</a></li>
+<li class="chapter" data-level="3.4.3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-mutate"><i class="fa fa-check"></i><b>3.4.3</b> Dplyr: Mutate</a></li>
+<li class="chapter" data-level="3.4.4" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-arrange"><i class="fa fa-check"></i><b>3.4.4</b> Dplyr: Arrange</a></li>
+<li class="chapter" data-level="3.4.5" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-group_by-and-summarize"><i class="fa fa-check"></i><b>3.4.5</b> Dplyr: Group_by and Summarize</a></li>
+<li class="chapter" data-level="3.4.6" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-join"><i class="fa fa-check"></i><b>3.4.6</b> Dplyr: Join</a></li>
+<li class="chapter" data-level="3.4.7" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#practical-example-data-shapingcleaning"><i class="fa fa-check"></i><b>3.4.7</b> Practical example data shaping/cleaning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-visualisation.html"><a href="data-visualisation.html"><i class="fa fa-check"></i><b>4</b> Data visualisation</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="data-visualisation.html"><a href="data-visualisation.html#the-language-of-ggplot"><i class="fa fa-check"></i><b>4.1</b> The language of ggplot</a></li>
+<li class="chapter" data-level="4.2" data-path="data-visualisation.html"><a href="data-visualisation.html#plotting-various-graphs."><i class="fa fa-check"></i><b>4.2</b> Plotting various graphs.</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="data-visualisation.html"><a href="data-visualisation.html#histogram"><i class="fa fa-check"></i><b>4.2.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.2.2" data-path="data-visualisation.html"><a href="data-visualisation.html#density-plots"><i class="fa fa-check"></i><b>4.2.2</b> Density plots</a></li>
+<li class="chapter" data-level="4.2.3" data-path="data-visualisation.html"><a href="data-visualisation.html#violin-plots"><i class="fa fa-check"></i><b>4.2.3</b> Violin plots</a></li>
+<li class="chapter" data-level="4.2.4" data-path="data-visualisation.html"><a href="data-visualisation.html#split-violin-plots"><i class="fa fa-check"></i><b>4.2.4</b> Split violin plots</a></li>
+<li class="chapter" data-level="4.2.5" data-path="data-visualisation.html"><a href="data-visualisation.html#bar-graphs"><i class="fa fa-check"></i><b>4.2.5</b> Bar graphs</a></li>
+<li class="chapter" data-level="4.2.6" data-path="data-visualisation.html"><a href="data-visualisation.html#piecharts"><i class="fa fa-check"></i><b>4.2.6</b> Piecharts</a></li>
+<li class="chapter" data-level="4.2.7" data-path="data-visualisation.html"><a href="data-visualisation.html#scatter-plots"><i class="fa fa-check"></i><b>4.2.7</b> Scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="data-visualisation.html"><a href="data-visualisation.html#how-to-customize-your-plots"><i class="fa fa-check"></i><b>4.3</b> How to customize your plots</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="data-visualisation.html"><a href="data-visualisation.html#changing-the-theme-colors-fonts-combining-plots-and-adding-p-value-indications"><i class="fa fa-check"></i><b>4.3.1</b> changing the theme, colors, fonts, combining plots, and adding p-value indications</a></li>
+<li class="chapter" data-level="4.3.2" data-path="data-visualisation.html"><a href="data-visualisation.html#example-1"><i class="fa fa-check"></i><b>4.3.2</b> Example 1</a></li>
+<li class="chapter" data-level="4.3.3" data-path="data-visualisation.html"><a href="data-visualisation.html#example-2"><i class="fa fa-check"></i><b>4.3.3</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="data-visualisation.html"><a href="data-visualisation.html#interactive-plots"><i class="fa fa-check"></i><b>4.4</b> Interactive plots</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><i class="fa fa-check"></i><b>5</b> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#cronbachs-alpha"><i class="fa fa-check"></i><b>5.1</b> Cronbach’s alpha</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#alpha-by-hand"><i class="fa fa-check"></i><b>5.1.1</b> Alpha by hand</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#omega"><i class="fa fa-check"></i><b>5.2</b> Omega</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#fit-indices-and-how-to-potentially-improve-model-fit"><i class="fa fa-check"></i><b>5.2.1</b> Fit indices and how to potentially improve model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#exploratory-factor-analysis"><i class="fa fa-check"></i><b>5.3</b> Exploratory factor analysis</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-check-multicollinearity"><i class="fa fa-check"></i><b>5.3.1</b> EFA check: multicollinearity</a></li>
+<li class="chapter" data-level="5.3.2" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-check-univariatemultivariate-normal-distribution"><i class="fa fa-check"></i><b>5.3.2</b> EFA check: univariate/multivariate normal distribution</a></li>
+<li class="chapter" data-level="5.3.3" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-check-univariatemultivariate-outliers"><i class="fa fa-check"></i><b>5.3.3</b> EFA check: univariate/multivariate outliers</a></li>
+<li class="chapter" data-level="5.3.4" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-how-many-factors"><i class="fa fa-check"></i><b>5.3.4</b> EFA: how many factors?</a></li>
+<li class="chapter" data-level="5.3.5" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-example"><i class="fa fa-check"></i><b>5.3.5</b> EFA example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#referred-article"><i class="fa fa-check"></i><b>5.4</b> Referred article</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regression-analysis.html"><a href="regression-analysis.html"><i class="fa fa-check"></i><b>6</b> Regression analysis</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regression-analysis.html"><a href="regression-analysis.html#regression-models-and-things-to-consider"><i class="fa fa-check"></i><b>6.1</b> Regression models and things to consider</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="regression-analysis.html"><a href="regression-analysis.html#the-language-of-regression-models"><i class="fa fa-check"></i><b>6.1.1</b> The language of regression models</a></li>
+<li class="chapter" data-level="6.1.2" data-path="regression-analysis.html"><a href="regression-analysis.html#long-to-wide-format-and-vice-versa"><i class="fa fa-check"></i><b>6.1.2</b> Long to wide format and vice versa</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="regression-analysis.html"><a href="regression-analysis.html#simple-linear-regression-using-a-general-linear-model"><i class="fa fa-check"></i><b>6.2</b> (Simple) linear regression using a general linear model</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="regression-analysis.html"><a href="regression-analysis.html#interaction-terms-johnson-neyman-intervals-and-simple-slopes"><i class="fa fa-check"></i><b>6.2.1</b> Interaction terms, Johnson-Neyman intervals, and simple slopes</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="regression-analysis.html"><a href="regression-analysis.html#simple-generalized-linear-models"><i class="fa fa-check"></i><b>6.3</b> Simple generalIZED linear models</a></li>
+<li class="chapter" data-level="6.4" data-path="regression-analysis.html"><a href="regression-analysis.html#mixed-effects-model"><i class="fa fa-check"></i><b>6.4</b> Mixed effects model</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="regression-analysis.html"><a href="regression-analysis.html#fixed-and-random-effects"><i class="fa fa-check"></i><b>6.4.1</b> Fixed and random effects</a></li>
+<li class="chapter" data-level="6.4.2" data-path="regression-analysis.html"><a href="regression-analysis.html#intraclass-correlationvariance-partition"><i class="fa fa-check"></i><b>6.4.2</b> Intraclass correlation/variance partition</a></li>
+<li class="chapter" data-level="6.4.3" data-path="regression-analysis.html"><a href="regression-analysis.html#random-slopes"><i class="fa fa-check"></i><b>6.4.3</b> Random slopes</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="regression-analysis.html"><a href="regression-analysis.html#model-assumptions"><i class="fa fa-check"></i><b>6.5</b> Model assumptions</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="regression-analysis.html"><a href="regression-analysis.html#assumptions-linear-regression-not-multilevel"><i class="fa fa-check"></i><b>6.5.1</b> Assumptions: Linear regression (not multilevel)</a></li>
+<li class="chapter" data-level="6.5.2" data-path="regression-analysis.html"><a href="regression-analysis.html#assumptions-multilevel-linear-regression"><i class="fa fa-check"></i><b>6.5.2</b> Assumptions: Multilevel linear regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="regression-analysis.html"><a href="regression-analysis.html#effect-sizes"><i class="fa fa-check"></i><b>6.6</b> Effect sizes</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="regression-analysis.html"><a href="regression-analysis.html#standardized-beta-coefficients-and-r²"><i class="fa fa-check"></i><b>6.6.1</b> Standardized beta coefficients and R²</a></li>
+<li class="chapter" data-level="6.6.2" data-path="regression-analysis.html"><a href="regression-analysis.html#in-case-of-mixed-effects-models"><i class="fa fa-check"></i><b>6.6.2</b> In case of mixed-effects models</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="anova.html"><a href="anova.html"><i class="fa fa-check"></i><b>7</b> Anova</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="anova.html"><a href="anova.html#sum-and-treatment-contrasts"><i class="fa fa-check"></i><b>7.1</b> Sum and Treatment Contrasts</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="anova.html"><a href="anova.html#dummy-coding"><i class="fa fa-check"></i><b>7.1.1</b> Dummy-coding</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="anova.html"><a href="anova.html#one-way-anova"><i class="fa fa-check"></i><b>7.2</b> One-way ANOVA</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="anova.html"><a href="anova.html#post-hoc-group-comparisons"><i class="fa fa-check"></i><b>7.2.1</b> Post-hoc group-comparisons</a></li>
+<li class="chapter" data-level="7.2.2" data-path="anova.html"><a href="anova.html#making-your-own-specific-hypotheses-and-contrasts."><i class="fa fa-check"></i><b>7.2.2</b> Making your own specific hypotheses and contrasts.</a></li>
+<li class="chapter" data-level="7.2.3" data-path="anova.html"><a href="anova.html#effect-sizes-1"><i class="fa fa-check"></i><b>7.2.3</b> Effect sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="anova.html"><a href="anova.html#two-way-anova"><i class="fa fa-check"></i><b>7.3</b> Two-way ANOVA</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="anova.html"><a href="anova.html#four-different-types-of-anova"><i class="fa fa-check"></i><b>7.3.1</b> Four different types of ANOVA</a></li>
+<li class="chapter" data-level="7.3.2" data-path="anova.html"><a href="anova.html#two-way-anova-post-hoc-comparisons"><i class="fa fa-check"></i><b>7.3.2</b> Two-way ANOVA: Post-hoc comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="anova.html"><a href="anova.html#manova"><i class="fa fa-check"></i><b>7.4</b> MANOVA</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="anova.html"><a href="anova.html#practical-example-manova-two-outcome-variables"><i class="fa fa-check"></i><b>7.4.1</b> Practical example Manova: two outcome variables</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="anova.html"><a href="anova.html#referred-article-1"><i class="fa fa-check"></i><b>7.5</b> Referred article</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html"><i class="fa fa-check"></i><b>8</b> <strong>Structural Equation Modelling and mediation</strong></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#basic-mediation"><i class="fa fa-check"></i><b>8.1</b> Basic mediation</a></li>
+<li class="chapter" data-level="8.2" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#basic-example"><i class="fa fa-check"></i><b>8.2</b> Basic example</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#visualize-your-path-diagrams"><i class="fa fa-check"></i><b>8.2.1</b> Visualize your : path diagrams</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#moderated-mediation"><i class="fa fa-check"></i><b>8.3</b> Moderated mediation</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#on-all-pathways"><i class="fa fa-check"></i><b>8.3.1</b> On all pathways</a></li>
+<li class="chapter" data-level="8.3.2" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#using-a-continuous-moderator"><i class="fa fa-check"></i><b>8.3.2</b> Using a continuous moderator</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html"><i class="fa fa-check"></i><b>9</b> Missing data and multiple imputation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#missing-data"><i class="fa fa-check"></i><b>9.1</b> Missing data</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#listwise-deletion-and-single-mean-imputation"><i class="fa fa-check"></i><b>9.1.1</b> Listwise deletion and single (mean) imputation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#multiple-imputation"><i class="fa fa-check"></i><b>9.2</b> Multiple imputation</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#before-mice-check-missing-values"><i class="fa fa-check"></i><b>9.2.1</b> before mice: Check missing values</a></li>
+<li class="chapter" data-level="9.2.2" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#mice-decissions-joint-modeling-versus-fully-conditional-specification"><i class="fa fa-check"></i><b>9.2.2</b> mice decissions: joint modeling versus fully conditional specification</a></li>
+<li class="chapter" data-level="9.2.3" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#mice-decisions-number-of-imputations"><i class="fa fa-check"></i><b>9.2.3</b> mice decisions: number of imputations</a></li>
+<li class="chapter" data-level="9.2.4" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#practical-example"><i class="fa fa-check"></i><b>9.2.4</b> Practical example</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</h1>
+<p class="author"><em>Gillian Debra</em></p>
+<p class="date"><em>2025-03-16</em></p>
+</div>
+<div id="delighted-to-have-you-welcome-to" class="section level1 unnumbered hasAnchor">
+<h1>Delighted to have you!<br>Welcome to:<a href="index.html#delighted-to-have-you-welcome-to" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.gif" /><!-- --></p>
+<p>This guide will tackle <strong>data preprocessing</strong> (the various steps to obtain a <em>“clean and ready”</em> dataset using e.g., <strong>dplyr</strong>), <strong>data visualization</strong> (using <strong>ggplot2</strong>), and <strong>data analysis</strong> (<strong>linear regression, analysis of variance, and structural equation modelling</strong>), using <strong>R and RStudio</strong>.</p>
+<p>If you already had a go with these activities, you may have noticed that they involve several steps, some of which may have taken you by surprise. You received your data file, you inspect it… only to find that it is far from <em>usable</em>. The data should be reordered, variables transformed, certain entries removed. There’s a lot to look up or to figure out. After some time, the data file is finally <em>ready to go</em>. However, you realize that this is only the beginning, the fun has yet to start.</p>
+<p>With a functional Wi-Fi connection, most of these steps are documented online. Thing is, this abundance of information is scattered far and wide across the internet. Additionally, <strong>you may be unaware of certain possibilities, leaving you without</strong> “<em>quality of life improving</em>” tips and tricks.</p>
+<p>Drawing from my own experience in R, I want to help you by providing explanations, demonstrations, and by sharing some tips and tricks. I also want to raise your <strong>awareness</strong> of the many possibilities that R offers. If you are aware that something is possible, you can then explore it further on your own.</p>
+<p>Before we begin, I want to briefly note two points. <strong>First</strong>, R allows for different <em>personal styles</em>. Different code can lead to the same result, some ways are more intuitive for me while others might be more intuitive for you. <strong>Second</strong>, while this guide is made with <strong>“beginner” R users</strong> in mind, it occasionally contains information for <strong>more advanced users</strong>. Keep in mind that I will explain relatively basic code in the early parts. In later sections, I will progressively reduce explanations of the “basics” to focus on the topic at hand.</p>
+<div id="what-to-expect" class="section level2 unnumbered hasAnchor">
+<h2>What to expect<a href="index.html#what-to-expect" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This guide will tackle the following aspects.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Loading different types of data files</strong>. We’ll start with a brief reminder of R packages and how to set a working directory before demonstrating how to open a variety of files such as <strong>.csv and .sas</strong>.</p></li>
+<li><p><strong>Sharing and communicating your work with others</strong>. This section will seem to jump ahead slightly, but the sooner you learn how <strong>R projects</strong> notably simplify sharing your data files and R scripts, the better. Additionally, I will provide a <strong>short</strong> introduction to making dynamic (online) reports using <strong>R Markdown</strong> to enhance transparency and reproducibility.</p></li>
+<li><p><strong>Data preprocessing (dplyr) and descriptive calculations</strong>. Learn perform various computations and to shape and clean your data, using traditional methods and the more modern <strong>dplyr</strong> approach.</p></li>
+<li><p><strong>Data visualization (ggplot2)</strong>. Learn to plot and show your data - one of the most powerful skills, in my humble opinion. To do so, I will introduce you to a flexible toolbox provided by the <strong>ggplot2 package</strong>, helping you unleash your inner artist.</p></li>
+<li><p><strong>Reliability, confirmatory and exploratory factor analysis.</strong> Learn to have an indication of how “closely” questionnaire items relate related to one another (<strong>Cronbach’s alpha and McDonald’s Omega</strong>). In addition, I’ll show you techniques that are used to evaluate whether your data “can be explained” (or deemed to be) by underlying constructs.</p></li>
+<li><p><strong>Basic regression analysis (lm, glm, lmer) and model assumptions</strong>. Learn to model straight lines, from the basic linear regression to the mixed-effects (multilevel) linear regression. In addition, we will check <strong>several assumptions</strong> of (linear) regression including the distribution of residuals and homoscedasticity.</p></li>
+<li><p><strong>ANOVA and MANOVA</strong>. This section focuses on linear regression with categorical variables and comparisons of group means. Learn to create various <strong>contrasts</strong> (beyond treatment and sum contrasts) to test your own questions and hypotheses.</p></li>
+<li><p><strong>Mediation analysis</strong>. Sometimes we want to know why a relation or effect occurs. In this section you will learn how to fit structural equation models to test mediation and moderated mediation models using <strong>lavaan</strong>. In addition, I’ll show you how to visualize the results of a mediation analysis by plotting path diagrams.</p></li>
+<li><p><strong>Missing data and multiple imputation</strong>. Data can go missing due to a variety of reasons and should not be ignored. In this last part, I provide some approaches on how to deal with missing values and how to inspect <em>patterns of missingness</em>. Lastly, I provide a step-by-step guide on multiple imputation using the <strong>mice package</strong>.</p></li>
+</ol>
+<p><br>
+<br></p>
+</div>
+<div id="packages-and-r-version" class="section level2 unnumbered hasAnchor">
+<h2>Packages and R version<a href="index.html#packages-and-r-version" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>All demonstrations in this guide were done using R <em>version 4.3.2</em> and RStudio <em>version 2023.12.0+369</em>.
+The following packages were used throughout this guide:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Package</th>
+<th align="left">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">car</td>
+<td align="left">3.1-2</td>
+</tr>
+<tr class="even">
+<td align="left">corrtable</td>
+<td align="left">0.1.1</td>
+</tr>
+<tr class="odd">
+<td align="left">dplyr</td>
+<td align="left">1.1.2</td>
+</tr>
+<tr class="even">
+<td align="left">e1071</td>
+<td align="left">1.7-13</td>
+</tr>
+<tr class="odd">
+<td align="left">effectsize</td>
+<td align="left">0.8.6</td>
+</tr>
+<tr class="even">
+<td align="left">gganimate</td>
+<td align="left">1.0.8</td>
+</tr>
+<tr class="odd">
+<td align="left">ggcorrplot</td>
+<td align="left">0.1.4.1</td>
+</tr>
+<tr class="even">
+<td align="left">ggimage</td>
+<td align="left">0.3.3</td>
+</tr>
+<tr class="odd">
+<td align="left">ggplot2</td>
+<td align="left">3.4.4</td>
+</tr>
+<tr class="even">
+<td align="left">ggpubr</td>
+<td align="left">0.6.0</td>
+</tr>
+<tr class="odd">
+<td align="left">haven</td>
+<td align="left">2.5.3</td>
+</tr>
+<tr class="even">
+<td align="left">introdataviz</td>
+<td align="left">0.0.0.9003</td>
+</tr>
+<tr class="odd">
+<td align="left">knitr</td>
+<td align="left">1.43</td>
+</tr>
+<tr class="even">
+<td align="left">lavaan</td>
+<td align="left">0.6-16</td>
+</tr>
+<tr class="odd">
+<td align="left">lubridate</td>
+<td align="left">1.9.2</td>
+</tr>
+<tr class="even">
+<td align="left">MASS</td>
+<td align="left">7.3-60</td>
+</tr>
+<tr class="odd">
+<td align="left">mice</td>
+<td align="left">3.16.0</td>
+</tr>
+<tr class="even">
+<td align="left">pacman</td>
+<td align="left">0.5.1</td>
+</tr>
+<tr class="odd">
+<td align="left">psych</td>
+<td align="left">2.3.6</td>
+</tr>
+<tr class="even">
+<td align="left">readxl</td>
+<td align="left">1.4.3</td>
+</tr>
+<tr class="odd">
+<td align="left">rockchalk</td>
+<td align="left">1.8.15.7</td>
+</tr>
+<tr class="even">
+<td align="left">semTools</td>
+<td align="left">0.5-6</td>
+</tr>
+<tr class="odd">
+<td align="left">stringr</td>
+<td align="left">1.5.0</td>
+</tr>
+<tr class="even">
+<td align="left">transformr</td>
+<td align="left">0.1.4</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="loading-datafiles.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

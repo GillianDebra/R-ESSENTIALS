@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Gillian Debra" />
+
+
+<meta name="date" content="2025-03-16" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"/>
+<link rel="next" href="data-visualisation.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.2/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Delighted to have you!<br>Welcome to:</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#what-to-expect"><i class="fa fa-check"></i>What to expect</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-and-r-version"><i class="fa fa-check"></i>Packages and R version</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="loading-datafiles.html"><a href="loading-datafiles.html"><i class="fa fa-check"></i><b>1</b> Loading datafiles</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="loading-datafiles.html"><a href="loading-datafiles.html#working-directory"><i class="fa fa-check"></i><b>1.1</b> Working directory</a></li>
+<li class="chapter" data-level="1.2" data-path="loading-datafiles.html"><a href="loading-datafiles.html#loading-different-types-of-data-files"><i class="fa fa-check"></i><b>1.2</b> Loading different types of data files</a></li>
+<li class="chapter" data-level="1.3" data-path="loading-datafiles.html"><a href="loading-datafiles.html#loading-multiple-files-same-extension-at-once"><i class="fa fa-check"></i><b>1.3</b> Loading multiple files (same extension) at once</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><i class="fa fa-check"></i><b>2</b> Communicate with others: a quick glance at R projects and R markdown</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#r-projects"><i class="fa fa-check"></i><b>2.1</b> R projects</a></li>
+<li class="chapter" data-level="2.2" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#r-markdown-brief"><i class="fa fa-check"></i><b>2.2</b> R Markdown (brief)</a></li>
+<li class="chapter" data-level="" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#a-heading-level-two"><i class="fa fa-check"></i>A heading (level two)</a>
+<ul>
+<li class="chapter" data-level="" data-path="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html#another-heading-level-three"><i class="fa fa-check"></i>Another heading (level three)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html"><i class="fa fa-check"></i><b>3</b> Data cleaning and descriptive statistics</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#access-different-parts-of-a-dataset"><i class="fa fa-check"></i><b>3.1</b> Access different parts of a dataset</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#viewing-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Viewing the data</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#several-examples"><i class="fa fa-check"></i><b>3.1.2</b> Several examples</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#mathematical-calculations-in-r"><i class="fa fa-check"></i><b>3.2</b> Mathematical calculations in R</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#sum"><i class="fa fa-check"></i><b>3.2.1</b> Sum</a></li>
+<li class="chapter" data-level="3.2.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#average"><i class="fa fa-check"></i><b>3.2.2</b> Average</a></li>
+<li class="chapter" data-level="3.2.3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#variance-standard-deviation-and-correlations"><i class="fa fa-check"></i><b>3.2.3</b> Variance, standard deviation, and correlations</a></li>
+<li class="chapter" data-level="3.2.4" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#other-calculations-and-the-describe-function"><i class="fa fa-check"></i><b>3.2.4</b> Other calculations and the describe function(!)</a></li>
+<li class="chapter" data-level="3.2.5" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#what-if-there-are-missing-values"><i class="fa fa-check"></i><b>3.2.5</b> What if there are missing values?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#correlation-matrices-and-visualisation"><i class="fa fa-check"></i><b>3.3</b> Correlation matrices and visualisation</a></li>
+<li class="chapter" data-level="3.4" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-a-more-modern-approach-to-shape-data-."><i class="fa fa-check"></i><b>3.4</b> Dplyr, a more modern approach to shape data (!).</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-filter"><i class="fa fa-check"></i><b>3.4.1</b> Dplyr: Filter</a></li>
+<li class="chapter" data-level="3.4.2" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-select"><i class="fa fa-check"></i><b>3.4.2</b> Dplyr: Select</a></li>
+<li class="chapter" data-level="3.4.3" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-mutate"><i class="fa fa-check"></i><b>3.4.3</b> Dplyr: Mutate</a></li>
+<li class="chapter" data-level="3.4.4" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-arrange"><i class="fa fa-check"></i><b>3.4.4</b> Dplyr: Arrange</a></li>
+<li class="chapter" data-level="3.4.5" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-group_by-and-summarize"><i class="fa fa-check"></i><b>3.4.5</b> Dplyr: Group_by and Summarize</a></li>
+<li class="chapter" data-level="3.4.6" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#dplyr-join"><i class="fa fa-check"></i><b>3.4.6</b> Dplyr: Join</a></li>
+<li class="chapter" data-level="3.4.7" data-path="data-cleaning-and-descriptive-statistics.html"><a href="data-cleaning-and-descriptive-statistics.html#practical-example-data-shapingcleaning"><i class="fa fa-check"></i><b>3.4.7</b> Practical example data shaping/cleaning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-visualisation.html"><a href="data-visualisation.html"><i class="fa fa-check"></i><b>4</b> Data visualisation</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="data-visualisation.html"><a href="data-visualisation.html#the-language-of-ggplot"><i class="fa fa-check"></i><b>4.1</b> The language of ggplot</a></li>
+<li class="chapter" data-level="4.2" data-path="data-visualisation.html"><a href="data-visualisation.html#plotting-various-graphs."><i class="fa fa-check"></i><b>4.2</b> Plotting various graphs.</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="data-visualisation.html"><a href="data-visualisation.html#histogram"><i class="fa fa-check"></i><b>4.2.1</b> Histogram</a></li>
+<li class="chapter" data-level="4.2.2" data-path="data-visualisation.html"><a href="data-visualisation.html#density-plots"><i class="fa fa-check"></i><b>4.2.2</b> Density plots</a></li>
+<li class="chapter" data-level="4.2.3" data-path="data-visualisation.html"><a href="data-visualisation.html#violin-plots"><i class="fa fa-check"></i><b>4.2.3</b> Violin plots</a></li>
+<li class="chapter" data-level="4.2.4" data-path="data-visualisation.html"><a href="data-visualisation.html#split-violin-plots"><i class="fa fa-check"></i><b>4.2.4</b> Split violin plots</a></li>
+<li class="chapter" data-level="4.2.5" data-path="data-visualisation.html"><a href="data-visualisation.html#bar-graphs"><i class="fa fa-check"></i><b>4.2.5</b> Bar graphs</a></li>
+<li class="chapter" data-level="4.2.6" data-path="data-visualisation.html"><a href="data-visualisation.html#piecharts"><i class="fa fa-check"></i><b>4.2.6</b> Piecharts</a></li>
+<li class="chapter" data-level="4.2.7" data-path="data-visualisation.html"><a href="data-visualisation.html#scatter-plots"><i class="fa fa-check"></i><b>4.2.7</b> Scatter plots</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="data-visualisation.html"><a href="data-visualisation.html#how-to-customize-your-plots"><i class="fa fa-check"></i><b>4.3</b> How to customize your plots</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="data-visualisation.html"><a href="data-visualisation.html#changing-the-theme-colors-fonts-combining-plots-and-adding-p-value-indications"><i class="fa fa-check"></i><b>4.3.1</b> changing the theme, colors, fonts, combining plots, and adding p-value indications</a></li>
+<li class="chapter" data-level="4.3.2" data-path="data-visualisation.html"><a href="data-visualisation.html#example-1"><i class="fa fa-check"></i><b>4.3.2</b> Example 1</a></li>
+<li class="chapter" data-level="4.3.3" data-path="data-visualisation.html"><a href="data-visualisation.html#example-2"><i class="fa fa-check"></i><b>4.3.3</b> Example 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="data-visualisation.html"><a href="data-visualisation.html#interactive-plots"><i class="fa fa-check"></i><b>4.4</b> Interactive plots</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><i class="fa fa-check"></i><b>5</b> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#cronbachs-alpha"><i class="fa fa-check"></i><b>5.1</b> Cronbach’s alpha</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#alpha-by-hand"><i class="fa fa-check"></i><b>5.1.1</b> Alpha by hand</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#omega"><i class="fa fa-check"></i><b>5.2</b> Omega</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#fit-indices-and-how-to-potentially-improve-model-fit"><i class="fa fa-check"></i><b>5.2.1</b> Fit indices and how to potentially improve model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#exploratory-factor-analysis"><i class="fa fa-check"></i><b>5.3</b> Exploratory factor analysis</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-check-multicollinearity"><i class="fa fa-check"></i><b>5.3.1</b> EFA check: multicollinearity</a></li>
+<li class="chapter" data-level="5.3.2" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-check-univariatemultivariate-normal-distribution"><i class="fa fa-check"></i><b>5.3.2</b> EFA check: univariate/multivariate normal distribution</a></li>
+<li class="chapter" data-level="5.3.3" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-check-univariatemultivariate-outliers"><i class="fa fa-check"></i><b>5.3.3</b> EFA check: univariate/multivariate outliers</a></li>
+<li class="chapter" data-level="5.3.4" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-how-many-factors"><i class="fa fa-check"></i><b>5.3.4</b> EFA: how many factors?</a></li>
+<li class="chapter" data-level="5.3.5" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#efa-example"><i class="fa fa-check"></i><b>5.3.5</b> EFA example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><a href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html#referred-article"><i class="fa fa-check"></i><b>5.4</b> Referred article</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regression-analysis.html"><a href="regression-analysis.html"><i class="fa fa-check"></i><b>6</b> Regression analysis</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regression-analysis.html"><a href="regression-analysis.html#regression-models-and-things-to-consider"><i class="fa fa-check"></i><b>6.1</b> Regression models and things to consider</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="regression-analysis.html"><a href="regression-analysis.html#the-language-of-regression-models"><i class="fa fa-check"></i><b>6.1.1</b> The language of regression models</a></li>
+<li class="chapter" data-level="6.1.2" data-path="regression-analysis.html"><a href="regression-analysis.html#long-to-wide-format-and-vice-versa"><i class="fa fa-check"></i><b>6.1.2</b> Long to wide format and vice versa</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="regression-analysis.html"><a href="regression-analysis.html#simple-linear-regression-using-a-general-linear-model"><i class="fa fa-check"></i><b>6.2</b> (Simple) linear regression using a general linear model</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="regression-analysis.html"><a href="regression-analysis.html#interaction-terms-johnson-neyman-intervals-and-simple-slopes"><i class="fa fa-check"></i><b>6.2.1</b> Interaction terms, Johnson-Neyman intervals, and simple slopes</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="regression-analysis.html"><a href="regression-analysis.html#simple-generalized-linear-models"><i class="fa fa-check"></i><b>6.3</b> Simple generalIZED linear models</a></li>
+<li class="chapter" data-level="6.4" data-path="regression-analysis.html"><a href="regression-analysis.html#mixed-effects-model"><i class="fa fa-check"></i><b>6.4</b> Mixed effects model</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="regression-analysis.html"><a href="regression-analysis.html#fixed-and-random-effects"><i class="fa fa-check"></i><b>6.4.1</b> Fixed and random effects</a></li>
+<li class="chapter" data-level="6.4.2" data-path="regression-analysis.html"><a href="regression-analysis.html#intraclass-correlationvariance-partition"><i class="fa fa-check"></i><b>6.4.2</b> Intraclass correlation/variance partition</a></li>
+<li class="chapter" data-level="6.4.3" data-path="regression-analysis.html"><a href="regression-analysis.html#random-slopes"><i class="fa fa-check"></i><b>6.4.3</b> Random slopes</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="regression-analysis.html"><a href="regression-analysis.html#model-assumptions"><i class="fa fa-check"></i><b>6.5</b> Model assumptions</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="regression-analysis.html"><a href="regression-analysis.html#assumptions-linear-regression-not-multilevel"><i class="fa fa-check"></i><b>6.5.1</b> Assumptions: Linear regression (not multilevel)</a></li>
+<li class="chapter" data-level="6.5.2" data-path="regression-analysis.html"><a href="regression-analysis.html#assumptions-multilevel-linear-regression"><i class="fa fa-check"></i><b>6.5.2</b> Assumptions: Multilevel linear regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="regression-analysis.html"><a href="regression-analysis.html#effect-sizes"><i class="fa fa-check"></i><b>6.6</b> Effect sizes</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="regression-analysis.html"><a href="regression-analysis.html#standardized-beta-coefficients-and-r²"><i class="fa fa-check"></i><b>6.6.1</b> Standardized beta coefficients and R²</a></li>
+<li class="chapter" data-level="6.6.2" data-path="regression-analysis.html"><a href="regression-analysis.html#in-case-of-mixed-effects-models"><i class="fa fa-check"></i><b>6.6.2</b> In case of mixed-effects models</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="anova.html"><a href="anova.html"><i class="fa fa-check"></i><b>7</b> Anova</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="anova.html"><a href="anova.html#sum-and-treatment-contrasts"><i class="fa fa-check"></i><b>7.1</b> Sum and Treatment Contrasts</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="anova.html"><a href="anova.html#dummy-coding"><i class="fa fa-check"></i><b>7.1.1</b> Dummy-coding</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="anova.html"><a href="anova.html#one-way-anova"><i class="fa fa-check"></i><b>7.2</b> One-way ANOVA</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="anova.html"><a href="anova.html#post-hoc-group-comparisons"><i class="fa fa-check"></i><b>7.2.1</b> Post-hoc group-comparisons</a></li>
+<li class="chapter" data-level="7.2.2" data-path="anova.html"><a href="anova.html#making-your-own-specific-hypotheses-and-contrasts."><i class="fa fa-check"></i><b>7.2.2</b> Making your own specific hypotheses and contrasts.</a></li>
+<li class="chapter" data-level="7.2.3" data-path="anova.html"><a href="anova.html#effect-sizes-1"><i class="fa fa-check"></i><b>7.2.3</b> Effect sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="anova.html"><a href="anova.html#two-way-anova"><i class="fa fa-check"></i><b>7.3</b> Two-way ANOVA</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="anova.html"><a href="anova.html#four-different-types-of-anova"><i class="fa fa-check"></i><b>7.3.1</b> Four different types of ANOVA</a></li>
+<li class="chapter" data-level="7.3.2" data-path="anova.html"><a href="anova.html#two-way-anova-post-hoc-comparisons"><i class="fa fa-check"></i><b>7.3.2</b> Two-way ANOVA: Post-hoc comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="anova.html"><a href="anova.html#manova"><i class="fa fa-check"></i><b>7.4</b> MANOVA</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="anova.html"><a href="anova.html#practical-example-manova-two-outcome-variables"><i class="fa fa-check"></i><b>7.4.1</b> Practical example Manova: two outcome variables</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="anova.html"><a href="anova.html#referred-article-1"><i class="fa fa-check"></i><b>7.5</b> Referred article</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html"><i class="fa fa-check"></i><b>8</b> <strong>Structural Equation Modelling and mediation</strong></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#basic-mediation"><i class="fa fa-check"></i><b>8.1</b> Basic mediation</a></li>
+<li class="chapter" data-level="8.2" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#basic-example"><i class="fa fa-check"></i><b>8.2</b> Basic example</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#visualize-your-path-diagrams"><i class="fa fa-check"></i><b>8.2.1</b> Visualize your : path diagrams</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#moderated-mediation"><i class="fa fa-check"></i><b>8.3</b> Moderated mediation</a>
+<ul>
+<li class="chapter" data-level="8.3.1" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#on-all-pathways"><i class="fa fa-check"></i><b>8.3.1</b> On all pathways</a></li>
+<li class="chapter" data-level="8.3.2" data-path="structural-equation-modelling-and-mediation.html"><a href="structural-equation-modelling-and-mediation.html#using-a-continuous-moderator"><i class="fa fa-check"></i><b>8.3.2</b> Using a continuous moderator</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html"><i class="fa fa-check"></i><b>9</b> Missing data and multiple imputation</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#missing-data"><i class="fa fa-check"></i><b>9.1</b> Missing data</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#listwise-deletion-and-single-mean-imputation"><i class="fa fa-check"></i><b>9.1.1</b> Listwise deletion and single (mean) imputation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#multiple-imputation"><i class="fa fa-check"></i><b>9.2</b> Multiple imputation</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#before-mice-check-missing-values"><i class="fa fa-check"></i><b>9.2.1</b> before mice: Check missing values</a></li>
+<li class="chapter" data-level="9.2.2" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#mice-decissions-joint-modeling-versus-fully-conditional-specification"><i class="fa fa-check"></i><b>9.2.2</b> mice decissions: joint modeling versus fully conditional specification</a></li>
+<li class="chapter" data-level="9.2.3" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#mice-decisions-number-of-imputations"><i class="fa fa-check"></i><b>9.2.3</b> mice decisions: number of imputations</a></li>
+<li class="chapter" data-level="9.2.4" data-path="missing-data-and-multiple-imputation.html"><a href="missing-data-and-multiple-imputation.html#practical-example"><i class="fa fa-check"></i><b>9.2.4</b> Practical example</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="data-cleaning-and-descriptive-statistics" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Data cleaning and descriptive statistics<a href="data-cleaning-and-descriptive-statistics.html#data-cleaning-and-descriptive-statistics" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, <strong>merge datasets</strong>, and more.</p>
+<p>Fortunately, the data is fluid. It can be changed. reshaped. remade.</p>
+<p>This all requires some understanding of how to access different parts of your dataset, how to perform mathematical calculations in R, how to recode variables, and so on. After a brief overview, I will introduce you to <a href="https://dplyr.tidyverse.org/authors.html">dplyr package</a> - a personal favorite of mine - which simplifies preprocessing/cleaning.</p>
+<p>In this part I will be covering:</p>
+<ol style="list-style-type: decimal">
+<li><strong>How to access the different parts of dataset in R</strong>. This includes how to navigate and extract certain rows or columns from a dataset.</li>
+<li><strong>How to do mathematical computations in R including the standard deviation and the kurtosis</strong>. In addition, I will show <strong>how to get multiple descriptive statistics of multiple variables</strong> in one code line. I will also show <strong>how to easily make a correlation matrix</strong>.</li>
+<li><strong>Important functions of the dplyr package</strong>. I will explain and demonstrate a variety of functions that I commonly use in my data processing toolbox such as mutate and left_join.</li>
+<li><strong>Ending with a demonstration of data preprocessing/cleaning a raw dataset from scratch</strong>.</li>
+</ol>
+<div id="access-different-parts-of-a-dataset" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Access different parts of a dataset<a href="data-cleaning-and-descriptive-statistics.html#access-different-parts-of-a-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s start with the demonstration or a refresher of the basics. For the examples below, I will generate my own dataset using the <strong>data.frame()</strong> function. As the values of this dataset will be generated at random, I will <em>set a seed</em> so that in each run, the generated data will be identical.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="data-cleaning-and-descriptive-statistics.html#cb6-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># Note, the number can be anything (but the results will be different )</span></span>
+<span id="cb6-2"><a href="data-cleaning-and-descriptive-statistics.html#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="data-cleaning-and-descriptive-statistics.html#cb6-3" tabindex="-1"></a>mydata <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-4"><a href="data-cleaning-and-descriptive-statistics.html#cb6-4" tabindex="-1"></a>  <span class="at">participant =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="co"># generate the values 1 to 5 (1,2,3,4,5)</span></span>
+<span id="cb6-5"><a href="data-cleaning-and-descriptive-statistics.html#cb6-5" tabindex="-1"></a>  <span class="at">scores =</span> <span class="fu">runif</span>(<span class="dv">5</span>, <span class="dv">0</span>,<span class="dv">100</span>), <span class="co"># generate 5 values (from a uniform distribution) between 0 and 100</span></span>
+<span id="cb6-6"><a href="data-cleaning-and-descriptive-statistics.html#cb6-6" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">c</span>(<span class="st">&quot;male&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;female&quot;</span>)</span>
+<span id="cb6-7"><a href="data-cleaning-and-descriptive-statistics.html#cb6-7" tabindex="-1"></a>)</span></code></pre></div>
+<div id="viewing-the-data" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Viewing the data<a href="data-cleaning-and-descriptive-statistics.html#viewing-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now that I have made a dataset, I’ll briefly show you how to view your data as RStudio allows different ways to do so. With code:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="data-cleaning-and-descriptive-statistics.html#cb7-1" tabindex="-1"></a>  mydata</span>
+<span id="cb7-2"><a href="data-cleaning-and-descriptive-statistics.html#cb7-2" tabindex="-1"></a>  <span class="fu">head</span>(mydata) <span class="co"># shows the first 10 entries of a dataset</span></span>
+<span id="cb7-3"><a href="data-cleaning-and-descriptive-statistics.html#cb7-3" tabindex="-1"></a>  <span class="fu">View</span>(mydata) <span class="co"># Prompts the dataset in a separate window</span></span>
+<span id="cb7-4"><a href="data-cleaning-and-descriptive-statistics.html#cb7-4" tabindex="-1"></a><span class="co"># TEMPORARILY filter values, TEMPORARILY rearrange values, see changes in real-time, ... </span></span></code></pre></div>
+<p><strong>Next to writing code</strong>, you can also click on your datasets (under Environment, top right corner). The dataset will be shown in a separate window (similar to the <em>View()</em> code).
+<img src="images/Data%20cleaning/Cleaning_1.jpg" />
+<br>
+<br></p>
+<p>As shown in the image above, the “view window” allows to <strong>quickly track any changes</strong>. If you want you can use the view window outside of R**. Also practical, you can check specific entries in your dataset using the filter option and (temporarily) rearrange the data in an ascending or descending order to quickly check who or what has the highest or lowest score.</p>
+</div>
+<div id="several-examples" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Several examples<a href="data-cleaning-and-descriptive-statistics.html#several-examples" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A dataset consists of rows and columns. In referring to these, R will <strong>first look at the rows</strong> and <strong>then at the columns</strong>. For example, <em>dataset</em>[1,2] will output the value at the cross point of the first row and second column (28.75775). Let’s learn through example.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="data-cleaning-and-descriptive-statistics.html#cb8-1" tabindex="-1"></a>  <span class="co"># If I want to see the first row of all columns:</span></span>
+<span id="cb8-2"><a href="data-cleaning-and-descriptive-statistics.html#cb8-2" tabindex="-1"></a>  mydata[<span class="dv">1</span>,] <span class="co"># Again rows are on the left of the comma (columns on the right)</span></span>
+<span id="cb8-3"><a href="data-cleaning-and-descriptive-statistics.html#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="data-cleaning-and-descriptive-statistics.html#cb8-4" tabindex="-1"></a>  <span class="co"># If I want to see rows 1 to 3 of all columns:</span></span>
+<span id="cb8-5"><a href="data-cleaning-and-descriptive-statistics.html#cb8-5" tabindex="-1"></a>  mydata[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,]</span>
+<span id="cb8-6"><a href="data-cleaning-and-descriptive-statistics.html#cb8-6" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="data-cleaning-and-descriptive-statistics.html#cb8-7" tabindex="-1"></a>  <span class="co"># If I want to see rows 1,2, and 5 of all columns:</span></span>
+<span id="cb8-8"><a href="data-cleaning-and-descriptive-statistics.html#cb8-8" tabindex="-1"></a>  mydata[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">5</span>),] <span class="co"># Here I have to use a &quot;c&quot; vector </span></span>
+<span id="cb8-9"><a href="data-cleaning-and-descriptive-statistics.html#cb8-9" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="data-cleaning-and-descriptive-statistics.html#cb8-10" tabindex="-1"></a><span class="co"># Same goes for the columns. I can mention the column number (in my example 1= participant, 2= scores, 3=gender) </span></span>
+<span id="cb8-11"><a href="data-cleaning-and-descriptive-statistics.html#cb8-11" tabindex="-1"></a>  </span>
+<span id="cb8-12"><a href="data-cleaning-and-descriptive-statistics.html#cb8-12" tabindex="-1"></a>  <span class="co"># I want to see column 1 and 3 but by calling them by name instead their column number</span></span>
+<span id="cb8-13"><a href="data-cleaning-and-descriptive-statistics.html#cb8-13" tabindex="-1"></a>  mydata[,<span class="fu">c</span>(<span class="st">&quot;participant&quot;</span>, <span class="st">&quot;gender&quot;</span>)]</span>
+<span id="cb8-14"><a href="data-cleaning-and-descriptive-statistics.html#cb8-14" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="data-cleaning-and-descriptive-statistics.html#cb8-15" tabindex="-1"></a>  <span class="co"># If you want to see one column. In R you can also ask it like this:</span></span>
+<span id="cb8-16"><a href="data-cleaning-and-descriptive-statistics.html#cb8-16" tabindex="-1"></a>  mydata<span class="sc">$</span>gender</span>
+<span id="cb8-17"><a href="data-cleaning-and-descriptive-statistics.html#cb8-17" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="data-cleaning-and-descriptive-statistics.html#cb8-18" tabindex="-1"></a>  <span class="co"># If I want to see the value at column 2, row 3:</span></span>
+<span id="cb8-19"><a href="data-cleaning-and-descriptive-statistics.html#cb8-19" tabindex="-1"></a>  mydata[<span class="dv">3</span>,<span class="dv">2</span>]</span>
+<span id="cb8-20"><a href="data-cleaning-and-descriptive-statistics.html#cb8-20" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="data-cleaning-and-descriptive-statistics.html#cb8-21" tabindex="-1"></a>  <span class="co"># If I want to change the above value and add the value of row 5 and column 2</span></span>
+<span id="cb8-22"><a href="data-cleaning-and-descriptive-statistics.html#cb8-22" tabindex="-1"></a>  mydata[<span class="dv">3</span>,<span class="dv">2</span>] <span class="ot">=</span> mydata[<span class="dv">3</span>,<span class="dv">2</span>] <span class="sc">+</span> mydata[<span class="dv">5</span>,<span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="data-cleaning-and-descriptive-statistics.html#cb9-1" tabindex="-1"></a> <span class="co"># Suppose I want to look at certain values. For example, I want to look at scores but only from females:</span></span>
+<span id="cb9-2"><a href="data-cleaning-and-descriptive-statistics.html#cb9-2" tabindex="-1"></a>  mydata<span class="sc">$</span>scores[mydata<span class="sc">$</span>gender<span class="sc">==</span><span class="st">&quot;female&quot;</span>] <span class="co"># Within the column scores, search for scores that &quot;row-wise&quot;   corresponds with &quot;female&quot;</span></span>
+<span id="cb9-3"><a href="data-cleaning-and-descriptive-statistics.html#cb9-3" tabindex="-1"></a>  </span>
+<span id="cb9-4"><a href="data-cleaning-and-descriptive-statistics.html#cb9-4" tabindex="-1"></a>  <span class="co"># Suppose I want to look at scores from females who have a score of at least 85</span></span>
+<span id="cb9-5"><a href="data-cleaning-and-descriptive-statistics.html#cb9-5" tabindex="-1"></a>  <span class="co"># In other words: look to scores with condition &quot;female&quot; who have a &quot;score&gt;=85&quot;</span></span>
+<span id="cb9-6"><a href="data-cleaning-and-descriptive-statistics.html#cb9-6" tabindex="-1"></a>  mydata<span class="sc">$</span>scores[mydata<span class="sc">$</span>gender<span class="sc">==</span><span class="st">&quot;female&quot;</span> <span class="sc">&amp;</span> mydata<span class="sc">$</span>scores<span class="sc">&gt;=</span><span class="dv">85</span>]</span>
+<span id="cb9-7"><a href="data-cleaning-and-descriptive-statistics.html#cb9-7" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="data-cleaning-and-descriptive-statistics.html#cb9-8" tabindex="-1"></a>  <span class="co"># I want to look at scores from females and from participant 1 (a male)</span></span>
+<span id="cb9-9"><a href="data-cleaning-and-descriptive-statistics.html#cb9-9" tabindex="-1"></a>  <span class="co"># &quot;female&quot; OR &quot;participant == 1&quot;</span></span>
+<span id="cb9-10"><a href="data-cleaning-and-descriptive-statistics.html#cb9-10" tabindex="-1"></a>  mydata<span class="sc">$</span>scores[mydata<span class="sc">$</span>gender<span class="sc">==</span><span class="st">&quot;female&quot;</span> <span class="sc">|</span> mydata<span class="sc">$</span>participant<span class="sc">==</span><span class="dv">1</span>]</span>
+<span id="cb9-11"><a href="data-cleaning-and-descriptive-statistics.html#cb9-11" tabindex="-1"></a>  </span>
+<span id="cb9-12"><a href="data-cleaning-and-descriptive-statistics.html#cb9-12" tabindex="-1"></a>  </span>
+<span id="cb9-13"><a href="data-cleaning-and-descriptive-statistics.html#cb9-13" tabindex="-1"></a>  <span class="co"># One final example, I want to look at scores from females with a score of above 90, males with a score below 30, and participant 3</span></span>
+<span id="cb9-14"><a href="data-cleaning-and-descriptive-statistics.html#cb9-14" tabindex="-1"></a>  <span class="co"># &quot;female AND score&gt;90&quot;, &quot;male AND score&lt;30&quot;</span></span>
+<span id="cb9-15"><a href="data-cleaning-and-descriptive-statistics.html#cb9-15" tabindex="-1"></a>  mydata<span class="sc">$</span>scores[<span class="fu">c</span>(mydata<span class="sc">$</span>gender<span class="sc">==</span><span class="st">&quot;female&quot;</span> <span class="sc">&amp;</span> mydata<span class="sc">$</span>scores<span class="sc">&gt;</span><span class="dv">90</span>) <span class="sc">|</span></span>
+<span id="cb9-16"><a href="data-cleaning-and-descriptive-statistics.html#cb9-16" tabindex="-1"></a>              <span class="fu">c</span>(mydata<span class="sc">$</span>gender<span class="sc">==</span><span class="st">&quot;male&quot;</span> <span class="sc">&amp;</span> mydata<span class="sc">$</span>scores<span class="sc">&lt;</span><span class="dv">30</span>) <span class="sc">|</span></span>
+<span id="cb9-17"><a href="data-cleaning-and-descriptive-statistics.html#cb9-17" tabindex="-1"></a>                mydata<span class="sc">$</span>participant <span class="sc">==</span><span class="dv">3</span></span>
+<span id="cb9-18"><a href="data-cleaning-and-descriptive-statistics.html#cb9-18" tabindex="-1"></a>              ]</span></code></pre></div>
+<p>Insight in the above was required to compute novel variables and filter data. <strong>However</strong>, as I mentioned earlier, packages such as <strong>dplyr</strong> ease the majority of this work. There remains one obstacle before I move on to dplyr. While preprocessing/cleaning your data, you might have to transform your variables or compute new ones. Thus, knowledge concerning math calculations is essential.</p>
+<p>I will briefly show how to do different (basic) math calculations and how to make a correlation matrix in R. Although I have to note that there are different ways to do so.</p>
+</div>
+</div>
+<div id="mathematical-calculations-in-r" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Mathematical calculations in R<a href="data-cleaning-and-descriptive-statistics.html#mathematical-calculations-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="data-cleaning-and-descriptive-statistics.html#cb10-1" tabindex="-1"></a><span class="co"># Defining a new dataset (with the same name)</span></span>
+<span id="cb10-2"><a href="data-cleaning-and-descriptive-statistics.html#cb10-2" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">0209</span>)</span>
+<span id="cb10-3"><a href="data-cleaning-and-descriptive-statistics.html#cb10-3" tabindex="-1"></a>mydata <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">v1 =</span> <span class="fu">runif</span>(<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">10</span>),</span>
+<span id="cb10-4"><a href="data-cleaning-and-descriptive-statistics.html#cb10-4" tabindex="-1"></a>                     <span class="at">v2 =</span> <span class="fu">runif</span>(<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">10</span>),</span>
+<span id="cb10-5"><a href="data-cleaning-and-descriptive-statistics.html#cb10-5" tabindex="-1"></a>                     <span class="at">v3 =</span> <span class="fu">runif</span>(<span class="dv">10</span>,<span class="dv">1</span>,<span class="dv">10</span>))</span></code></pre></div>
+<div id="sum" class="section level3 hasAnchor" number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Sum<a href="data-cleaning-and-descriptive-statistics.html#sum" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="data-cleaning-and-descriptive-statistics.html#cb11-1" tabindex="-1"></a>  <span class="co"># Take the sum across all values of column v1</span></span>
+<span id="cb11-2"><a href="data-cleaning-and-descriptive-statistics.html#cb11-2" tabindex="-1"></a>  <span class="fu">sum</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb11-3"><a href="data-cleaning-and-descriptive-statistics.html#cb11-3" tabindex="-1"></a>  </span>
+<span id="cb11-4"><a href="data-cleaning-and-descriptive-statistics.html#cb11-4" tabindex="-1"></a>  <span class="co"># Take the sum row-wise (from v1 to v2) of each row</span></span>
+<span id="cb11-5"><a href="data-cleaning-and-descriptive-statistics.html#cb11-5" tabindex="-1"></a>  <span class="fu">rowSums</span>(mydata)</span>
+<span id="cb11-6"><a href="data-cleaning-and-descriptive-statistics.html#cb11-6" tabindex="-1"></a>    <span class="co"># Note, as expected, you get 10 outcomes.</span></span>
+<span id="cb11-7"><a href="data-cleaning-and-descriptive-statistics.html#cb11-7" tabindex="-1"></a>  </span>
+<span id="cb11-8"><a href="data-cleaning-and-descriptive-statistics.html#cb11-8" tabindex="-1"></a>  <span class="co"># Do the same but OUTPUT only the results of rows 1 to 3, 5, and 9 to 10</span></span>
+<span id="cb11-9"><a href="data-cleaning-and-descriptive-statistics.html#cb11-9" tabindex="-1"></a>  <span class="fu">rowSums</span>(mydata)[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">10</span>)]</span>
+<span id="cb11-10"><a href="data-cleaning-and-descriptive-statistics.html#cb11-10" tabindex="-1"></a>  </span>
+<span id="cb11-11"><a href="data-cleaning-and-descriptive-statistics.html#cb11-11" tabindex="-1"></a>  <span class="co"># Do the same but now CALCULATE and OUTPUT the &quot;row wise sum&quot; of v1 and 3</span></span>
+<span id="cb11-12"><a href="data-cleaning-and-descriptive-statistics.html#cb11-12" tabindex="-1"></a>  <span class="fu">rowSums</span>(mydata[,<span class="fu">c</span>(<span class="st">&quot;v1&quot;</span>,<span class="st">&quot;v3&quot;</span>)])[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">9</span><span class="sc">:</span><span class="dv">10</span>)]</span>
+<span id="cb11-13"><a href="data-cleaning-and-descriptive-statistics.html#cb11-13" tabindex="-1"></a>  </span>
+<span id="cb11-14"><a href="data-cleaning-and-descriptive-statistics.html#cb11-14" tabindex="-1"></a>  <span class="co"># Compute the sum of values in column v2 and then do the same in column v3 </span></span>
+<span id="cb11-15"><a href="data-cleaning-and-descriptive-statistics.html#cb11-15" tabindex="-1"></a>  <span class="fu">colSums</span>(mydata[,<span class="fu">c</span>(<span class="st">&quot;v2&quot;</span>,<span class="st">&quot;v3&quot;</span>)])</span>
+<span id="cb11-16"><a href="data-cleaning-and-descriptive-statistics.html#cb11-16" tabindex="-1"></a>  </span>
+<span id="cb11-17"><a href="data-cleaning-and-descriptive-statistics.html#cb11-17" tabindex="-1"></a>  <span class="co"># Do the same but use only rows 5 and 7</span></span>
+<span id="cb11-18"><a href="data-cleaning-and-descriptive-statistics.html#cb11-18" tabindex="-1"></a>  <span class="fu">colSums</span>(mydata[<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">7</span>),</span>
+<span id="cb11-19"><a href="data-cleaning-and-descriptive-statistics.html#cb11-19" tabindex="-1"></a>               <span class="fu">c</span>(<span class="st">&quot;v2&quot;</span>,<span class="st">&quot;v3&quot;</span>)]</span>
+<span id="cb11-20"><a href="data-cleaning-and-descriptive-statistics.html#cb11-20" tabindex="-1"></a>          )</span>
+<span id="cb11-21"><a href="data-cleaning-and-descriptive-statistics.html#cb11-21" tabindex="-1"></a>    <span class="co"># Quick note, I don&#39;t need to stay on the same line. To my knowledge, you can start a &quot;new line&quot; with &quot;,&quot; &quot;+/- etc.&quot; and brackets so that you provide R some expected &quot;continuation&quot; of the code.</span></span>
+<span id="cb11-22"><a href="data-cleaning-and-descriptive-statistics.html#cb11-22" tabindex="-1"></a>  </span></code></pre></div>
+</div>
+<div id="average" class="section level3 hasAnchor" number="3.2.2">
+<h3><span class="header-section-number">3.2.2</span> Average<a href="data-cleaning-and-descriptive-statistics.html#average" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="data-cleaning-and-descriptive-statistics.html#cb12-1" tabindex="-1"></a>  <span class="co"># Take the mean of column v1</span></span>
+<span id="cb12-2"><a href="data-cleaning-and-descriptive-statistics.html#cb12-2" tabindex="-1"></a>  <span class="fu">mean</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb12-3"><a href="data-cleaning-and-descriptive-statistics.html#cb12-3" tabindex="-1"></a>  </span>
+<span id="cb12-4"><a href="data-cleaning-and-descriptive-statistics.html#cb12-4" tabindex="-1"></a>  <span class="co"># take the mean rowwise</span></span>
+<span id="cb12-5"><a href="data-cleaning-and-descriptive-statistics.html#cb12-5" tabindex="-1"></a>  <span class="fu">rowMeans</span>(mydata)</span>
+<span id="cb12-6"><a href="data-cleaning-and-descriptive-statistics.html#cb12-6" tabindex="-1"></a>  </span>
+<span id="cb12-7"><a href="data-cleaning-and-descriptive-statistics.html#cb12-7" tabindex="-1"></a>  <span class="co"># Take the mean column wise but only using odd rows from v1 and v2 </span></span>
+<span id="cb12-8"><a href="data-cleaning-and-descriptive-statistics.html#cb12-8" tabindex="-1"></a>  <span class="fu">colMeans</span>(mydata)</span></code></pre></div>
+</div>
+<div id="variance-standard-deviation-and-correlations" class="section level3 hasAnchor" number="3.2.3">
+<h3><span class="header-section-number">3.2.3</span> Variance, standard deviation, and correlations<a href="data-cleaning-and-descriptive-statistics.html#variance-standard-deviation-and-correlations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="data-cleaning-and-descriptive-statistics.html#cb13-1" tabindex="-1"></a>  <span class="co"># variance</span></span>
+<span id="cb13-2"><a href="data-cleaning-and-descriptive-statistics.html#cb13-2" tabindex="-1"></a>  <span class="fu">var</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb13-3"><a href="data-cleaning-and-descriptive-statistics.html#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="data-cleaning-and-descriptive-statistics.html#cb13-4" tabindex="-1"></a>  <span class="co"># standard deviation</span></span>
+<span id="cb13-5"><a href="data-cleaning-and-descriptive-statistics.html#cb13-5" tabindex="-1"></a>  <span class="fu">sd</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb13-6"><a href="data-cleaning-and-descriptive-statistics.html#cb13-6" tabindex="-1"></a>  </span>
+<span id="cb13-7"><a href="data-cleaning-and-descriptive-statistics.html#cb13-7" tabindex="-1"></a>  <span class="co"># (bivariate) correlations</span></span>
+<span id="cb13-8"><a href="data-cleaning-and-descriptive-statistics.html#cb13-8" tabindex="-1"></a>  <span class="fu">cor</span>(mydata<span class="sc">$</span>v1, mydata<span class="sc">$</span>v3)</span>
+<span id="cb13-9"><a href="data-cleaning-and-descriptive-statistics.html#cb13-9" tabindex="-1"></a>  <span class="fu">cor</span>(mydata<span class="sc">$</span>v1, mydata<span class="sc">$</span>v3, <span class="at">method=</span><span class="st">&quot;spearman&quot;</span>)  </span>
+<span id="cb13-10"><a href="data-cleaning-and-descriptive-statistics.html#cb13-10" tabindex="-1"></a>  <span class="fu">cor</span>(mydata<span class="sc">$</span>v1, mydata<span class="sc">$</span>v3, <span class="at">method=</span><span class="st">&quot;kendall&quot;</span>)  </span></code></pre></div>
+</div>
+<div id="other-calculations-and-the-describe-function" class="section level3 hasAnchor" number="3.2.4">
+<h3><span class="header-section-number">3.2.4</span> Other calculations and the describe function(!)<a href="data-cleaning-and-descriptive-statistics.html#other-calculations-and-the-describe-function" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="data-cleaning-and-descriptive-statistics.html#cb14-1" tabindex="-1"></a>  <span class="co"># range</span></span>
+<span id="cb14-2"><a href="data-cleaning-and-descriptive-statistics.html#cb14-2" tabindex="-1"></a>  <span class="fu">range</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb14-3"><a href="data-cleaning-and-descriptive-statistics.html#cb14-3" tabindex="-1"></a>  </span>
+<span id="cb14-4"><a href="data-cleaning-and-descriptive-statistics.html#cb14-4" tabindex="-1"></a>  <span class="co"># min/max (value)</span></span>
+<span id="cb14-5"><a href="data-cleaning-and-descriptive-statistics.html#cb14-5" tabindex="-1"></a>  <span class="fu">min</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb14-6"><a href="data-cleaning-and-descriptive-statistics.html#cb14-6" tabindex="-1"></a>  <span class="fu">max</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb14-7"><a href="data-cleaning-and-descriptive-statistics.html#cb14-7" tabindex="-1"></a>  </span>
+<span id="cb14-8"><a href="data-cleaning-and-descriptive-statistics.html#cb14-8" tabindex="-1"></a>  <span class="co"># Centering and standardizing</span></span>
+<span id="cb14-9"><a href="data-cleaning-and-descriptive-statistics.html#cb14-9" tabindex="-1"></a>  <span class="fu">scale</span>(mydata<span class="sc">$</span>v1, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">FALSE</span>) <span class="co"># will mean center variables</span></span>
+<span id="cb14-10"><a href="data-cleaning-and-descriptive-statistics.html#cb14-10" tabindex="-1"></a>  <span class="fu">scale</span>(mydata<span class="sc">$</span>v1, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">scale=</span><span class="cn">TRUE</span>) <span class="co"># will standardize variables</span></span>
+<span id="cb14-11"><a href="data-cleaning-and-descriptive-statistics.html#cb14-11" tabindex="-1"></a>  </span>
+<span id="cb14-12"><a href="data-cleaning-and-descriptive-statistics.html#cb14-12" tabindex="-1"></a>  <span class="co"># skewness and kurtosis (using the e1071 package)</span></span>
+<span id="cb14-13"><a href="data-cleaning-and-descriptive-statistics.html#cb14-13" tabindex="-1"></a>  e1071<span class="sc">::</span><span class="fu">skewness</span>(mydata<span class="sc">$</span>v1)</span>
+<span id="cb14-14"><a href="data-cleaning-and-descriptive-statistics.html#cb14-14" tabindex="-1"></a>  e1071<span class="sc">::</span><span class="fu">kurtosis</span>(mydata<span class="sc">$</span>v1)</span></code></pre></div>
+<p><strong>Or use the describe function from the <a href="https://cran.r-project.org/web/packages/psych/index.html">psych package</a> to have a quick overview</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="data-cleaning-and-descriptive-statistics.html#cb15-1" tabindex="-1"></a><span class="fu">library</span>(psych)</span>
+<span id="cb15-2"><a href="data-cleaning-and-descriptive-statistics.html#cb15-2" tabindex="-1"></a><span class="fu">describe</span>(mydata)</span>
+<span id="cb15-3"><a href="data-cleaning-and-descriptive-statistics.html#cb15-3" tabindex="-1"></a><span class="fu">describe</span>(mydata[,<span class="fu">c</span>(<span class="st">&quot;v1&quot;</span>,<span class="st">&quot;v3&quot;</span>)]) <span class="co"># If you want to use it for specific variables</span></span></code></pre></div>
+</div>
+<div id="what-if-there-are-missing-values" class="section level3 hasAnchor" number="3.2.5">
+<h3><span class="header-section-number">3.2.5</span> What if there are missing values?<a href="data-cleaning-and-descriptive-statistics.html#what-if-there-are-missing-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As it turns out, taking the sum, mean, correlation, among other things, will output NA if I would apply the above methods. Therefore, I will both illustrate and correct this issue:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="data-cleaning-and-descriptive-statistics.html#cb16-1" tabindex="-1"></a>  mini_data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">a =</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="dv">30</span>,<span class="dv">1</span>,<span class="dv">10</span>)),</span>
+<span id="cb16-2"><a href="data-cleaning-and-descriptive-statistics.html#cb16-2" tabindex="-1"></a>                         <span class="at">b =</span> <span class="fu">round</span>(<span class="fu">runif</span>(<span class="dv">30</span>,<span class="dv">1</span>,<span class="dv">10</span>))</span>
+<span id="cb16-3"><a href="data-cleaning-and-descriptive-statistics.html#cb16-3" tabindex="-1"></a>  )</span>
+<span id="cb16-4"><a href="data-cleaning-and-descriptive-statistics.html#cb16-4" tabindex="-1"></a>  mini_data[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">1</span>]<span class="ot">=</span><span class="cn">NA</span></span>
+<span id="cb16-5"><a href="data-cleaning-and-descriptive-statistics.html#cb16-5" tabindex="-1"></a>  mini_data[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>,<span class="dv">2</span>]<span class="ot">=</span><span class="cn">NA</span></span>
+<span id="cb16-6"><a href="data-cleaning-and-descriptive-statistics.html#cb16-6" tabindex="-1"></a>  </span>
+<span id="cb16-7"><a href="data-cleaning-and-descriptive-statistics.html#cb16-7" tabindex="-1"></a>  <span class="fu">sum</span>(mini_data<span class="sc">$</span>a) <span class="co"># NA</span></span>
+<span id="cb16-8"><a href="data-cleaning-and-descriptive-statistics.html#cb16-8" tabindex="-1"></a>  <span class="fu">rowSums</span>(mini_data) <span class="co"># Only the last value is not NA</span></span>
+<span id="cb16-9"><a href="data-cleaning-and-descriptive-statistics.html#cb16-9" tabindex="-1"></a>  <span class="fu">cor</span>(mini_data<span class="sc">$</span>a, mini_data<span class="sc">$</span>b) <span class="co"># NA</span></span>
+<span id="cb16-10"><a href="data-cleaning-and-descriptive-statistics.html#cb16-10" tabindex="-1"></a>  </span>
+<span id="cb16-11"><a href="data-cleaning-and-descriptive-statistics.html#cb16-11" tabindex="-1"></a><span class="co"># To let the above functions ignore NA&#39;s (but proceed with caution, do the outcomes make sense in your individual specific case?)</span></span>
+<span id="cb16-12"><a href="data-cleaning-and-descriptive-statistics.html#cb16-12" tabindex="-1"></a>  <span class="fu">sum</span>(mini_data<span class="sc">$</span>a, <span class="at">na.rm=</span><span class="cn">TRUE</span>) <span class="co"># remove the NA (&quot;ignore it&quot;)</span></span>
+<span id="cb16-13"><a href="data-cleaning-and-descriptive-statistics.html#cb16-13" tabindex="-1"></a>  <span class="fu">rowSums</span>(mini_data, <span class="at">na.rm=</span><span class="cn">TRUE</span>) </span>
+<span id="cb16-14"><a href="data-cleaning-and-descriptive-statistics.html#cb16-14" tabindex="-1"></a>  </span>
+<span id="cb16-15"><a href="data-cleaning-and-descriptive-statistics.html#cb16-15" tabindex="-1"></a>  <span class="co"># With correlations we have to use different code:</span></span>
+<span id="cb16-16"><a href="data-cleaning-and-descriptive-statistics.html#cb16-16" tabindex="-1"></a>  <span class="fu">cor</span>(mini_data<span class="sc">$</span>a, mini_data<span class="sc">$</span>b, <span class="at">use =</span> <span class="st">&quot;complete.obs&quot;</span>) <span class="co"># Will apply listwise deletion (delete rows containing NA&#39;s)</span></span>
+<span id="cb16-17"><a href="data-cleaning-and-descriptive-statistics.html#cb16-17" tabindex="-1"></a>  <span class="fu">cor</span>(mini_data<span class="sc">$</span>a, mini_data<span class="sc">$</span>b, <span class="at">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="co"># Will apply pairwise deletion (delete cases/cells containing NA&#39;s)</span></span>
+<span id="cb16-18"><a href="data-cleaning-and-descriptive-statistics.html#cb16-18" tabindex="-1"></a>    <span class="co"># In this example the result will remain the same irrespective from listwise or pairwise deletion</span></span></code></pre></div>
+</div>
+</div>
+<div id="correlation-matrices-and-visualisation" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Correlation matrices and visualisation<a href="data-cleaning-and-descriptive-statistics.html#correlation-matrices-and-visualisation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>It is often appreciated to show the correlations between all relevant variables in your dataset (personalliy, I frequently spot them in papers from social and behavioral disciplines). For this purpose I will create a new dataset in which variables are “taken from” a multivariate normal distribution and in which the correlations between variables are prespecified. For transparency I show how I made this dataset (in case you’re interested).</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="data-cleaning-and-descriptive-statistics.html#cb17-1" tabindex="-1"></a><span class="co"># OPTIONAL, just if your interested in how to create a correlated dataset</span></span>
+<span id="cb17-2"><a href="data-cleaning-and-descriptive-statistics.html#cb17-2" tabindex="-1"></a>  <span class="fu">library</span>(MASS)  </span>
+<span id="cb17-3"><a href="data-cleaning-and-descriptive-statistics.html#cb17-3" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="data-cleaning-and-descriptive-statistics.html#cb17-4" tabindex="-1"></a><span class="co"># Using the MASS package I will create a dataset based on a multivariate normal distribution. To create one I need the following ingredients: the mean of the variables I want to generate and their variance covariance matrix</span></span>
+<span id="cb17-5"><a href="data-cleaning-and-descriptive-statistics.html#cb17-5" tabindex="-1"></a>  </span>
+<span id="cb17-6"><a href="data-cleaning-and-descriptive-statistics.html#cb17-6" tabindex="-1"></a>  <span class="co"># the mean (determined by me)</span></span>
+<span id="cb17-7"><a href="data-cleaning-and-descriptive-statistics.html#cb17-7" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb17-8"><a href="data-cleaning-and-descriptive-statistics.html#cb17-8" tabindex="-1"></a>  a_mean <span class="ot">=</span> <span class="dv">6</span></span>
+<span id="cb17-9"><a href="data-cleaning-and-descriptive-statistics.html#cb17-9" tabindex="-1"></a>  b_mean <span class="ot">=</span> <span class="dv">8</span></span>
+<span id="cb17-10"><a href="data-cleaning-and-descriptive-statistics.html#cb17-10" tabindex="-1"></a>  c_mean <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb17-11"><a href="data-cleaning-and-descriptive-statistics.html#cb17-11" tabindex="-1"></a>  d_mean <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb17-12"><a href="data-cleaning-and-descriptive-statistics.html#cb17-12" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="data-cleaning-and-descriptive-statistics.html#cb17-13" tabindex="-1"></a>  <span class="co"># the standard deviation for the variance covariance matrix (determined by me)</span></span>
+<span id="cb17-14"><a href="data-cleaning-and-descriptive-statistics.html#cb17-14" tabindex="-1"></a>  a_sd <span class="ot">=</span> <span class="fl">0.8</span> </span>
+<span id="cb17-15"><a href="data-cleaning-and-descriptive-statistics.html#cb17-15" tabindex="-1"></a>  b_sd <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb17-16"><a href="data-cleaning-and-descriptive-statistics.html#cb17-16" tabindex="-1"></a>  c_sd <span class="ot">=</span> <span class="fl">0.4</span></span>
+<span id="cb17-17"><a href="data-cleaning-and-descriptive-statistics.html#cb17-17" tabindex="-1"></a>  d_sd <span class="ot">=</span> <span class="fl">1.5</span></span>
+<span id="cb17-18"><a href="data-cleaning-and-descriptive-statistics.html#cb17-18" tabindex="-1"></a>  </span>
+<span id="cb17-19"><a href="data-cleaning-and-descriptive-statistics.html#cb17-19" tabindex="-1"></a>  <span class="co"># Correlations between variables (determined by me)</span></span>
+<span id="cb17-20"><a href="data-cleaning-and-descriptive-statistics.html#cb17-20" tabindex="-1"></a>  cor_ab <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.2</span></span>
+<span id="cb17-21"><a href="data-cleaning-and-descriptive-statistics.html#cb17-21" tabindex="-1"></a>  cor_ac <span class="ot">=</span> <span class="fl">0.3</span></span>
+<span id="cb17-22"><a href="data-cleaning-and-descriptive-statistics.html#cb17-22" tabindex="-1"></a>  cor_ad <span class="ot">=</span> <span class="fl">0.5</span></span>
+<span id="cb17-23"><a href="data-cleaning-and-descriptive-statistics.html#cb17-23" tabindex="-1"></a>  cor_bc <span class="ot">=</span> <span class="fl">0.7</span></span>
+<span id="cb17-24"><a href="data-cleaning-and-descriptive-statistics.html#cb17-24" tabindex="-1"></a>  cor_bd <span class="ot">=</span> <span class="sc">-</span><span class="fl">0.25</span></span>
+<span id="cb17-25"><a href="data-cleaning-and-descriptive-statistics.html#cb17-25" tabindex="-1"></a>  cor_cd <span class="ot">=</span> <span class="fl">0.15</span></span>
+<span id="cb17-26"><a href="data-cleaning-and-descriptive-statistics.html#cb17-26" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="data-cleaning-and-descriptive-statistics.html#cb17-27" tabindex="-1"></a>  <span class="co"># Variance-covariance matrix</span></span>
+<span id="cb17-28"><a href="data-cleaning-and-descriptive-statistics.html#cb17-28" tabindex="-1"></a>  sigma<span class="ot">=</span><span class="fu">matrix</span>(</span>
+<span id="cb17-29"><a href="data-cleaning-and-descriptive-statistics.html#cb17-29" tabindex="-1"></a>    <span class="fu">c</span>(a_sd<span class="sc">^</span><span class="dv">2</span>, a_sd<span class="sc">*</span>b_sd<span class="sc">*</span>cor_ab, a_sd<span class="sc">*</span>c_sd<span class="sc">*</span>cor_ac, a_sd<span class="sc">*</span>d_sd<span class="sc">*</span>cor_ad,</span>
+<span id="cb17-30"><a href="data-cleaning-and-descriptive-statistics.html#cb17-30" tabindex="-1"></a>      b_sd<span class="sc">*</span>a_sd<span class="sc">*</span>cor_ab, b_sd<span class="sc">^</span><span class="dv">2</span>, b_sd<span class="sc">*</span>c_sd<span class="sc">*</span>cor_bc, b_sd<span class="sc">*</span>d_sd<span class="sc">*</span>cor_bd,</span>
+<span id="cb17-31"><a href="data-cleaning-and-descriptive-statistics.html#cb17-31" tabindex="-1"></a>      c_sd<span class="sc">*</span>a_sd<span class="sc">*</span>cor_ac, c_sd<span class="sc">*</span>b_sd<span class="sc">*</span>cor_bc, c_sd<span class="sc">^</span><span class="dv">2</span>, c_sd<span class="sc">*</span>d_sd<span class="sc">*</span>cor_cd,</span>
+<span id="cb17-32"><a href="data-cleaning-and-descriptive-statistics.html#cb17-32" tabindex="-1"></a>      d_sd<span class="sc">*</span>a_sd<span class="sc">*</span>cor_ad, d_sd<span class="sc">*</span>b_sd<span class="sc">*</span>cor_bd, d_sd<span class="sc">*</span>c_sd<span class="sc">*</span>cor_cd, d_sd<span class="sc">^</span><span class="dv">2</span>),</span>
+<span id="cb17-33"><a href="data-cleaning-and-descriptive-statistics.html#cb17-33" tabindex="-1"></a>    <span class="dv">4</span>,<span class="dv">4</span></span>
+<span id="cb17-34"><a href="data-cleaning-and-descriptive-statistics.html#cb17-34" tabindex="-1"></a>  )</span>
+<span id="cb17-35"><a href="data-cleaning-and-descriptive-statistics.html#cb17-35" tabindex="-1"></a>  </span>
+<span id="cb17-36"><a href="data-cleaning-and-descriptive-statistics.html#cb17-36" tabindex="-1"></a>  <span class="co"># The above variance-covariance matrix can also be made using the lazyCov() function from the rockchalk package</span></span>
+<span id="cb17-37"><a href="data-cleaning-and-descriptive-statistics.html#cb17-37" tabindex="-1"></a>  <span class="fu">library</span>(rockchalk)</span>
+<span id="cb17-38"><a href="data-cleaning-and-descriptive-statistics.html#cb17-38" tabindex="-1"></a>  sigma <span class="ot">=</span> <span class="fu">lazyCov</span>(<span class="at">Rho =</span> <span class="fu">c</span>(cor_ab, cor_ac, cor_ad, cor_bc, cor_bd, cor_cd),</span>
+<span id="cb17-39"><a href="data-cleaning-and-descriptive-statistics.html#cb17-39" tabindex="-1"></a>          <span class="at">Sd =</span> <span class="fu">c</span>(a_sd, b_sd, c_sd, d_sd)</span>
+<span id="cb17-40"><a href="data-cleaning-and-descriptive-statistics.html#cb17-40" tabindex="-1"></a>  )</span>
+<span id="cb17-41"><a href="data-cleaning-and-descriptive-statistics.html#cb17-41" tabindex="-1"></a>  </span>
+<span id="cb17-42"><a href="data-cleaning-and-descriptive-statistics.html#cb17-42" tabindex="-1"></a>  <span class="co"># Our correlations can be retrieved from our &quot;sigma&quot; object:</span></span>
+<span id="cb17-43"><a href="data-cleaning-and-descriptive-statistics.html#cb17-43" tabindex="-1"></a>  <span class="fu">round</span>(<span class="fu">cov2cor</span>(sigma),<span class="dv">2</span>)</span>
+<span id="cb17-44"><a href="data-cleaning-and-descriptive-statistics.html#cb17-44" tabindex="-1"></a><span class="co">#&gt;      [,1]  [,2] [,3]  [,4]</span></span>
+<span id="cb17-45"><a href="data-cleaning-and-descriptive-statistics.html#cb17-45" tabindex="-1"></a><span class="co">#&gt; [1,]  1.0 -0.20 0.30  0.50</span></span>
+<span id="cb17-46"><a href="data-cleaning-and-descriptive-statistics.html#cb17-46" tabindex="-1"></a><span class="co">#&gt; [2,] -0.2  1.00 0.70 -0.25</span></span>
+<span id="cb17-47"><a href="data-cleaning-and-descriptive-statistics.html#cb17-47" tabindex="-1"></a><span class="co">#&gt; [3,]  0.3  0.70 1.00  0.15</span></span>
+<span id="cb17-48"><a href="data-cleaning-and-descriptive-statistics.html#cb17-48" tabindex="-1"></a><span class="co">#&gt; [4,]  0.5 -0.25 0.15  1.00</span></span>
+<span id="cb17-49"><a href="data-cleaning-and-descriptive-statistics.html#cb17-49" tabindex="-1"></a>  </span>
+<span id="cb17-50"><a href="data-cleaning-and-descriptive-statistics.html#cb17-50" tabindex="-1"></a>  </span>
+<span id="cb17-51"><a href="data-cleaning-and-descriptive-statistics.html#cb17-51" tabindex="-1"></a>  <span class="co"># Now we can create the dataset, I want 100 values per variable</span></span>
+<span id="cb17-52"><a href="data-cleaning-and-descriptive-statistics.html#cb17-52" tabindex="-1"></a>  n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb17-53"><a href="data-cleaning-and-descriptive-statistics.html#cb17-53" tabindex="-1"></a>  </span>
+<span id="cb17-54"><a href="data-cleaning-and-descriptive-statistics.html#cb17-54" tabindex="-1"></a>  corr_data <span class="ot">=</span> <span class="fu">as.data.frame</span>(</span>
+<span id="cb17-55"><a href="data-cleaning-and-descriptive-statistics.html#cb17-55" tabindex="-1"></a>    <span class="fu">mvrnorm</span>(<span class="at">n=</span>n, <span class="at">mu=</span><span class="fu">c</span>(a_mean,b_mean,c_mean,d_mean), <span class="at">Sigma =</span> sigma, <span class="at">empirical =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-56"><a href="data-cleaning-and-descriptive-statistics.html#cb17-56" tabindex="-1"></a>  )</span>
+<span id="cb17-57"><a href="data-cleaning-and-descriptive-statistics.html#cb17-57" tabindex="-1"></a>  <span class="fu">names</span>(corr_data) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>)</span></code></pre></div>
+<p>Now, there are plethora of packages available to visualize correlations. I’ll point you to a relatively recent one <a href="https://cran.r-project.org/web/packages/corrtable/index.html">corrtable</a>. This package makes it easy to create and save a correlation matrix provided with frequentist p-value significance indications (“the significance stars”). In this dataset, I want to have the correlations between all variables. <strong>However</strong>, if you want to do this with a smaller subset of variables, then extract those variables first in a separate dataset and use this smaller dataset to create your correlation matrix.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="data-cleaning-and-descriptive-statistics.html#cb18-1" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="data-cleaning-and-descriptive-statistics.html#cb18-2" tabindex="-1"></a>  new_correlation_matrix <span class="ot">=</span> corrtable<span class="sc">::</span><span class="fu">correlation_matrix</span>(corr_data) <span class="co"># your correlations accompanied with the significance stars</span></span>
+<span id="cb18-3"><a href="data-cleaning-and-descriptive-statistics.html#cb18-3" tabindex="-1"></a>  new_correlation_matrix[<span class="fu">upper.tri</span>(new_correlation_matrix)]<span class="ot">=</span><span class="st">&quot;&quot;</span> <span class="co"># Remove the upper part, so we get the typical triangle shape</span></span>
+<span id="cb18-4"><a href="data-cleaning-and-descriptive-statistics.html#cb18-4" tabindex="-1"></a>  new_correlation_matrix <span class="ot">=</span> <span class="fu">as.data.frame</span>(new_correlation_matrix)</span>
+<span id="cb18-5"><a href="data-cleaning-and-descriptive-statistics.html#cb18-5" tabindex="-1"></a>  </span>
+<span id="cb18-6"><a href="data-cleaning-and-descriptive-statistics.html#cb18-6" tabindex="-1"></a>  <span class="co"># Or we can do the above in one step and save it to a csv file (to copy-paste it in Words)</span></span>
+<span id="cb18-7"><a href="data-cleaning-and-descriptive-statistics.html#cb18-7" tabindex="-1"></a>  corrtable<span class="sc">::</span><span class="fu">save_correlation_matrix</span>(<span class="at">df=</span>corr_data,<span class="at">file=</span><span class="st">&quot;data_files/corr_matrix.csv&quot;</span>,<span class="at">digits=</span><span class="dv">3</span>,<span class="at">use=</span><span class="st">&quot;lower&quot;</span>)</span></code></pre></div>
+<p>Note that you only get the significance stars. If you want the specific p-values from the above matrix you can use e.g., the cor_pmat() function from the <a href="https://cran.r-project.org/web/packages/ggcorrplot/index.html">ggcorrplot package</a>.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="data-cleaning-and-descriptive-statistics.html#cb19-1" tabindex="-1"></a>  <span class="fu">library</span>(ggcorrplot)</span>
+<span id="cb19-2"><a href="data-cleaning-and-descriptive-statistics.html#cb19-2" tabindex="-1"></a>  mycorr_pvalues <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">cor_pmat</span>(corr_data),<span class="dv">3</span>) </span></code></pre></div>
+</div>
+<div id="dplyr-a-more-modern-approach-to-shape-data-." class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> Dplyr, a more modern approach to shape data (!).<a href="data-cleaning-and-descriptive-statistics.html#dplyr-a-more-modern-approach-to-shape-data-." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We finally arrive at the <strong>dplyr package</strong>. This package contains a variety of functions to ease data preprocessing/cleaning. For the purpose of this guide, I will go through some functions that I frequently use on my adventures in data analysis. If you are hungry for more, <strong>I highly recommend</strong> to have a look at the <a href="https://nyu-cdsc.github.io/learningr/assets/data-transformation.pdf">following cheat sheet (click here)</a>.</p>
+<p>In the various examples below, I will use a <strong>fabricated dataset</strong>. Next to the dplyr package, I will use the <a href="https://cran.r-project.org/web/packages/stringr/index.html">stringr package</a> (simplifying operations with strings/“text” variables) and the <a href="https://cran.r-project.org/web/packages/readxl/index.html">readxl package</a> (to load this fabricated dataset)</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="data-cleaning-and-descriptive-statistics.html#cb20-1" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr,stringr,readxl)</span>
+<span id="cb20-2"><a href="data-cleaning-and-descriptive-statistics.html#cb20-2" tabindex="-1"></a>mydata <span class="ot">=</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;data_files/mydata.xlsx&quot;</span>)</span></code></pre></div>
+<div id="dplyr-filter" class="section level3 hasAnchor" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Dplyr: Filter<a href="data-cleaning-and-descriptive-statistics.html#dplyr-filter" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s start with <strong>filter</strong> which “filters” entries (row-wise). The question here is what data (row-wise) you want to keep or what data you want to exclude. Off-note, in dplyr, we can do something called “pipelining” noted by adding <strong>%&gt;%</strong> in the code. Pipelining allows to do various calculations and functions on the same code line. So instead of
+do this
+do that
+do this…
+You can keep all of your code on the same line, <em>chaining your functions/calculations together</em> (<strong>as shown in later examples and my demonstration at the end</strong>).</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="data-cleaning-and-descriptive-statistics.html#cb21-1" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="data-cleaning-and-descriptive-statistics.html#cb21-2" tabindex="-1"></a>  <span class="co"># Suppose you want to only SHOW/KEEP rows that have a &quot;1&quot; in the variable &quot;cond&quot; (filtering out the rest)</span></span>
+<span id="cb21-3"><a href="data-cleaning-and-descriptive-statistics.html#cb21-3" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cond<span class="sc">==</span><span class="dv">1</span>) </span>
+<span id="cb21-4"><a href="data-cleaning-and-descriptive-statistics.html#cb21-4" tabindex="-1"></a>  <span class="co"># Notice the &quot;%&gt;%&quot; to start pipelining. Here I tell R in the dataset &quot;mydata&quot; to filter... </span></span>
+<span id="cb21-5"><a href="data-cleaning-and-descriptive-statistics.html#cb21-5" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="data-cleaning-and-descriptive-statistics.html#cb21-6" tabindex="-1"></a>  <span class="co"># Show rows containing condition 1 and from participant 5</span></span>
+<span id="cb21-7"><a href="data-cleaning-and-descriptive-statistics.html#cb21-7" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(cond<span class="sc">==</span><span class="dv">1</span>, participant<span class="sc">==</span><span class="dv">5</span>) </span>
+<span id="cb21-8"><a href="data-cleaning-and-descriptive-statistics.html#cb21-8" tabindex="-1"></a>  </span>
+<span id="cb21-9"><a href="data-cleaning-and-descriptive-statistics.html#cb21-9" tabindex="-1"></a>  <span class="co"># Keep rows from participants 1 to 5</span></span>
+<span id="cb21-10"><a href="data-cleaning-and-descriptive-statistics.html#cb21-10" tabindex="-1"></a>  </span>
+<span id="cb21-11"><a href="data-cleaning-and-descriptive-statistics.html#cb21-11" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(participant <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)) </span>
+<span id="cb21-12"><a href="data-cleaning-and-descriptive-statistics.html#cb21-12" tabindex="-1"></a>    <span class="co"># I recommend using %in% instead of only c(1:5) </span></span>
+<span id="cb21-13"><a href="data-cleaning-and-descriptive-statistics.html#cb21-13" tabindex="-1"></a>    <span class="co"># As the name suggests %in% implies &quot;in range of ...&quot;. Here, in (range of) values of 1 to 5.</span></span>
+<span id="cb21-14"><a href="data-cleaning-and-descriptive-statistics.html#cb21-14" tabindex="-1"></a>  </span>
+<span id="cb21-15"><a href="data-cleaning-and-descriptive-statistics.html#cb21-15" tabindex="-1"></a>  <span class="co"># Keep all rows EXCEPT THOSE CONTAINING participant 4</span></span>
+<span id="cb21-16"><a href="data-cleaning-and-descriptive-statistics.html#cb21-16" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>participant <span class="sc">==</span><span class="dv">4</span>) </span>
+<span id="cb21-17"><a href="data-cleaning-and-descriptive-statistics.html#cb21-17" tabindex="-1"></a>    <span class="co"># Notice the &quot;!&quot; this mean NOT or in this context DO NOT KEEP/KICK OUT ...</span></span>
+<span id="cb21-18"><a href="data-cleaning-and-descriptive-statistics.html#cb21-18" tabindex="-1"></a>  </span>
+<span id="cb21-19"><a href="data-cleaning-and-descriptive-statistics.html#cb21-19" tabindex="-1"></a>  <span class="co"># Keep rows from participants 1, 3, and 5 EXCEPT THOSE containing a rt of 0.245</span></span>
+<span id="cb21-20"><a href="data-cleaning-and-descriptive-statistics.html#cb21-20" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(participant <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>), <span class="sc">!</span>rt<span class="sc">==</span><span class="st">&quot;0.245&quot;</span> ) </span>
+<span id="cb21-21"><a href="data-cleaning-and-descriptive-statistics.html#cb21-21" tabindex="-1"></a>    <span class="co"># Note that rt is written as a character (hence &quot;&quot;)</span></span>
+<span id="cb21-22"><a href="data-cleaning-and-descriptive-statistics.html#cb21-22" tabindex="-1"></a>  </span>
+<span id="cb21-23"><a href="data-cleaning-and-descriptive-statistics.html#cb21-23" tabindex="-1"></a>  <span class="co"># Exclude rows containing NA&#39;s (Not Administered, empty cells) in q_2</span></span>
+<span id="cb21-24"><a href="data-cleaning-and-descriptive-statistics.html#cb21-24" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(q_2))</span>
+<span id="cb21-25"><a href="data-cleaning-and-descriptive-statistics.html#cb21-25" tabindex="-1"></a>  </span>
+<span id="cb21-26"><a href="data-cleaning-and-descriptive-statistics.html#cb21-26" tabindex="-1"></a>  <span class="co"># Keep rows that contain the characters: &quot;sagree&quot; (to get &quot;disagree&quot; &amp; &quot;heavily disagree&quot;) in q_1.</span></span>
+<span id="cb21-27"><a href="data-cleaning-and-descriptive-statistics.html#cb21-27" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">str_detect</span>(q_1,<span class="st">&quot;sagree&quot;</span>))</span>
+<span id="cb21-28"><a href="data-cleaning-and-descriptive-statistics.html#cb21-28" tabindex="-1"></a>    <span class="co"># For this you can use the stringr package </span></span></code></pre></div>
+</div>
+<div id="dplyr-select" class="section level3 hasAnchor" number="3.4.2">
+<h3><span class="header-section-number">3.4.2</span> Dplyr: Select<a href="data-cleaning-and-descriptive-statistics.html#dplyr-select" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Similar to filter, but here we will select or exclude columns/variables so we go “column-wise” instead of row-wise.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="data-cleaning-and-descriptive-statistics.html#cb22-1" tabindex="-1"></a>  <span class="co"># Select (KEEP) columns q_1 and r_2</span></span>
+<span id="cb22-2"><a href="data-cleaning-and-descriptive-statistics.html#cb22-2" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">select</span>(q_1, r_2 )</span>
+<span id="cb22-3"><a href="data-cleaning-and-descriptive-statistics.html#cb22-3" tabindex="-1"></a>  </span>
+<span id="cb22-4"><a href="data-cleaning-and-descriptive-statistics.html#cb22-4" tabindex="-1"></a>  <span class="co"># Select the columns whose name has/contains a &quot;q&quot; character (we can&#39;t use stringr here)</span></span>
+<span id="cb22-5"><a href="data-cleaning-and-descriptive-statistics.html#cb22-5" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">&quot;q&quot;</span>))</span>
+<span id="cb22-6"><a href="data-cleaning-and-descriptive-statistics.html#cb22-6" tabindex="-1"></a>  </span>
+<span id="cb22-7"><a href="data-cleaning-and-descriptive-statistics.html#cb22-7" tabindex="-1"></a>  <span class="co"># DO NOT select (EXCLUDE) column names ending with &quot;ge&quot;, beginning with an &quot;r&quot;, and containing the characters &quot;ond&quot;.</span></span>
+<span id="cb22-8"><a href="data-cleaning-and-descriptive-statistics.html#cb22-8" tabindex="-1"></a>  <span class="co"># Exlude rows containing participant 3</span></span>
+<span id="cb22-9"><a href="data-cleaning-and-descriptive-statistics.html#cb22-9" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">ends_with</span>(<span class="st">&quot;ge&quot;</span>), <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">&quot;r&quot;</span>), <span class="sc">-</span><span class="fu">contains</span>(<span class="st">&quot;ond&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>participant <span class="sc">==</span><span class="dv">3</span>)</span>
+<span id="cb22-10"><a href="data-cleaning-and-descriptive-statistics.html#cb22-10" tabindex="-1"></a>    <span class="co"># Note the beauty of PIPELINING &#39;%&gt;%&#39;, I chain SELECT and FILTER on the same code line</span></span>
+<span id="cb22-11"><a href="data-cleaning-and-descriptive-statistics.html#cb22-11" tabindex="-1"></a>    <span class="co"># Note that I use &quot;-&quot; in SELECT instead of the &quot;!&quot; that I use in FILTER</span></span>
+<span id="cb22-12"><a href="data-cleaning-and-descriptive-statistics.html#cb22-12" tabindex="-1"></a>    <span class="co"># Why? From personal experience, using &quot;!&quot; in SELECT does not always yield the intended results</span></span>
+<span id="cb22-13"><a href="data-cleaning-and-descriptive-statistics.html#cb22-13" tabindex="-1"></a>    </span>
+<span id="cb22-14"><a href="data-cleaning-and-descriptive-statistics.html#cb22-14" tabindex="-1"></a>  <span class="co"># Alternatively, we could also use only one &quot;-&quot; in the above code:</span></span>
+<span id="cb22-15"><a href="data-cleaning-and-descriptive-statistics.html#cb22-15" tabindex="-1"></a>    mydata <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(  <span class="fu">ends_with</span>(<span class="st">&quot;ge&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;r&quot;</span>), <span class="fu">contains</span>(<span class="st">&quot;ond&quot;</span>)  )) <span class="sc">%&gt;%</span></span>
+<span id="cb22-16"><a href="data-cleaning-and-descriptive-statistics.html#cb22-16" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="sc">!</span>participant <span class="sc">==</span><span class="dv">3</span>)</span>
+<span id="cb22-17"><a href="data-cleaning-and-descriptive-statistics.html#cb22-17" tabindex="-1"></a>    <span class="co"># Note that I add some unnecessary &quot;spaces&quot; in the c() part. This is just for clarity, you can add as much of these spaces as you want without repercussion</span></span></code></pre></div>
+</div>
+<div id="dplyr-mutate" class="section level3 hasAnchor" number="3.4.3">
+<h3><span class="header-section-number">3.4.3</span> Dplyr: Mutate<a href="data-cleaning-and-descriptive-statistics.html#dplyr-mutate" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now that we can include or exclude certain columns and rows, we want to start transforming our variables. in dplyr language we will <strong>mutate</strong> them. The beauty with mutate, is that we can do multiple <em>mutations</em> in one go.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="data-cleaning-and-descriptive-statistics.html#cb23-1" tabindex="-1"></a>  </span>
+<span id="cb23-2"><a href="data-cleaning-and-descriptive-statistics.html#cb23-2" tabindex="-1"></a>  <span class="co"># Suppose I want to create a novel variable containing the natural logarithm of the variable &quot;rt&quot;. I do NOT want to overwrite the original &quot;rt&quot; variable</span></span>
+<span id="cb23-3"><a href="data-cleaning-and-descriptive-statistics.html#cb23-3" tabindex="-1"></a>  <span class="co"># Since rt is a character (and not a number) I will FIRST transform/mutate it from character to numeric and THEN compute the natural logarithm</span></span>
+<span id="cb23-4"><a href="data-cleaning-and-descriptive-statistics.html#cb23-4" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">rt_log =</span> <span class="fu">as.numeric</span>(rt), <span class="at">rt_log =</span> <span class="fu">log</span>(rt) ) </span>
+<span id="cb23-5"><a href="data-cleaning-and-descriptive-statistics.html#cb23-5" tabindex="-1"></a>  </span>
+<span id="cb23-6"><a href="data-cleaning-and-descriptive-statistics.html#cb23-6" tabindex="-1"></a>  </span>
+<span id="cb23-7"><a href="data-cleaning-and-descriptive-statistics.html#cb23-7" tabindex="-1"></a>  <span class="co"># I will now permanently (because mydata = mydata %&gt;% ...) set rt to be a number (all code up til now were temporarily)</span></span>
+<span id="cb23-8"><a href="data-cleaning-and-descriptive-statistics.html#cb23-8" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">rt =</span> <span class="fu">as.numeric</span>(rt))</span>
+<span id="cb23-9"><a href="data-cleaning-and-descriptive-statistics.html#cb23-9" tabindex="-1"></a>  </span>
+<span id="cb23-10"><a href="data-cleaning-and-descriptive-statistics.html#cb23-10" tabindex="-1"></a>  <span class="co"># You can also transform all variables into a specific type, here transform all numeric variables to &quot;factor&quot;</span></span>
+<span id="cb23-11"><a href="data-cleaning-and-descriptive-statistics.html#cb23-11" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate_if</span>(is.numeric,as.factor)</span>
+<span id="cb23-12"><a href="data-cleaning-and-descriptive-statistics.html#cb23-12" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="data-cleaning-and-descriptive-statistics.html#cb23-13" tabindex="-1"></a>  </span>
+<span id="cb23-14"><a href="data-cleaning-and-descriptive-statistics.html#cb23-14" tabindex="-1"></a>  <span class="co"># For the next example, suppose you questionnaire items (noted by a &quot;q&quot; in the variable name). Suppose you want to add 2 to each of these items (but temporarily). Here we can use &quot;across&quot; as will be explained below</span></span>
+<span id="cb23-15"><a href="data-cleaning-and-descriptive-statistics.html#cb23-15" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q&quot;</span>),</span>
+<span id="cb23-16"><a href="data-cleaning-and-descriptive-statistics.html#cb23-16" tabindex="-1"></a>                                    <span class="sc">~</span>. <span class="sc">+</span> <span class="dv">2</span> ) )</span>
+<span id="cb23-17"><a href="data-cleaning-and-descriptive-statistics.html#cb23-17" tabindex="-1"></a>    </span>
+<span id="cb23-18"><a href="data-cleaning-and-descriptive-statistics.html#cb23-18" tabindex="-1"></a>    <span class="co"># In this context, &quot;across&quot; can be translated as &quot;in each&quot;. For each variable starting with &quot;q&quot;, we add &quot;~&quot; to indicate that the following function should be applied. Next, The dot represents the variable itself (which starts with &quot;q&quot;). In summary. Across (in each) variable starting with &quot;q&quot;, do the following: add 2 to each variable (starting with &quot;q&quot;).</span></span>
+<span id="cb23-19"><a href="data-cleaning-and-descriptive-statistics.html#cb23-19" tabindex="-1"></a>  </span>
+<span id="cb23-20"><a href="data-cleaning-and-descriptive-statistics.html#cb23-20" tabindex="-1"></a>  <span class="co"># Important detail, across tends to &quot;apply the following&quot;, one variable at a time, and not simultaneously. So pay attention with certain function (such as rowMeans), as explained below.</span></span></code></pre></div>
+<p><strong>Watch out if you use <em>across</em> in combination with another function that uses variables simultaneously (such as rowMeans or rowSums)!</strong> Again, <em>across</em> works with variables “one at a time”. Luckily, this can be easily fixed by knowing where to place <em>across</em>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="data-cleaning-and-descriptive-statistics.html#cb24-1" tabindex="-1"></a><span class="co"># Lets take the row-wise average score of all variables starting with &quot;q&quot; (ignoring empty variables)</span></span>
+<span id="cb24-2"><a href="data-cleaning-and-descriptive-statistics.html#cb24-2" tabindex="-1"></a><span class="co"># HOWEVER, doing it wrong first (so expect an error)</span></span>
+<span id="cb24-3"><a href="data-cleaning-and-descriptive-statistics.html#cb24-3" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">average_score=</span><span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q&quot;</span>)), <span class="sc">~</span> <span class="fu">rowMeans</span>(., <span class="at">na.rm=</span><span class="cn">TRUE</span>)) </span>
+<span id="cb24-4"><a href="data-cleaning-and-descriptive-statistics.html#cb24-4" tabindex="-1"></a>    </span>
+<span id="cb24-5"><a href="data-cleaning-and-descriptive-statistics.html#cb24-5" tabindex="-1"></a>    <span class="co"># Why this error in the case of rowMeans? Well, rowMeans is function that works with all variables SIMULTANEOUSLY (since it is an average). This can be fixed by putting &quot;across&quot; within rowMeans. So pay attention were you put across and all will be fine.</span></span>
+<span id="cb24-6"><a href="data-cleaning-and-descriptive-statistics.html#cb24-6" tabindex="-1"></a>      mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">average_score=</span><span class="fu">rowMeans</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q&quot;</span>)),<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code></pre></div>
+<p>A final example</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="data-cleaning-and-descriptive-statistics.html#cb25-1" tabindex="-1"></a>    <span class="co"># Similar example but a &quot;bit more advanced&quot;. Say we want to have a sum score across variables starting with &quot;q&quot;. However, now we want to set this sum score to NA (empty/not administered) if at least ONE value is NA/missing (row-wise).</span></span>
+<span id="cb25-2"><a href="data-cleaning-and-descriptive-statistics.html#cb25-2" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">na_count=</span><span class="fu">rowSums</span>(<span class="fu">is.na</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q&quot;</span>)))),</span>
+<span id="cb25-3"><a href="data-cleaning-and-descriptive-statistics.html#cb25-3" tabindex="-1"></a>                             <span class="at">average_score=</span><span class="fu">ifelse</span>(na_count<span class="sc">&gt;=</span><span class="dv">1</span>, <span class="cn">NA</span>, average_score)</span>
+<span id="cb25-4"><a href="data-cleaning-and-descriptive-statistics.html#cb25-4" tabindex="-1"></a>  )</span></code></pre></div>
+<div id="recoding-questionnaire-items" class="section level4 hasAnchor" number="3.4.3.1">
+<h4><span class="header-section-number">3.4.3.1</span> (Re)coding (questionnaire) items<a href="data-cleaning-and-descriptive-statistics.html#recoding-questionnaire-items" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In surveys there is often a need to (re)code responses (like <em>agree</em> and <em>totally disagree</em>), giving these a numerical value. Fortunately, the mutate function is a versatile in this regard as well. One way is to use the versatile <em>ifelse</em> function within mutate (<strong>but see a more straightforward approach afterwards</strong>). In short, you first need to specify a condition (e.g., if the item is scored as <em>“agree”</em>), then you specify what should be done if so (the item should be given a value of…), and finally you indicate what value should be given if not. Lets give an <em>“easy”</em> example</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="data-cleaning-and-descriptive-statistics.html#cb26-1" tabindex="-1"></a>  <span class="co"># If the variable q_1 is scored as &quot;heavily disagree&quot;, give it value a 1, else give it a value of 0</span></span>
+<span id="cb26-2"><a href="data-cleaning-and-descriptive-statistics.html#cb26-2" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">q_1 =</span> <span class="fu">ifelse</span>(q_1<span class="sc">==</span><span class="st">&quot;heavily disagree&quot;</span>, <span class="dv">1</span>, <span class="dv">0</span>)       )</span></code></pre></div>
+<p>Looks straightforward right? However, suppose you have five response categories:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="data-cleaning-and-descriptive-statistics.html#cb27-1" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">q_1 =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb27-2"><a href="data-cleaning-and-descriptive-statistics.html#cb27-2" tabindex="-1"></a>    q_1<span class="sc">==</span><span class="st">&quot;heavily disagree&quot;</span>, <span class="dv">1</span>, <span class="fu">ifelse</span>(</span>
+<span id="cb27-3"><a href="data-cleaning-and-descriptive-statistics.html#cb27-3" tabindex="-1"></a>      q_1<span class="sc">==</span> <span class="st">&quot;disagree&quot;</span>, <span class="dv">2</span>, <span class="fu">ifelse</span>(</span>
+<span id="cb27-4"><a href="data-cleaning-and-descriptive-statistics.html#cb27-4" tabindex="-1"></a>        q_1<span class="sc">==</span><span class="st">&quot;neutral&quot;</span>, <span class="dv">3</span>, <span class="fu">ifelse</span>(</span>
+<span id="cb27-5"><a href="data-cleaning-and-descriptive-statistics.html#cb27-5" tabindex="-1"></a>          q_1<span class="sc">==</span><span class="st">&quot;agree&quot;</span>, <span class="dv">4</span>, <span class="dv">5</span></span>
+<span id="cb27-6"><a href="data-cleaning-and-descriptive-statistics.html#cb27-6" tabindex="-1"></a>        )</span>
+<span id="cb27-7"><a href="data-cleaning-and-descriptive-statistics.html#cb27-7" tabindex="-1"></a>      )</span>
+<span id="cb27-8"><a href="data-cleaning-and-descriptive-statistics.html#cb27-8" tabindex="-1"></a>    )</span>
+<span id="cb27-9"><a href="data-cleaning-and-descriptive-statistics.html#cb27-9" tabindex="-1"></a>  )</span>
+<span id="cb27-10"><a href="data-cleaning-and-descriptive-statistics.html#cb27-10" tabindex="-1"></a>)</span></code></pre></div>
+<p>The above follows the same logic (if…, do …, else do…) but a lot of brackets… and unnecessary in this case. Not to speak ill about about the ifelse() function, it is very flexible in numerous situations. Fortunately in this context, there exist a more straightforward alternative: <strong>recode</strong>. With recode I can give text (“agree”) a numerical value, and a value (2) a textual value. Let us redo the above example and change text to numbers, and back.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="data-cleaning-and-descriptive-statistics.html#cb28-1" tabindex="-1"></a> <span class="co"># Take again the example with five response categories. </span></span>
+<span id="cb28-2"><a href="data-cleaning-and-descriptive-statistics.html#cb28-2" tabindex="-1"></a> <span class="co"># Lets recode text to numbers:</span></span>
+<span id="cb28-3"><a href="data-cleaning-and-descriptive-statistics.html#cb28-3" tabindex="-1"></a>  </span>
+<span id="cb28-4"><a href="data-cleaning-and-descriptive-statistics.html#cb28-4" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb28-5"><a href="data-cleaning-and-descriptive-statistics.html#cb28-5" tabindex="-1"></a>    <span class="at">q_1 =</span> <span class="fu">recode</span>(q_1,</span>
+<span id="cb28-6"><a href="data-cleaning-and-descriptive-statistics.html#cb28-6" tabindex="-1"></a>      <span class="st">&#39;heavily disagree&#39;</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb28-7"><a href="data-cleaning-and-descriptive-statistics.html#cb28-7" tabindex="-1"></a>      <span class="st">&#39;disagree&#39;</span> <span class="ot">=</span> <span class="dv">2</span>,</span>
+<span id="cb28-8"><a href="data-cleaning-and-descriptive-statistics.html#cb28-8" tabindex="-1"></a>      <span class="st">&#39;neutral&#39;</span> <span class="ot">=</span> <span class="dv">3</span>,</span>
+<span id="cb28-9"><a href="data-cleaning-and-descriptive-statistics.html#cb28-9" tabindex="-1"></a>      <span class="st">&#39;agree&#39;</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
+<span id="cb28-10"><a href="data-cleaning-and-descriptive-statistics.html#cb28-10" tabindex="-1"></a>      <span class="st">&#39;heavily agree&#39;</span> <span class="ot">=</span> <span class="dv">5</span></span>
+<span id="cb28-11"><a href="data-cleaning-and-descriptive-statistics.html#cb28-11" tabindex="-1"></a>    ))</span>
+<span id="cb28-12"><a href="data-cleaning-and-descriptive-statistics.html#cb28-12" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="data-cleaning-and-descriptive-statistics.html#cb28-13" tabindex="-1"></a>  <span class="co"># Lets change it back from numbers to text</span></span>
+<span id="cb28-14"><a href="data-cleaning-and-descriptive-statistics.html#cb28-14" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb28-15"><a href="data-cleaning-and-descriptive-statistics.html#cb28-15" tabindex="-1"></a>  <span class="at">q_1 =</span> <span class="fu">recode</span>(q_1,</span>
+<span id="cb28-16"><a href="data-cleaning-and-descriptive-statistics.html#cb28-16" tabindex="-1"></a>  <span class="st">&#39;1&#39;</span>  <span class="ot">=</span> <span class="st">&quot;heavily disagree&quot;</span>,</span>
+<span id="cb28-17"><a href="data-cleaning-and-descriptive-statistics.html#cb28-17" tabindex="-1"></a>  <span class="st">&#39;2&#39;</span> <span class="ot">=</span> <span class="st">&quot;disagree&quot;</span>,</span>
+<span id="cb28-18"><a href="data-cleaning-and-descriptive-statistics.html#cb28-18" tabindex="-1"></a>  <span class="st">&#39;3&#39;</span>  <span class="ot">=</span> <span class="st">&quot;neutral&quot;</span>,</span>
+<span id="cb28-19"><a href="data-cleaning-and-descriptive-statistics.html#cb28-19" tabindex="-1"></a>  <span class="st">&#39;4&#39;</span>  <span class="ot">=</span> <span class="st">&quot;agree&quot;</span>,</span>
+<span id="cb28-20"><a href="data-cleaning-and-descriptive-statistics.html#cb28-20" tabindex="-1"></a>  <span class="st">&#39;5&#39;</span>  <span class="ot">=</span> <span class="st">&quot;heavily agree&quot;</span></span>
+<span id="cb28-21"><a href="data-cleaning-and-descriptive-statistics.html#cb28-21" tabindex="-1"></a>  ))</span>
+<span id="cb28-22"><a href="data-cleaning-and-descriptive-statistics.html#cb28-22" tabindex="-1"></a>  </span>
+<span id="cb28-23"><a href="data-cleaning-and-descriptive-statistics.html#cb28-23" tabindex="-1"></a>  <span class="co"># Lets recode from text to numbers in all variables starting with &quot;q&quot;.</span></span>
+<span id="cb28-24"><a href="data-cleaning-and-descriptive-statistics.html#cb28-24" tabindex="-1"></a>  <span class="co"># I will apply these changes permanently to my dataset (mydata = mydata %&gt;% ...)</span></span>
+<span id="cb28-25"><a href="data-cleaning-and-descriptive-statistics.html#cb28-25" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q&quot;</span>),</span>
+<span id="cb28-26"><a href="data-cleaning-and-descriptive-statistics.html#cb28-26" tabindex="-1"></a>                             <span class="sc">~</span> <span class="fu">recode</span>(.,</span>
+<span id="cb28-27"><a href="data-cleaning-and-descriptive-statistics.html#cb28-27" tabindex="-1"></a>                                      <span class="st">&#39;heavily disagree&#39;</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb28-28"><a href="data-cleaning-and-descriptive-statistics.html#cb28-28" tabindex="-1"></a>                                      <span class="st">&#39;disagree&#39;</span> <span class="ot">=</span> <span class="dv">2</span>,</span>
+<span id="cb28-29"><a href="data-cleaning-and-descriptive-statistics.html#cb28-29" tabindex="-1"></a>                                      <span class="st">&#39;neutral&#39;</span> <span class="ot">=</span> <span class="dv">3</span>,</span>
+<span id="cb28-30"><a href="data-cleaning-and-descriptive-statistics.html#cb28-30" tabindex="-1"></a>                                      <span class="st">&#39;agree&#39;</span> <span class="ot">=</span>  <span class="dv">4</span>,</span>
+<span id="cb28-31"><a href="data-cleaning-and-descriptive-statistics.html#cb28-31" tabindex="-1"></a>                                      <span class="st">&#39;heavily agree&#39;</span> <span class="ot">=</span> <span class="dv">5</span>)</span>
+<span id="cb28-32"><a href="data-cleaning-and-descriptive-statistics.html#cb28-32" tabindex="-1"></a>                             ))</span></code></pre></div>
+</div>
+</div>
+<div id="dplyr-arrange" class="section level3 hasAnchor" number="3.4.4">
+<h3><span class="header-section-number">3.4.4</span> Dplyr: Arrange<a href="data-cleaning-and-descriptive-statistics.html#dplyr-arrange" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Arrange data in ascending or descending order based on value or alphabetical order.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="data-cleaning-and-descriptive-statistics.html#cb29-1" tabindex="-1"></a></span>
+<span id="cb29-2"><a href="data-cleaning-and-descriptive-statistics.html#cb29-2" tabindex="-1"></a>  <span class="co"># Arrange reaction time (rt) from lowest value ascending to highest</span></span>
+<span id="cb29-3"><a href="data-cleaning-and-descriptive-statistics.html#cb29-3" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(rt)</span>
+<span id="cb29-4"><a href="data-cleaning-and-descriptive-statistics.html#cb29-4" tabindex="-1"></a>  </span>
+<span id="cb29-5"><a href="data-cleaning-and-descriptive-statistics.html#cb29-5" tabindex="-1"></a>  <span class="co"># Arrange rt from highest value descending to lowest</span></span>
+<span id="cb29-6"><a href="data-cleaning-and-descriptive-statistics.html#cb29-6" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(rt))</span>
+<span id="cb29-7"><a href="data-cleaning-and-descriptive-statistics.html#cb29-7" tabindex="-1"></a>  </span>
+<span id="cb29-8"><a href="data-cleaning-and-descriptive-statistics.html#cb29-8" tabindex="-1"></a>  <span class="co"># Arrange on both age and rt</span></span>
+<span id="cb29-9"><a href="data-cleaning-and-descriptive-statistics.html#cb29-9" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(age,rt)</span></code></pre></div>
+</div>
+<div id="dplyr-group_by-and-summarize" class="section level3 hasAnchor" number="3.4.5">
+<h3><span class="header-section-number">3.4.5</span> Dplyr: Group_by and Summarize<a href="data-cleaning-and-descriptive-statistics.html#dplyr-group_by-and-summarize" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Suppose we want to compute something like the sum or mean, per <em>“cluster variable”</em> such as per each participant, per each condition, per each plant or animal species… We can do so by grouping and then summarizing it, which will create <strong>a tinier dataset including the desired computation(s)</strong>. First we will need to define our “grouping/cluster” variables. Then we need to indicate what we want to do per this cluster variable. As an illustration, suppose you want to have an average per participant.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="data-cleaning-and-descriptive-statistics.html#cb30-1" tabindex="-1"></a></span>
+<span id="cb30-2"><a href="data-cleaning-and-descriptive-statistics.html#cb30-2" tabindex="-1"></a>tempdata <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
+<span id="cb30-3"><a href="data-cleaning-and-descriptive-statistics.html#cb30-3" tabindex="-1"></a>  <span class="at">participant =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), <span class="at">each =</span> <span class="dv">3</span>),</span>
+<span id="cb30-4"><a href="data-cleaning-and-descriptive-statistics.html#cb30-4" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>, <span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>, <span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>)</span>
+<span id="cb30-5"><a href="data-cleaning-and-descriptive-statistics.html#cb30-5" tabindex="-1"></a>)</span>
+<span id="cb30-6"><a href="data-cleaning-and-descriptive-statistics.html#cb30-6" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="data-cleaning-and-descriptive-statistics.html#cb30-7" tabindex="-1"></a><span class="fu">group_by</span>(participant) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">average_per_participant =</span> <span class="fu">mean</span>(score) )</span></code></pre></div>
+<p>You may “visualize” the above procedure as:
+<img src="images/Data%20cleaning/Cleaning_3.png" />
+Note that you can group by multiple variables (e.g., participants within countries). Below, some examples with group by and summarize.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="data-cleaning-and-descriptive-statistics.html#cb31-1" tabindex="-1"></a>  </span>
+<span id="cb31-2"><a href="data-cleaning-and-descriptive-statistics.html#cb31-2" tabindex="-1"></a>  <span class="co"># Suppose we want to compute the mean and sd for rt per participant.</span></span>
+<span id="cb31-3"><a href="data-cleaning-and-descriptive-statistics.html#cb31-3" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(participant) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">aggr_rt=</span><span class="fu">mean</span>(rt), <span class="at">sd_rt=</span><span class="fu">sd</span>(rt)) </span>
+<span id="cb31-4"><a href="data-cleaning-and-descriptive-statistics.html#cb31-4" tabindex="-1"></a>    <span class="co"># Again, note that the output is a seperate dataset</span></span>
+<span id="cb31-5"><a href="data-cleaning-and-descriptive-statistics.html#cb31-5" tabindex="-1"></a>    <span class="co"># If you want, we can &quot;glue&quot; our freshly computed mean and standard deviation to each corresponding participant</span></span>
+<span id="cb31-6"><a href="data-cleaning-and-descriptive-statistics.html#cb31-6" tabindex="-1"></a>    <span class="co"># Below, a sneak peak on how to do the above (WITHOUT SAVING THE &quot;NEW SMALLER DATASET&quot; FIRST).  </span></span>
+<span id="cb31-7"><a href="data-cleaning-and-descriptive-statistics.html#cb31-7" tabindex="-1"></a>  mydata <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(participant) <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href="data-cleaning-and-descriptive-statistics.html#cb31-8" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">aggr_rt=</span><span class="fu">mean</span>(rt), <span class="at">sd_rt=</span><span class="fu">sd</span>(rt)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-9"><a href="data-cleaning-and-descriptive-statistics.html#cb31-9" tabindex="-1"></a>   <span class="fu">left_join</span>(mydata)</span></code></pre></div>
+</div>
+<div id="dplyr-join" class="section level3 hasAnchor" number="3.4.6">
+<h3><span class="header-section-number">3.4.6</span> Dplyr: Join<a href="data-cleaning-and-descriptive-statistics.html#dplyr-join" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As I demonstrated above, the obtained smaller dataset can be <em>glued</em> to the original one if desired. This glueing of datasets often can come in handy. For example, suppose you ran an experiment and you obtain two separate data files: one from the experiment itself and one on the demographics from the participant. Say you want to <em>test</em> how the main effect of some variable is moderated by some demographic, you will need to merge both data files into one dataset.</p>
+<p>There exist different types of join() such as inner_join, right_join. Personally, I mainly use left_join() since it is straightforward. The idea is that I put two datasets into this function so e.g., left_join(dataset_1, dataset_2). What it will do is to <strong>find variables that both datasets share, variables that share the same name and the same type (numeric or character)</strong>. After identifying these shared so called “key variables”, it will then glue all “non-shared” variables. In our example with left_join(), it will glue data_set 2 to data_set 1 (so the second argument “dataset_2” <strong>to the left</strong> of argument “dataset_1). A visual example:
+<img src="images/Data%20cleaning/Cleaning_4.jpg" /></p>
+<p>My advice, after joining, <strong>always check whether the amount of variables in your original dataset stayed the same</strong>. Sometimes it could be that (unbeknownst to you) there are <strong>duplicates</strong> or <strong>empty values (coded as NA)</strong> in your variables. This may lead to left_join returning more values. So check for these if you would encounter this problem. What also could help is to make sure that your second dataset (the one to glued on the main one) is as small as possible (while withholding necessary information) and here group_by and summarize could help. Below, a small example of left_join, the last one before we move to a “live” demonstration of data preprocessing.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="data-cleaning-and-descriptive-statistics.html#cb32-1" tabindex="-1"></a></span>
+<span id="cb32-2"><a href="data-cleaning-and-descriptive-statistics.html#cb32-2" tabindex="-1"></a>  <span class="co"># Say we want to &quot;join/glue&quot; the aggregated rt and sd from the previous code exaple to the main dataset </span></span>
+<span id="cb32-3"><a href="data-cleaning-and-descriptive-statistics.html#cb32-3" tabindex="-1"></a>  data_aggr <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(participant) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">aggr_rt=</span><span class="fu">mean</span>(rt), <span class="at">sd_rt=</span><span class="fu">sd</span>(rt)) </span>
+<span id="cb32-4"><a href="data-cleaning-and-descriptive-statistics.html#cb32-4" tabindex="-1"></a>  <span class="fu">left_join</span>(mydata, data_aggr)</span></code></pre></div>
+</div>
+<div id="practical-example-data-shapingcleaning" class="section level3 hasAnchor" number="3.4.7">
+<h3><span class="header-section-number">3.4.7</span> Practical example data shaping/cleaning<a href="data-cleaning-and-descriptive-statistics.html#practical-example-data-shapingcleaning" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If this was your first encounter with dplyr, all these different functions might be overwhelming. I understand.</p>
+<p>For me personally, what I find most appealing about dplyr is that by “chaining” different functions (pipelining) and by allowing to do multiple things at once, it made data preproccesing and my R scripts in general, less chaotic for myself. Yes, <em>%&gt;% this and %&gt;% that</em>… can lead to <em>behemoths of code</em> that may seem intimidating at first. As with everything new, the beginning can feel akward. Perhaps by further example, things become clearer.</p>
+<p>To conclude this section, I will demonstrate a complete example from scratch, integrating what we have learned about dplyr so far (plus some new elements added along the way). I made two raw datasets: a <em>main</em> dataset (<em>mydata_prac.xlsx</em>) and a smaller one (<em>mydata_prac_add.csv</em>). In a nutshell I will have to do the following preprocessing steps:
+1. Check my data
+2. Recode/rename/transform/create variables
+3. Join datasets
+4. Create the preprocessed dataset</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="data-cleaning-and-descriptive-statistics.html#cb33-1" tabindex="-1"></a><span class="do">############################</span></span>
+<span id="cb33-2"><a href="data-cleaning-and-descriptive-statistics.html#cb33-2" tabindex="-1"></a><span class="co"># Preprocessing example    #</span></span>
+<span id="cb33-3"><a href="data-cleaning-and-descriptive-statistics.html#cb33-3" tabindex="-1"></a><span class="do">############################  </span></span>
+<span id="cb33-4"><a href="data-cleaning-and-descriptive-statistics.html#cb33-4" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
+<span id="cb33-5"><a href="data-cleaning-and-descriptive-statistics.html#cb33-5" tabindex="-1"></a><span class="fu">p_load</span>(dplyr,stringr,corrtable,readxl, haven)</span>
+<span id="cb33-6"><a href="data-cleaning-and-descriptive-statistics.html#cb33-6" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen=</span><span class="dv">999</span>)</span>
+<span id="cb33-7"><a href="data-cleaning-and-descriptive-statistics.html#cb33-7" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">54321</span>)  </span>
+<span id="cb33-8"><a href="data-cleaning-and-descriptive-statistics.html#cb33-8" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="data-cleaning-and-descriptive-statistics.html#cb33-9" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb33-10"><a href="data-cleaning-and-descriptive-statistics.html#cb33-10" tabindex="-1"></a><span class="co"># Load data file and inspect data</span></span>
+<span id="cb33-11"><a href="data-cleaning-and-descriptive-statistics.html#cb33-11" tabindex="-1"></a><span class="do">##  </span></span>
+<span id="cb33-12"><a href="data-cleaning-and-descriptive-statistics.html#cb33-12" tabindex="-1"></a>  </span>
+<span id="cb33-13"><a href="data-cleaning-and-descriptive-statistics.html#cb33-13" tabindex="-1"></a>  mydata <span class="ot">=</span> <span class="fu">read_xlsx</span>(<span class="st">&quot;data_files/mydata_prac.xlsx&quot;</span>)</span>
+<span id="cb33-14"><a href="data-cleaning-and-descriptive-statistics.html#cb33-14" tabindex="-1"></a>  <span class="fu">View</span>(mydata)</span>
+<span id="cb33-15"><a href="data-cleaning-and-descriptive-statistics.html#cb33-15" tabindex="-1"></a>  </span>
+<span id="cb33-16"><a href="data-cleaning-and-descriptive-statistics.html#cb33-16" tabindex="-1"></a>  <span class="co"># -&gt; So far so good. However, one participant shows no data so here I decide to delete this one (filter it out)</span></span>
+<span id="cb33-17"><a href="data-cleaning-and-descriptive-statistics.html#cb33-17" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="sc">!</span>participant<span class="sc">==</span><span class="dv">11</span>)</span>
+<span id="cb33-18"><a href="data-cleaning-and-descriptive-statistics.html#cb33-18" tabindex="-1"></a>  </span>
+<span id="cb33-19"><a href="data-cleaning-and-descriptive-statistics.html#cb33-19" tabindex="-1"></a>  <span class="co"># -&gt; Ok so now I should have 10 partipants, let&#39;s quickly check. </span></span>
+<span id="cb33-20"><a href="data-cleaning-and-descriptive-statistics.html#cb33-20" tabindex="-1"></a>  <span class="fu">length</span>(<span class="fu">unique</span>(mydata<span class="sc">$</span>participant)) </span>
+<span id="cb33-21"><a href="data-cleaning-and-descriptive-statistics.html#cb33-21" tabindex="-1"></a>  </span>
+<span id="cb33-22"><a href="data-cleaning-and-descriptive-statistics.html#cb33-22" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb33-23"><a href="data-cleaning-and-descriptive-statistics.html#cb33-23" tabindex="-1"></a><span class="co">#  Recode variables</span></span>
+<span id="cb33-24"><a href="data-cleaning-and-descriptive-statistics.html#cb33-24" tabindex="-1"></a><span class="do">##</span></span>
+<span id="cb33-25"><a href="data-cleaning-and-descriptive-statistics.html#cb33-25" tabindex="-1"></a>  </span>
+<span id="cb33-26"><a href="data-cleaning-and-descriptive-statistics.html#cb33-26" tabindex="-1"></a>  <span class="co"># Items &quot;q&quot; need to be recoded to values (heavily disagree = 1 ; heavily agree = 5)</span></span>
+<span id="cb33-27"><a href="data-cleaning-and-descriptive-statistics.html#cb33-27" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q_&quot;</span>),</span>
+<span id="cb33-28"><a href="data-cleaning-and-descriptive-statistics.html#cb33-28" tabindex="-1"></a>                                   <span class="sc">~</span> <span class="fu">recode</span>(.,<span class="st">&#39;heavily disagree&#39;</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb33-29"><a href="data-cleaning-and-descriptive-statistics.html#cb33-29" tabindex="-1"></a>                                             <span class="st">&#39;disagree&#39;</span> <span class="ot">=</span> <span class="dv">2</span>,</span>
+<span id="cb33-30"><a href="data-cleaning-and-descriptive-statistics.html#cb33-30" tabindex="-1"></a>                                             <span class="st">&#39;neutral&#39;</span> <span class="ot">=</span> <span class="dv">3</span>,</span>
+<span id="cb33-31"><a href="data-cleaning-and-descriptive-statistics.html#cb33-31" tabindex="-1"></a>                                             <span class="st">&#39;agree&#39;</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
+<span id="cb33-32"><a href="data-cleaning-and-descriptive-statistics.html#cb33-32" tabindex="-1"></a>                                             <span class="st">&#39;heavily agree&#39;</span> <span class="ot">=</span> <span class="dv">5</span>)</span>
+<span id="cb33-33"><a href="data-cleaning-and-descriptive-statistics.html#cb33-33" tabindex="-1"></a>                                    ))</span>
+<span id="cb33-34"><a href="data-cleaning-and-descriptive-statistics.html#cb33-34" tabindex="-1"></a>  </span>
+<span id="cb33-35"><a href="data-cleaning-and-descriptive-statistics.html#cb33-35" tabindex="-1"></a>  <span class="co"># Turns out question q_1 and q_2 need to be REVERSED code</span></span>
+<span id="cb33-36"><a href="data-cleaning-and-descriptive-statistics.html#cb33-36" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q_&quot;</span>) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">ends_with</span>(<span class="st">&quot;3&quot;</span>),</span>
+<span id="cb33-37"><a href="data-cleaning-and-descriptive-statistics.html#cb33-37" tabindex="-1"></a>                                    <span class="sc">~</span> <span class="fu">abs</span>(.<span class="sc">-</span><span class="dv">6</span>)))</span>
+<span id="cb33-38"><a href="data-cleaning-and-descriptive-statistics.html#cb33-38" tabindex="-1"></a>    <span class="co"># -&gt; note !ends_with = does NOT end with; abs take the absolute value otherwise I end up with negative values.                              </span></span>
+<span id="cb33-39"><a href="data-cleaning-and-descriptive-statistics.html#cb33-39" tabindex="-1"></a>                                    </span>
+<span id="cb33-40"><a href="data-cleaning-and-descriptive-statistics.html#cb33-40" tabindex="-1"></a>  <span class="fu">View</span>(mydata) <span class="co"># Check your data                            </span></span>
+<span id="cb33-41"><a href="data-cleaning-and-descriptive-statistics.html#cb33-41" tabindex="-1"></a></span>
+<span id="cb33-42"><a href="data-cleaning-and-descriptive-statistics.html#cb33-42" tabindex="-1"></a><span class="do">###  </span></span>
+<span id="cb33-43"><a href="data-cleaning-and-descriptive-statistics.html#cb33-43" tabindex="-1"></a><span class="co">#   Rename and transform variables  </span></span>
+<span id="cb33-44"><a href="data-cleaning-and-descriptive-statistics.html#cb33-44" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb33-45"><a href="data-cleaning-and-descriptive-statistics.html#cb33-45" tabindex="-1"></a>  </span>
+<span id="cb33-46"><a href="data-cleaning-and-descriptive-statistics.html#cb33-46" tabindex="-1"></a>  <span class="co"># First off the &quot;age&quot; variable was misnamed and should be called &quot;date_of_birth&quot;</span></span>
+<span id="cb33-47"><a href="data-cleaning-and-descriptive-statistics.html#cb33-47" tabindex="-1"></a>  <span class="co"># Similarly, &quot;q_3&quot; is actually &quot;r_4&quot;</span></span>
+<span id="cb33-48"><a href="data-cleaning-and-descriptive-statistics.html#cb33-48" tabindex="-1"></a>  <span class="co"># rt is not a character but should be coded as a numerical value. Participant should be coded as a factor</span></span>
+<span id="cb33-49"><a href="data-cleaning-and-descriptive-statistics.html#cb33-49" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">birth_date=</span>age, <span class="at">r_4 =</span> q_3) <span class="sc">%&gt;%</span></span>
+<span id="cb33-50"><a href="data-cleaning-and-descriptive-statistics.html#cb33-50" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">rt =</span> <span class="fu">as.numeric</span>(rt), <span class="at">participant =</span> <span class="fu">as.factor</span>(participant))</span>
+<span id="cb33-51"><a href="data-cleaning-and-descriptive-statistics.html#cb33-51" tabindex="-1"></a></span>
+<span id="cb33-52"><a href="data-cleaning-and-descriptive-statistics.html#cb33-52" tabindex="-1"></a>    <span class="co"># -&gt; Note that the dataset reads as r_4; r_1; r_2; r_3</span></span>
+<span id="cb33-53"><a href="data-cleaning-and-descriptive-statistics.html#cb33-53" tabindex="-1"></a>    <span class="co"># -&gt; This may trigger someone so lets quickly change the order</span></span>
+<span id="cb33-54"><a href="data-cleaning-and-descriptive-statistics.html#cb33-54" tabindex="-1"></a>    <span class="co"># The current column number 7 (&quot;r_4&quot;) needs to placed last:</span></span>
+<span id="cb33-55"><a href="data-cleaning-and-descriptive-statistics.html#cb33-55" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata[,<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">8</span><span class="sc">:</span><span class="dv">10</span>,<span class="dv">7</span>)] <span class="co"># from &quot;participant&quot; to &quot;q_2&quot;, from &quot;r_1&quot; to &quot;r_3&quot;, &quot;r_4&quot; </span></span>
+<span id="cb33-56"><a href="data-cleaning-and-descriptive-statistics.html#cb33-56" tabindex="-1"></a>  </span>
+<span id="cb33-57"><a href="data-cleaning-and-descriptive-statistics.html#cb33-57" tabindex="-1"></a><span class="do">###  </span></span>
+<span id="cb33-58"><a href="data-cleaning-and-descriptive-statistics.html#cb33-58" tabindex="-1"></a><span class="co">#   Compute new variables</span></span>
+<span id="cb33-59"><a href="data-cleaning-and-descriptive-statistics.html#cb33-59" tabindex="-1"></a><span class="do">###  </span></span>
+<span id="cb33-60"><a href="data-cleaning-and-descriptive-statistics.html#cb33-60" tabindex="-1"></a>  </span>
+<span id="cb33-61"><a href="data-cleaning-and-descriptive-statistics.html#cb33-61" tabindex="-1"></a>  <span class="co"># Moving on, I will create a variable &quot;participant_age&quot; which is the difference in time between the variable &quot;birth_date&quot; and a certain date (say the first of April 2023)</span></span>
+<span id="cb33-62"><a href="data-cleaning-and-descriptive-statistics.html#cb33-62" tabindex="-1"></a>  <span class="co"># I will use the packages anytime and lubridate </span></span>
+<span id="cb33-63"><a href="data-cleaning-and-descriptive-statistics.html#cb33-63" tabindex="-1"></a>  pacman<span class="sc">::</span><span class="fu">p_load</span>(anytime,lubridate)</span>
+<span id="cb33-64"><a href="data-cleaning-and-descriptive-statistics.html#cb33-64" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">age =</span><span class="fu">time_length</span>(</span>
+<span id="cb33-65"><a href="data-cleaning-and-descriptive-statistics.html#cb33-65" tabindex="-1"></a>    <span class="fu">interval</span>(</span>
+<span id="cb33-66"><a href="data-cleaning-and-descriptive-statistics.html#cb33-66" tabindex="-1"></a>      <span class="fu">as.Date</span>(<span class="fu">anytime</span>(birth_date)),</span>
+<span id="cb33-67"><a href="data-cleaning-and-descriptive-statistics.html#cb33-67" tabindex="-1"></a>      <span class="fu">as.Date</span>(<span class="st">&quot;2023-04-01&quot;</span>)  <span class="co"># Note, has to be in YYYY/MM/DD format.</span></span>
+<span id="cb33-68"><a href="data-cleaning-and-descriptive-statistics.html#cb33-68" tabindex="-1"></a>    ),</span>
+<span id="cb33-69"><a href="data-cleaning-and-descriptive-statistics.html#cb33-69" tabindex="-1"></a>    <span class="at">unit =</span><span class="st">&quot;year&quot;</span> <span class="co"># To get the difference in years</span></span>
+<span id="cb33-70"><a href="data-cleaning-and-descriptive-statistics.html#cb33-70" tabindex="-1"></a>  )</span>
+<span id="cb33-71"><a href="data-cleaning-and-descriptive-statistics.html#cb33-71" tabindex="-1"></a>  )</span>
+<span id="cb33-72"><a href="data-cleaning-and-descriptive-statistics.html#cb33-72" tabindex="-1"></a>  </span>
+<span id="cb33-73"><a href="data-cleaning-and-descriptive-statistics.html#cb33-73" tabindex="-1"></a>  <span class="co"># Next, I wish to compute the row-wise averages of the &quot;q_&quot; variables as well ass the &quot;r_&quot; variables. BUT I don&#39;t want to have the average (set to an empty value) if only one item was filled in (row-wise)</span></span>
+<span id="cb33-74"><a href="data-cleaning-and-descriptive-statistics.html#cb33-74" tabindex="-1"></a>  <span class="co"># Essentially, we have to base whether or not to average based on the sum of NA (a.k.a. empty values) per row</span></span>
+<span id="cb33-75"><a href="data-cleaning-and-descriptive-statistics.html#cb33-75" tabindex="-1"></a>  <span class="co"># In other technical words: if our the condition is met (the sum of NA&#39;s per row is 1 or lower), compute the mean (ignore NA&#39;s)</span></span>
+<span id="cb33-76"><a href="data-cleaning-and-descriptive-statistics.html#cb33-76" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(</span>
+<span id="cb33-77"><a href="data-cleaning-and-descriptive-statistics.html#cb33-77" tabindex="-1"></a>    <span class="at">q_scale =</span> <span class="fu">ifelse</span>(<span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q_&quot;</span>), <span class="sc">~</span><span class="fu">is.na</span>(.)))<span class="sc">&lt;=</span><span class="dv">1</span>,</span>
+<span id="cb33-78"><a href="data-cleaning-and-descriptive-statistics.html#cb33-78" tabindex="-1"></a>                     <span class="fu">rowMeans</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;q_&quot;</span>)),<span class="at">na.rm=</span><span class="cn">TRUE</span>),<span class="cn">NA</span></span>
+<span id="cb33-79"><a href="data-cleaning-and-descriptive-statistics.html#cb33-79" tabindex="-1"></a>    ),</span>
+<span id="cb33-80"><a href="data-cleaning-and-descriptive-statistics.html#cb33-80" tabindex="-1"></a>    <span class="at">r_scale =</span> <span class="fu">ifelse</span>(<span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;r_&quot;</span>), <span class="sc">~</span><span class="fu">is.na</span>(.)))<span class="sc">&lt;=</span><span class="dv">1</span>,</span>
+<span id="cb33-81"><a href="data-cleaning-and-descriptive-statistics.html#cb33-81" tabindex="-1"></a>                     <span class="fu">rowMeans</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;r_&quot;</span>)),<span class="at">na.rm=</span><span class="cn">TRUE</span>),<span class="cn">NA</span></span>
+<span id="cb33-82"><a href="data-cleaning-and-descriptive-statistics.html#cb33-82" tabindex="-1"></a>    )</span>
+<span id="cb33-83"><a href="data-cleaning-and-descriptive-statistics.html#cb33-83" tabindex="-1"></a>  )</span>
+<span id="cb33-84"><a href="data-cleaning-and-descriptive-statistics.html#cb33-84" tabindex="-1"></a>    <span class="co"># Again be mindfull of where to put across.</span></span>
+<span id="cb33-85"><a href="data-cleaning-and-descriptive-statistics.html#cb33-85" tabindex="-1"></a>    <span class="co"># Check your data</span></span>
+<span id="cb33-86"><a href="data-cleaning-and-descriptive-statistics.html#cb33-86" tabindex="-1"></a>    <span class="fu">View</span>(mydata) </span>
+<span id="cb33-87"><a href="data-cleaning-and-descriptive-statistics.html#cb33-87" tabindex="-1"></a>    </span>
+<span id="cb33-88"><a href="data-cleaning-and-descriptive-statistics.html#cb33-88" tabindex="-1"></a>      <span class="co"># It worked... but some ages are set to zero. Transform &#39;em to NA</span></span>
+<span id="cb33-89"><a href="data-cleaning-and-descriptive-statistics.html#cb33-89" tabindex="-1"></a>      mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">age =</span> <span class="fu">ifelse</span>( age<span class="sc">==</span><span class="dv">0</span>,<span class="cn">NA</span>, age))</span>
+<span id="cb33-90"><a href="data-cleaning-and-descriptive-statistics.html#cb33-90" tabindex="-1"></a>      </span>
+<span id="cb33-91"><a href="data-cleaning-and-descriptive-statistics.html#cb33-91" tabindex="-1"></a>      <span class="co"># It is a good thing we frequently check our data :-)</span></span>
+<span id="cb33-92"><a href="data-cleaning-and-descriptive-statistics.html#cb33-92" tabindex="-1"></a></span>
+<span id="cb33-93"><a href="data-cleaning-and-descriptive-statistics.html#cb33-93" tabindex="-1"></a>  <span class="co"># Next, PER PARTICIPANT, I want the average rt and the average of the freshly created &quot;q_scale&quot; and the &quot;r_scale&quot; (ignore NA).</span></span>
+<span id="cb33-94"><a href="data-cleaning-and-descriptive-statistics.html#cb33-94" tabindex="-1"></a>  <span class="co"># In addition, I want to grand-mean center the average rt per participant.</span></span>
+<span id="cb33-95"><a href="data-cleaning-and-descriptive-statistics.html#cb33-95" tabindex="-1"></a>  <span class="co"># For the first part, we can use the group_by() and summarize() combo. We could join the created miniature dataset with the main one to grand-mean center.</span></span>
+<span id="cb33-96"><a href="data-cleaning-and-descriptive-statistics.html#cb33-96" tabindex="-1"></a>  <span class="co"># I could glue datasets using left_join()... but in this example, I will &quot;pipeline&quot; all functions without &quot;breaking the chain&quot;</span></span>
+<span id="cb33-97"><a href="data-cleaning-and-descriptive-statistics.html#cb33-97" tabindex="-1"></a>  <span class="co"># To keep the chain intact, I will have to use right_join()</span></span>
+<span id="cb33-98"><a href="data-cleaning-and-descriptive-statistics.html#cb33-98" tabindex="-1"></a>  <span class="co"># You see, after &quot;summarizing&quot; the dataset, a miniature dataset will be created. From that moment, if you pipeline further, you will be using that miniature dataset. Now, with right_join(), you tell R: &quot;use the first dataset (i.e., the miniature dataset) to glue it to the second one (i.e., our original dataset), which is exactly what we want to preserve the chain</span></span>
+<span id="cb33-99"><a href="data-cleaning-and-descriptive-statistics.html#cb33-99" tabindex="-1"></a>  </span>
+<span id="cb33-100"><a href="data-cleaning-and-descriptive-statistics.html#cb33-100" tabindex="-1"></a>  mydata <span class="ot">=</span> mydata <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">rt =</span> <span class="fu">as.numeric</span>(rt)) <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(participant) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(  <span class="at">rt_average_part =</span> <span class="fu">mean</span>(rt,<span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-101"><a href="data-cleaning-and-descriptive-statistics.html#cb33-101" tabindex="-1"></a>                                                                                        <span class="at">q_average_part =</span> <span class="fu">mean</span>(q_scale,<span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb33-102"><a href="data-cleaning-and-descriptive-statistics.html#cb33-102" tabindex="-1"></a>                                                                                        <span class="at">r_average_part =</span> <span class="fu">mean</span>(r_scale,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-103"><a href="data-cleaning-and-descriptive-statistics.html#cb33-103" tabindex="-1"></a>  <span class="fu">right_join</span>(mydata) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-104"><a href="data-cleaning-and-descriptive-statistics.html#cb33-104" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rt_grand_mean =</span> <span class="fu">scale</span>(mydata<span class="sc">$</span>rt, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">FALSE</span>) )</span>
+<span id="cb33-105"><a href="data-cleaning-and-descriptive-statistics.html#cb33-105" tabindex="-1"></a></span>
+<span id="cb33-106"><a href="data-cleaning-and-descriptive-statistics.html#cb33-106" tabindex="-1"></a>  <span class="co"># Check. your. data.</span></span>
+<span id="cb33-107"><a href="data-cleaning-and-descriptive-statistics.html#cb33-107" tabindex="-1"></a>  <span class="fu">View</span>(mydata)</span>
+<span id="cb33-108"><a href="data-cleaning-and-descriptive-statistics.html#cb33-108" tabindex="-1"></a></span>
+<span id="cb33-109"><a href="data-cleaning-and-descriptive-statistics.html#cb33-109" tabindex="-1"></a><span class="do">###  </span></span>
+<span id="cb33-110"><a href="data-cleaning-and-descriptive-statistics.html#cb33-110" tabindex="-1"></a><span class="co">#   Merge datasets</span></span>
+<span id="cb33-111"><a href="data-cleaning-and-descriptive-statistics.html#cb33-111" tabindex="-1"></a><span class="do">###    </span></span>
+<span id="cb33-112"><a href="data-cleaning-and-descriptive-statistics.html#cb33-112" tabindex="-1"></a>  </span>
+<span id="cb33-113"><a href="data-cleaning-and-descriptive-statistics.html#cb33-113" tabindex="-1"></a>  <span class="co"># Let&#39;s wrap it up. Glue the &quot;mydata_prac_add.csv&quot; to the main one and recode gender into words (1 = female, 2 = male)</span></span>
+<span id="cb33-114"><a href="data-cleaning-and-descriptive-statistics.html#cb33-114" tabindex="-1"></a>  mydata <span class="ot">=</span> <span class="fu">left_join</span>(mydata, <span class="fu">read.csv</span>(<span class="st">&quot;data_files/mydata_prac_add.csv&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">gender =</span> <span class="fu">ifelse</span>(gender <span class="sc">==</span> <span class="dv">1</span>,<span class="st">&quot;female&quot;</span>,<span class="st">&quot;male&quot;</span>)) )</span>
+<span id="cb33-115"><a href="data-cleaning-and-descriptive-statistics.html#cb33-115" tabindex="-1"></a>  </span>
+<span id="cb33-116"><a href="data-cleaning-and-descriptive-statistics.html#cb33-116" tabindex="-1"></a>  <span class="co"># You know what to do</span></span>
+<span id="cb33-117"><a href="data-cleaning-and-descriptive-statistics.html#cb33-117" tabindex="-1"></a>  <span class="fu">View</span>(mydata)</span>
+<span id="cb33-118"><a href="data-cleaning-and-descriptive-statistics.html#cb33-118" tabindex="-1"></a>  </span>
+<span id="cb33-119"><a href="data-cleaning-and-descriptive-statistics.html#cb33-119" tabindex="-1"></a>  <span class="co"># Everything looks fine, save the &quot;clean&quot; dataset in a &quot;clean&quot; datafile.</span></span>
+<span id="cb33-120"><a href="data-cleaning-and-descriptive-statistics.html#cb33-120" tabindex="-1"></a>  <span class="fu">write.csv</span>(mydata,<span class="st">&quot;data_files/mydata_prac_finished.csv&quot;</span>) </span>
+<span id="cb33-121"><a href="data-cleaning-and-descriptive-statistics.html#cb33-121" tabindex="-1"></a>  </span>
+<span id="cb33-122"><a href="data-cleaning-and-descriptive-statistics.html#cb33-122" tabindex="-1"></a>  <span class="co"># Done.</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-visualisation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
