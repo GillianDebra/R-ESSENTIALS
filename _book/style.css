@@ -1,0 +1,153 @@
+p.caption {
+  color: #777;
+  margin-top: 10px;
+}
+p code {
+  white-space: inherit;
+}
+pre {
+  word-break: normal;
+  word-wrap: normal;
+}
+pre code {
+  white-space: inherit;
+}
+
+
+
+/* CUSTOMIZATION: Change Font & Text Size */
+body {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    margin-left: 200px;
+}
+
+/*                  Customize Chapter Titles (With h1 = first level)          */
+
+/* h1 = first header (i.e., level 1) */
+h1 {
+    color: #0d48a2;
+    font-size: 28px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 12px;
+}
+
+h2 {
+    color: #0066cc;   
+    font-size: 24px;  
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 6px;
+}
+
+/* Style for H3 (Section Titles) */
+h3 {
+    color: #0066ff;
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+/* Style for H4 (Section Titles) */
+h4 {
+    color: #0091ff;
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+/*                  Customize Sidebar, R code blocks and hyperlinks          */
+
+
+/* Modify Navigation Sidebar */
+.book .book-summary {
+    background-color: #f8f9fa;
+    width: 300px;
+}
+
+/* Add Styling to Code Blocks */
+pre {
+    background-color: #282c34;
+    color: #171717;  
+    padding: 10px;
+    border-radius: 20px;
+}
+
+
+/* Customize Links */
+a {
+    color: #115cd2;  /* Customize hyperlinks, color them green #00ab55; */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #00de6e;/* Customize hyperlinks, color them green #00de6e */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+
+/*                  Customize layout to tweak code area, etc.         */
+
+
+
+/* Default layout for larger screens */
+.book .book-body .page-wrapper .page-inner {
+  max-width: 1200px !important; 
+}
+
+
+.book .book-summary {
+  /* Table of content */
+  width: 220px;
+  left: -30px;
+}
+
+.book .book-body {
+  /* Adjust margins */
+  margin-left: 150px;
+  margin-right: 150px;
+}
+
+
+
+
+/* Medium-sized screens (tablets, smaller laptops) */
+@media (max-width: 1200px) {
+  .book .book-body .page-wrapper .page-inner {
+    max-width: 90%; /* Adjust content width relative to screen size */
+  }
+
+  .book .book-summary {
+    width: 220px;
+  }
+
+  .book .book-body {
+    margin-left: 150px;
+      margin-right: 150px;
+  }
+}
+
+
+
+
+
+/* Small screens (mobile phones) */
+@media (max-width: 768px) {
+  .book .book-body .page-wrapper .page-inner {
+    max-width: 100%; /* Use full width on small screens */
+    padding: 10px; /* Add some padding for readability */
+  }
+
+  .book .book-summary {
+    width: 100%; /* Allow TOC to span full width */
+    position: relative; /* Stack TOC above content */
+  }
+
+  .book .book-body {
+    margin-left: 0;
+  }
+  
+}
+

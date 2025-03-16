@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<meta name="author" content="Gillian Debra">
+<meta name="description" content="By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:type" content="book">
+<meta property="og:description" content="By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:description" content="By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.2/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Delighted to have you!Welcome to:</a></li>
+<li><a class="" href="loading-datafiles.html"><span class="header-section-number">1</span> Loading datafiles</a></li>
+<li><a class="" href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></li>
+<li><a class="" href="data-cleaning-and-descriptive-statistics.html"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></li>
+<li><a class="" href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></li>
+<li><a class="active" href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a></li>
+<li><a class="" href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></li>
+<li><a class="" href="anova.html"><span class="header-section-number">7</span> Anova</a></li>
+<li><a class="" href="structural-equation-modelling-and-mediation.html"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></li>
+<li><a class="" href="missing-data-and-multiple-imputation.html"><span class="header-section-number">9</span> Missing data and multiple imputation</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis" class="section level1" number="5">
+<h1>
+<span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis<a class="anchor" aria-label="anchor" href="#reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis"><i class="fas fa-link"></i></a>
+</h1>
+<p>By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this mainly from a “investigation/research/testing” view.</p>
+<p>This particular part may interest you, in particular if you are affiliated with fields such as Psychology. In those fields, you may be confronted with questionnaires that are presumed to measure something… often an abstract construct. Questionnaires often include multiple items that are presumed to represent the constructs the questionnaire are presumed to measure. For example, items like “happy”, “energized”, “relaxed”, “calm”, could be presumed to reflect the construct “positive affect”.</p>
+<p>The question arises, do you have some indications for the consistency of these questionnaires? Do the questionnaire items <strong>reliably</strong> tap onto the assumed construct? Can our questionnaire items be summarized in factors (“more latent constructs”) and in how may?</p>
+<p>In this part I’ll go over <strong>reliability, confirmatory factor analysis, and exploratory factor analysis</strong>. Specifically:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Starting with a classic (but debated) indicator of reliability, Cronbach’s alpha.</strong>. We will compute this indicator using the <a href="https://cran.r-project.org/web/packages/psych/index.html">psych package</a> and I’ll show you how to compute it by hand.</li>
+<li>
+<strong>We explore McDonald’s Omega reliability indicator as an alternative to Cronbach’s alpha</strong>. During this part I will use the <a href="https://lavaan.ugent.be/">lavaan package</a> and the <a href="https://cran.r-project.org/web/packages/semTools/index.html">semTools package</a> to introduce you to <strong>Confirmatory Factor Analysis</strong>, <strong>factor loadings (checking tau equivalence)</strong>, <strong>CFA fit indicators and how we could improve them</strong>.</li>
+<li>
+<strong>How to conduct an Exploratory Factor Analysis to unveil the underlying structure of the data</strong>. We will briefly discuss <strong>some</strong> considerations concerning this kind of analysis including <strong>multicollinearity (variance inflation factors), multivariate normallity (Mardia’s skewness and kurtosis)</strong>, and <strong>univariate/multivariate outliers (mahalanobis distance)</strong>. I’ll also briefly discuss some methods that gives us suggestions regarding the number of factors we could restrain (<strong>scree plots, parallel analysis, Minimal Average Potential</strong>). We end with a small demonstration using the fa() function from the psych package.</li>
+</ol>
+<div id="cronbachs-alpha" class="section level2" number="5.1">
+<h2>
+<span class="header-section-number">5.1</span> Cronbach’s alpha<a class="anchor" aria-label="anchor" href="#cronbachs-alpha"><i class="fas fa-link"></i></a>
+</h2>
+<p>Starting off with one of the most popular indicators of internal consistency (reliability). Over the years, this indicator was not spared of criticism <a href="https://www.doi.org/10.1037/met0000144">click here for an example</a>. Nevertheless, I will show you how to compute it. I will use the <strong>psych package</strong> and a <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0199750">free online dataset, click here</a>. This dataset contains items that “belong” to the same presumed construct.</p>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
+<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">psych</span>, <span class="va">dplyr</span>, <span class="va">haven</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu">read_sav</span><span class="op">(</span><span class="st">"data_files/pone.0199750.s001.sav"</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Reliability analysis   </span></span>
+<span><span class="co">#&gt; Call: alpha(x = mydata)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   raw_alpha std.alpha G6(smc) average_r S/N   ase mean   sd</span></span>
+<span><span class="co">#&gt;       0.28      0.88    0.89      0.24 7.4 0.022  1.8 0.79</span></span>
+<span><span class="co">#&gt;  median_r</span></span>
+<span><span class="co">#&gt;      0.26</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     95% confidence boundaries </span></span>
+<span><span class="co">#&gt;          lower alpha upper</span></span>
+<span><span class="co">#&gt; Feldt     0.21  0.28  0.34</span></span>
+<span><span class="co">#&gt; Duhachek  0.23  0.28  0.32</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Reliability if an item is dropped:</span></span>
+<span><span class="co">#&gt;                    raw_alpha std.alpha G6(smc) average_r</span></span>
+<span><span class="co">#&gt; age                     0.89      0.89    0.89      0.25</span></span>
+<span><span class="co">#&gt; sex                     0.27      0.88    0.89      0.25</span></span>
+<span><span class="co">#&gt; BDI1                    0.26      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI2                    0.26      0.87    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI3                    0.26      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI4                    0.25      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI5                    0.27      0.88    0.89      0.24</span></span>
+<span><span class="co">#&gt; BDI6                    0.27      0.88    0.89      0.24</span></span>
+<span><span class="co">#&gt; BDI7                    0.26      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI8                    0.26      0.87    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI9                    0.27      0.88    0.89      0.24</span></span>
+<span><span class="co">#&gt; BDI10                   0.25      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI11                   0.26      0.88    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI12                   0.26      0.87    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI13                   0.26      0.87    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI14                   0.26      0.88    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI15                   0.25      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI16                   0.27      0.88    0.89      0.24</span></span>
+<span><span class="co">#&gt; BDI17                   0.26      0.87    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI18                   0.26      0.88    0.89      0.24</span></span>
+<span><span class="co">#&gt; BDI19                   0.26      0.87    0.89      0.23</span></span>
+<span><span class="co">#&gt; BDI20                   0.25      0.87    0.88      0.23</span></span>
+<span><span class="co">#&gt; BDI21                   0.25      0.88    0.89      0.24</span></span>
+<span><span class="co">#&gt; clinicalandgeneral      0.27      0.88    0.89      0.25</span></span>
+<span><span class="co">#&gt;                    S/N alpha se  var.r med.r</span></span>
+<span><span class="co">#&gt; age                7.8   0.0049 0.0091  0.26</span></span>
+<span><span class="co">#&gt; sex                7.6   0.0215 0.0111  0.26</span></span>
+<span><span class="co">#&gt; BDI1               6.8   0.0214 0.0121  0.25</span></span>
+<span><span class="co">#&gt; BDI2               7.0   0.0215 0.0126  0.25</span></span>
+<span><span class="co">#&gt; BDI3               6.9   0.0213 0.0122  0.25</span></span>
+<span><span class="co">#&gt; BDI4               6.9   0.0216 0.0125  0.25</span></span>
+<span><span class="co">#&gt; BDI5               7.1   0.0212 0.0125  0.26</span></span>
+<span><span class="co">#&gt; BDI6               7.1   0.0212 0.0125  0.26</span></span>
+<span><span class="co">#&gt; BDI7               6.8   0.0212 0.0116  0.25</span></span>
+<span><span class="co">#&gt; BDI8               7.0   0.0211 0.0124  0.25</span></span>
+<span><span class="co">#&gt; BDI9               7.2   0.0215 0.0128  0.26</span></span>
+<span><span class="co">#&gt; BDI10              6.9   0.0215 0.0128  0.25</span></span>
+<span><span class="co">#&gt; BDI11              7.1   0.0214 0.0131  0.26</span></span>
+<span><span class="co">#&gt; BDI12              7.0   0.0212 0.0124  0.25</span></span>
+<span><span class="co">#&gt; BDI13              7.0   0.0212 0.0126  0.25</span></span>
+<span><span class="co">#&gt; BDI14              7.0   0.0215 0.0126  0.25</span></span>
+<span><span class="co">#&gt; BDI15              6.9   0.0218 0.0125  0.25</span></span>
+<span><span class="co">#&gt; BDI16              7.3   0.0213 0.0126  0.26</span></span>
+<span><span class="co">#&gt; BDI17              7.0   0.0214 0.0129  0.25</span></span>
+<span><span class="co">#&gt; BDI18              7.2   0.0213 0.0131  0.26</span></span>
+<span><span class="co">#&gt; BDI19              7.0   0.0211 0.0127  0.25</span></span>
+<span><span class="co">#&gt; BDI20              7.0   0.0218 0.0126  0.25</span></span>
+<span><span class="co">#&gt; BDI21              7.1   0.0221 0.0131  0.26</span></span>
+<span><span class="co">#&gt; clinicalandgeneral 7.5   0.0216 0.0118  0.26</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Item statistics </span></span>
+<span><span class="co">#&gt;                       n raw.r std.r r.cor r.drop  mean</span></span>
+<span><span class="co">#&gt; age                1038 0.884  0.17  0.11  0.097 31.44</span></span>
+<span><span class="co">#&gt; sex                1040 0.102  0.24  0.18  0.073  0.55</span></span>
+<span><span class="co">#&gt; BDI1               1040 0.352  0.65  0.64  0.319  0.35</span></span>
+<span><span class="co">#&gt; BDI2               1040 0.319  0.59  0.56  0.288  0.30</span></span>
+<span><span class="co">#&gt; BDI3               1040 0.266  0.59  0.57  0.236  0.29</span></span>
+<span><span class="co">#&gt; BDI4               1040 0.409  0.62  0.60  0.376  0.47</span></span>
+<span><span class="co">#&gt; BDI5               1040 0.205  0.53  0.50  0.170  0.47</span></span>
+<span><span class="co">#&gt; BDI6               1040 0.220  0.51  0.48  0.181  0.33</span></span>
+<span><span class="co">#&gt; BDI7               1040 0.295  0.67  0.66  0.259  0.39</span></span>
+<span><span class="co">#&gt; BDI8               1040 0.246  0.57  0.55  0.205  0.66</span></span>
+<span><span class="co">#&gt; BDI9               1040 0.182  0.45  0.41  0.159  0.13</span></span>
+<span><span class="co">#&gt; BDI10              1040 0.381  0.60  0.58  0.343  0.50</span></span>
+<span><span class="co">#&gt; BDI11              1040 0.307  0.53  0.50  0.266  0.56</span></span>
+<span><span class="co">#&gt; BDI12              1040 0.281  0.59  0.56  0.247  0.59</span></span>
+<span><span class="co">#&gt; BDI13              1040 0.282  0.57  0.55  0.244  0.49</span></span>
+<span><span class="co">#&gt; BDI14              1040 0.320  0.55  0.53  0.288  0.28</span></span>
+<span><span class="co">#&gt; BDI15              1040 0.462  0.59  0.57  0.429  0.68</span></span>
+<span><span class="co">#&gt; BDI16              1040 0.192  0.42  0.38  0.146  0.92</span></span>
+<span><span class="co">#&gt; BDI17              1040 0.298  0.56  0.53  0.261  0.44</span></span>
+<span><span class="co">#&gt; BDI18              1040 0.257  0.47  0.43  0.210  0.79</span></span>
+<span><span class="co">#&gt; BDI19              1040 0.254  0.57  0.55  0.209  0.71</span></span>
+<span><span class="co">#&gt; BDI20              1040 0.458  0.58  0.56  0.426  0.69</span></span>
+<span><span class="co">#&gt; BDI21              1040 0.497  0.50  0.47  0.466  0.38</span></span>
+<span><span class="co">#&gt; clinicalandgeneral 1040 0.096  0.30  0.25  0.081  1.08</span></span>
+<span><span class="co">#&gt;                       sd</span></span>
+<span><span class="co">#&gt; age                15.81</span></span>
+<span><span class="co">#&gt; sex                 0.50</span></span>
+<span><span class="co">#&gt; BDI1                0.69</span></span>
+<span><span class="co">#&gt; BDI2                0.64</span></span>
+<span><span class="co">#&gt; BDI3                0.60</span></span>
+<span><span class="co">#&gt; BDI4                0.73</span></span>
+<span><span class="co">#&gt; BDI5                0.64</span></span>
+<span><span class="co">#&gt; BDI6                0.74</span></span>
+<span><span class="co">#&gt; BDI7                0.71</span></span>
+<span><span class="co">#&gt; BDI8                0.78</span></span>
+<span><span class="co">#&gt; BDI9                0.43</span></span>
+<span><span class="co">#&gt; BDI10               0.90</span></span>
+<span><span class="co">#&gt; BDI11               0.81</span></span>
+<span><span class="co">#&gt; BDI12               0.74</span></span>
+<span><span class="co">#&gt; BDI13               0.82</span></span>
+<span><span class="co">#&gt; BDI14               0.66</span></span>
+<span><span class="co">#&gt; BDI15               0.74</span></span>
+<span><span class="co">#&gt; BDI16               0.82</span></span>
+<span><span class="co">#&gt; BDI17               0.72</span></span>
+<span><span class="co">#&gt; BDI18               0.89</span></span>
+<span><span class="co">#&gt; BDI19               0.85</span></span>
+<span><span class="co">#&gt; BDI20               0.76</span></span>
+<span><span class="co">#&gt; BDI21               0.78</span></span>
+<span><span class="co">#&gt; clinicalandgeneral  0.28</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Non missing response frequency for each item</span></span>
+<span><span class="co">#&gt;                       0    1    2    3 miss</span></span>
+<span><span class="co">#&gt; sex                0.45 0.55 0.00 0.00    0</span></span>
+<span><span class="co">#&gt; BDI1               0.76 0.15 0.07 0.02    0</span></span>
+<span><span class="co">#&gt; BDI2               0.78 0.17 0.02 0.03    0</span></span>
+<span><span class="co">#&gt; BDI3               0.78 0.18 0.03 0.02    0</span></span>
+<span><span class="co">#&gt; BDI4               0.65 0.27 0.06 0.03    0</span></span>
+<span><span class="co">#&gt; BDI5               0.59 0.37 0.02 0.02    0</span></span>
+<span><span class="co">#&gt; BDI6               0.79 0.14 0.02 0.05    0</span></span>
+<span><span class="co">#&gt; BDI7               0.72 0.19 0.07 0.02    0</span></span>
+<span><span class="co">#&gt; BDI8               0.49 0.40 0.07 0.04    0</span></span>
+<span><span class="co">#&gt; BDI9               0.89 0.09 0.01 0.01    0</span></span>
+<span><span class="co">#&gt; BDI10              0.72 0.12 0.10 0.06    0</span></span>
+<span><span class="co">#&gt; BDI11              0.60 0.30 0.05 0.05    0</span></span>
+<span><span class="co">#&gt; BDI12              0.53 0.37 0.07 0.03    0</span></span>
+<span><span class="co">#&gt; BDI13              0.68 0.21 0.07 0.05    0</span></span>
+<span><span class="co">#&gt; BDI14              0.82 0.10 0.06 0.02    0</span></span>
+<span><span class="co">#&gt; BDI15              0.46 0.43 0.09 0.03    0</span></span>
+<span><span class="co">#&gt; BDI16              0.34 0.43 0.19 0.04    0</span></span>
+<span><span class="co">#&gt; BDI17              0.67 0.25 0.05 0.03    0</span></span>
+<span><span class="co">#&gt; BDI18              0.46 0.36 0.12 0.06    0</span></span>
+<span><span class="co">#&gt; BDI19              0.52 0.30 0.15 0.04    0</span></span>
+<span><span class="co">#&gt; BDI20              0.47 0.41 0.09 0.03    0</span></span>
+<span><span class="co">#&gt; BDI21              0.76 0.15 0.04 0.05    0</span></span>
+<span><span class="co">#&gt; clinicalandgeneral 0.00 0.92 0.08 0.00    0</span></span></code></pre></div>
+<p>Note that you receive a lot of output. The (raw) alpha is printed at the top of the output. You could also skip most of it and ask for what you want. For example:</p>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[[</span><span class="st">"total"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"raw_alpha"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] 0.2751774</span></span>
+<span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[[</span><span class="st">"total"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"std.alpha"</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">#&gt; [1] 0.8808157</span></span></code></pre></div>
+<p>The above looks a bit complicated with all those brackets. here is a trick to it.
+Suppose I ran the following code:</p>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">alpha_output</span> <span class="op">=</span> <span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html">alpha</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span></code></pre></div>
+<p>Now I click on the freshly created alpha_output object (Environment window, top right). It looks something like this:
+<img src="images/Reliability/Reliability_01.png"><br><br></p>
+<p>Click on total, then click on raw_alpha. On the bottom you should see: <em>“alpha_output[[”total”]][[”raw_alpha”]]”</em>. Nnow you can copy-paste the <em>[[“total”]][[“raw_alpha”]]</em> part into R. “This store as an object and click” strategy works in variety of contexts such as with regression models.<br><img src="images/Reliability/Reliability_02.png"><br><br></p>
+<div id="alpha-by-hand" class="section level3" number="5.1.1">
+<h3>
+<span class="header-section-number">5.1.1</span> Alpha by hand<a class="anchor" aria-label="anchor" href="#alpha-by-hand"><i class="fas fa-link"></i></a>
+</h3>
+<p>If desired we could also compute the Cronbach’s alpha ourselves without fancy packages. Just for fun and educational purposes, I will demonstrate how.</p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Formula Cronbach's alpha: (N)/(N-1) * ( (VARIANCE SUM SCORE ACROSS ITEMS - VARIANCE SUM SCORE PER ITEM)/VARIANCE SUM SCORE ACROSS ITEMS )</span></span>
+<span>  </span>
+<span>  <span class="co"># ingredients:</span></span>
+<span>    <span class="va">N</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> <span class="co"># N</span></span>
+<span>    <span class="va">variance_sum_across_items</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> <span class="op">)</span> <span class="co"># VARIANCE SUM SCORE ACROSS ITEMS</span></span>
+<span>    <span class="va">variance_sum_per_item</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span>  <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">mydata</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>  <span class="op">)</span> <span class="co"># VARIANCE SUM SCORE PER ITEM</span></span>
+<span>    </span>
+<span>  <span class="co"># Put the above in the formula:</span></span>
+<span>    <span class="op">(</span><span class="va">N</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="va">N</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span> <span class="op">(</span><span class="va">variance_sum_across_items</span> <span class="op">-</span> <span class="va">variance_sum_per_item</span><span class="op">)</span><span class="op">/</span><span class="va">variance_sum_across_items</span> <span class="op">)</span></span>
+<span><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+</div>
+</div>
+<div id="omega" class="section level2" number="5.2">
+<h2>
+<span class="header-section-number">5.2</span> Omega<a class="anchor" aria-label="anchor" href="#omega"><i class="fas fa-link"></i></a>
+</h2>
+<p>As I told you earlier, there is a bit of commotion surrounding whether or not it is appropriate to use Cronbach’s alpha. It has been put forward that alpha holds several strong assumptions, some that likely do not apply to the majority of data. A classic example, Cronbach’s alpha assumes <strong>(essential) tau equivalence</strong>, meaning that all items contribute equally to the construct being measured (i.e., similar factor loadings, a similar “weight” so to speak)..</p>
+<p>What can we use instead?</p>
+<p>One popular alternative, McDonald’s omega, relaxes the assumption of (essential) tau equivalence. A variety of packages allow to compute this indicator, even the psych package. For simplicity, I will use the <strong>lavaan and semtools packages</strong> to use the <strong>reliability() function</strong> which can compute both Cronbach’s alpha and McDonald’s omega. To do so, we will have to walk into <strong>C</strong>onfirmatory <strong>F</strong>actor <strong>A</strong>nalysis territory.</p>
+<p>First things first, the <strong>psych package may interfere with certain functions from semTools</strong> so I will unload it. Yes, packages in R may sometimes interfere with one another. If this occurs, you typically receive a message in the Console (bottom left) telling you that some function is masked from a given package.</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/detach.html">detach</a></span><span class="op">(</span><span class="st">"package:psych"</span>, unload <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>To use the reliability() function from semTools, we have to “define” a model, tell R to run a CFA using the “defined” model. When “defining” a model for a CFA or structural equation model, we need to tell R which variables we want to include, what variables are so called manifest or latent (see later parts), how variables relate to one another (regressions), and so on. In context of CFA, I will need to tell that there is a <strong>(latent) construct/factor</strong> (the thing that the questionnaire is presumed to tap into) and that all my items, the <strong>(manifest) observed</strong> item scores/factors, reflect/<strong>load on</strong> this latent construct/factor. To define our model:</p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">lavaan</span>, <span class="va">semTools</span><span class="op">)</span></span>
+<span>  <span class="va">mymodel</span> <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st">  # Here I defined a latent factor (which I arbitrarily named "DEP") and told R that the following manifest factors (here the variables from my dataset) load on this latent factor.</span></span>
+<span><span class="st">  # The names of the manifest factors must match those in your dataset !</span></span>
+<span><span class="st">  # the "=~" sign denotes a "latent construct reflected by manifest factors relation"</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st">  DEP =~ BDI1 + BDI2 +  BDI3 +  BDI4 +  BDI5 +  BDI6 +  BDI7 +  </span></span>
+<span><span class="st">  BDI8 +  BDI9 +  BDI10 +  BDI11 +  BDI12 +  BDI13 +  BDI14 + </span></span>
+<span><span class="st">  BDI15 +  BDI16 +  BDI17 +  BDI18 +  BDI19 +  BDI20 +  BDI21</span></span>
+<span><span class="st">  '</span></span></code></pre></div>
+<p>Now I will have to enter this model in a CFA (using the lavaan package). In the code below I specify certain options. I enable standardized output (discussed later on), use listwise deletion of empty values, and use the Maximum Likelihood with Robust Estimations method. If all goes well, we can compute the omega by putting this CFA object in the reliability() function. <strong>Importantly, for now I will temporarily ignore the output of my CFA object (i.e., it’s summary). However, I highly recommend to always look at the output first (as I do later on)</strong></p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">mycfa</span><span class="op">=</span><span class="fu">cfa</span><span class="op">(</span><span class="va">mymodel</span>, data <span class="op">=</span> <span class="va">mydata</span>, std.lv<span class="op">=</span><span class="cn">TRUE</span>, missing <span class="op">=</span> <span class="st">"direct"</span>, estimator <span class="op">=</span> <span class="st">"MLR"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/psych/man/reliability.html">reliability</a></span><span class="op">(</span><span class="va">mycfa</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              DEP</span></span>
+<span><span class="co">#&gt; alpha  0.8889281</span></span>
+<span><span class="co">#&gt; omega  0.8899104</span></span>
+<span><span class="co">#&gt; omega2 0.8899104</span></span>
+<span><span class="co">#&gt; omega3 0.8872431</span></span>
+<span><span class="co">#&gt; avevar 0.2844963</span></span></code></pre></div>
+<p>Glance over the output of reliability(), you see alpha, omega, omega2, omega3, and avevar. Avevar is the average variance extracted, not a reliability measure but an indication of how much variance is attributable to the common factor. Notice that we have three omega’s. In short, The first one (<strong>omega</strong>) “controls” for other (latent) factors, the second one (<strong>omega2</strong>) does not, the third one (<strong>omega3</strong>) has a denuminator that equals the sum of all elements in the variance-covariance matrix of item scores. <strong>Omega and omega2 likely differ</strong> when you define <strong>more than one latent factor and</strong> there is <strong>multi-dimensionality</strong> in the manifest factors/items(e.g., items loading notably on more latent factors).</p>
+<p>You can also request a spread (e.g., confidence intervals) surrounding our omega using the <a href="https://cran.r-project.org/web/packages/MBESS/index.html">MBESS package</a>. In the example below I will use a bootstrap of <strong>5 (purely for demonstration purposes) but in practice consider to go for a higher number (e.g., 500 or more)</strong>.</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://www3.nd.edu/~kkelley/site/MBESS.html">MBESS</a></span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/MBESS/man/ci.reliability.html">ci.reliability</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mydata</span>, type <span class="op">=</span> <span class="st">"omega"</span>, interval.type <span class="op">=</span> <span class="st">"perc"</span>, B<span class="op">=</span><span class="fl">5</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $est</span></span>
+<span><span class="co">#&gt; [1] 0.2725901</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $se</span></span>
+<span><span class="co">#&gt; [1] 0.02059776</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ci.lower</span></span>
+<span><span class="co">#&gt; [1] 0.2376628</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $ci.upper</span></span>
+<span><span class="co">#&gt; [1] 0.28201</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $conf.level</span></span>
+<span><span class="co">#&gt; [1] 0.95</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $type</span></span>
+<span><span class="co">#&gt; [1] "omega"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $interval.type</span></span>
+<span><span class="co">#&gt; [1] "percentile bootstrap"</span></span>
+<span>    <span class="co"># applying a bootstrap of 5 bootstrap runs (consider 500+) and a percental CI type</span></span></code></pre></div>
+<p><strong>It is very important to note that we used a fairly simple model with continuous variables and only one latent construct (i.e., a unidimensional model).</strong> Other types of models exist such as those including categorical variables, multiple factors, and hierarchical factor models. Covering all of these would be exhaustive for the purposis of this guide. However, I will direct to the work <a href="https://doi.org/10.1177/2515245920951747">Flora, 2020</a> who provides a detailed background and examples in R. The reference to this article is provided at the end of this part.</p>
+<div id="fit-indices-and-how-to-potentially-improve-model-fit" class="section level3" number="5.2.1">
+<h3>
+<span class="header-section-number">5.2.1</span> Fit indices and how to potentially improve model fit<a class="anchor" aria-label="anchor" href="#fit-indices-and-how-to-potentially-improve-model-fit"><i class="fas fa-link"></i></a>
+</h3>
+<p>As I said before, I ignored the output from my CFA object, but you really should not. For starters, we should check the model fit. The model fit refers to how closely your data matches the model you defined (the relations of the model). <strong>important to realize, a “good fitting model” does not prove that your defined model is a “good”, “realistic” or proven model</strong>.</p>
+<p>To see how well your model fits your data we start by requesting model fit indicators. Sometimes you may want to improve these fit indicators. After all, they could affect the value of your omega. While we’re at it we can also inspect the factor loadings. This way we can also check cronbach’s alpha assumption of (essential) tau equivalence.</p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mycfa</span>, fit.measures<span class="op">=</span><span class="cn">TRUE</span>, standardized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 27 iterations</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                        63</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                          1040</span></span>
+<span><span class="co">#&gt;   Number of missing patterns                         1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                               Standard      Scaled</span></span>
+<span><span class="co">#&gt;   Test Statistic                               969.539     590.608</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                               189         189</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.000       0.000</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.642</span></span>
+<span><span class="co">#&gt;     Yuan-Bentler correction (Mplus variant)                       </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test Baseline Model:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Test statistic                              6110.882    3716.183</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                               210         210</span></span>
+<span><span class="co">#&gt;   P-value                                        0.000       0.000</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.644</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; User Model versus Baseline Model:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Comparative Fit Index (CFI)                    0.868       0.885</span></span>
+<span><span class="co">#&gt;   Tucker-Lewis Index (TLI)                       0.853       0.873</span></span>
+<span><span class="co">#&gt;                                                                   </span></span>
+<span><span class="co">#&gt;   Robust Comparative Fit Index (CFI)                         0.886</span></span>
+<span><span class="co">#&gt;   Robust Tucker-Lewis Index (TLI)                            0.873</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loglikelihood and Information Criteria:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Loglikelihood user model (H0)             -21461.330  -21461.330</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.772</span></span>
+<span><span class="co">#&gt;       for the MLR correction                                      </span></span>
+<span><span class="co">#&gt;   Loglikelihood unrestricted model (H1)             NA          NA</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.674</span></span>
+<span><span class="co">#&gt;       for the MLR correction                                      </span></span>
+<span><span class="co">#&gt;                                                                   </span></span>
+<span><span class="co">#&gt;   Akaike (AIC)                               43048.660   43048.660</span></span>
+<span><span class="co">#&gt;   Bayesian (BIC)                             43360.319   43360.319</span></span>
+<span><span class="co">#&gt;   Sample-size adjusted Bayesian (SABIC)      43160.223   43160.223</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Root Mean Square Error of Approximation:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   RMSEA                                          0.063       0.045</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - lower         0.059       0.042</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - upper         0.067       0.048</span></span>
+<span><span class="co">#&gt;   P-value H_0: RMSEA &lt;= 0.050                    0.000       0.993</span></span>
+<span><span class="co">#&gt;   P-value H_0: RMSEA &gt;= 0.080                    0.000       0.000</span></span>
+<span><span class="co">#&gt;                                                                   </span></span>
+<span><span class="co">#&gt;   Robust RMSEA                                               0.058</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - lower                     0.053</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - upper                     0.063</span></span>
+<span><span class="co">#&gt;   P-value H_0: Robust RMSEA &lt;= 0.050                         0.007</span></span>
+<span><span class="co">#&gt;   P-value H_0: Robust RMSEA &gt;= 0.080                         0.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Standardized Root Mean Square Residual:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   SRMR                                           0.046       0.046</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                             Sandwich</span></span>
+<span><span class="co">#&gt;   Information bread                           Observed</span></span>
+<span><span class="co">#&gt;   Observed information based on                Hessian</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Latent Variables:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   DEP =~                                              </span></span>
+<span><span class="co">#&gt;     BDI1              0.438    0.028   15.417    0.000</span></span>
+<span><span class="co">#&gt;     BDI2              0.356    0.031   11.445    0.000</span></span>
+<span><span class="co">#&gt;     BDI3              0.353    0.030   11.726    0.000</span></span>
+<span><span class="co">#&gt;     BDI4              0.433    0.028   15.285    0.000</span></span>
+<span><span class="co">#&gt;     BDI5              0.327    0.029   11.381    0.000</span></span>
+<span><span class="co">#&gt;     BDI6              0.372    0.034   10.901    0.000</span></span>
+<span><span class="co">#&gt;     BDI7              0.479    0.028   17.166    0.000</span></span>
+<span><span class="co">#&gt;     BDI8              0.445    0.031   14.474    0.000</span></span>
+<span><span class="co">#&gt;     BDI9              0.175    0.022    7.993    0.000</span></span>
+<span><span class="co">#&gt;     BDI10             0.505    0.033   15.353    0.000</span></span>
+<span><span class="co">#&gt;     BDI11             0.397    0.033   11.984    0.000</span></span>
+<span><span class="co">#&gt;     BDI12             0.429    0.027   16.104    0.000</span></span>
+<span><span class="co">#&gt;     BDI13             0.459    0.033   13.925    0.000</span></span>
+<span><span class="co">#&gt;     BDI14             0.361    0.029   12.354    0.000</span></span>
+<span><span class="co">#&gt;     BDI15             0.404    0.029   14.049    0.000</span></span>
+<span><span class="co">#&gt;     BDI16             0.307    0.028   11.115    0.000</span></span>
+<span><span class="co">#&gt;     BDI17             0.379    0.029   13.112    0.000</span></span>
+<span><span class="co">#&gt;     BDI18             0.370    0.032   11.611    0.000</span></span>
+<span><span class="co">#&gt;     BDI19             0.467    0.031   15.232    0.000</span></span>
+<span><span class="co">#&gt;     BDI20             0.402    0.029   13.925    0.000</span></span>
+<span><span class="co">#&gt;     BDI21             0.333    0.036    9.268    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.438    0.633</span></span>
+<span><span class="co">#&gt;     0.356    0.559</span></span>
+<span><span class="co">#&gt;     0.353    0.588</span></span>
+<span><span class="co">#&gt;     0.433    0.597</span></span>
+<span><span class="co">#&gt;     0.327    0.512</span></span>
+<span><span class="co">#&gt;     0.372    0.500</span></span>
+<span><span class="co">#&gt;     0.479    0.678</span></span>
+<span><span class="co">#&gt;     0.445    0.568</span></span>
+<span><span class="co">#&gt;     0.175    0.412</span></span>
+<span><span class="co">#&gt;     0.505    0.562</span></span>
+<span><span class="co">#&gt;     0.397    0.488</span></span>
+<span><span class="co">#&gt;     0.429    0.582</span></span>
+<span><span class="co">#&gt;     0.459    0.557</span></span>
+<span><span class="co">#&gt;     0.361    0.544</span></span>
+<span><span class="co">#&gt;     0.404    0.549</span></span>
+<span><span class="co">#&gt;     0.307    0.374</span></span>
+<span><span class="co">#&gt;     0.379    0.526</span></span>
+<span><span class="co">#&gt;     0.370    0.418</span></span>
+<span><span class="co">#&gt;     0.467    0.547</span></span>
+<span><span class="co">#&gt;     0.402    0.526</span></span>
+<span><span class="co">#&gt;     0.333    0.427</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Intercepts:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .BDI1              0.346    0.021   16.142    0.000</span></span>
+<span><span class="co">#&gt;    .BDI2              0.295    0.020   14.938    0.000</span></span>
+<span><span class="co">#&gt;    .BDI3              0.287    0.019   15.397    0.000</span></span>
+<span><span class="co">#&gt;    .BDI4              0.467    0.022   20.782    0.000</span></span>
+<span><span class="co">#&gt;    .BDI5              0.475    0.020   23.953    0.000</span></span>
+<span><span class="co">#&gt;    .BDI6              0.329    0.023   14.281    0.000</span></span>
+<span><span class="co">#&gt;    .BDI7              0.391    0.022   17.853    0.000</span></span>
+<span><span class="co">#&gt;    .BDI8              0.663    0.024   27.270    0.000</span></span>
+<span><span class="co">#&gt;    .BDI9              0.134    0.013   10.126    0.000</span></span>
+<span><span class="co">#&gt;    .BDI10             0.496    0.028   17.804    0.000</span></span>
+<span><span class="co">#&gt;    .BDI11             0.560    0.025   22.184    0.000</span></span>
+<span><span class="co">#&gt;    .BDI12             0.591    0.023   25.866    0.000</span></span>
+<span><span class="co">#&gt;    .BDI13             0.487    0.026   19.083    0.000</span></span>
+<span><span class="co">#&gt;    .BDI14             0.278    0.021   13.494    0.000</span></span>
+<span><span class="co">#&gt;    .BDI15             0.676    0.023   29.607    0.000</span></span>
+<span><span class="co">#&gt;    .BDI16             0.921    0.025   36.169    0.000</span></span>
+<span><span class="co">#&gt;    .BDI17             0.436    0.022   19.500    0.000</span></span>
+<span><span class="co">#&gt;    .BDI18             0.788    0.027   28.680    0.000</span></span>
+<span><span class="co">#&gt;    .BDI19             0.708    0.026   26.713    0.000</span></span>
+<span><span class="co">#&gt;    .BDI20             0.688    0.024   29.058    0.000</span></span>
+<span><span class="co">#&gt;    .BDI21             0.378    0.024   15.651    0.000</span></span>
+<span><span class="co">#&gt;     DEP               0.000                           </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.346    0.501</span></span>
+<span><span class="co">#&gt;     0.295    0.463</span></span>
+<span><span class="co">#&gt;     0.287    0.477</span></span>
+<span><span class="co">#&gt;     0.467    0.644</span></span>
+<span><span class="co">#&gt;     0.475    0.743</span></span>
+<span><span class="co">#&gt;     0.329    0.443</span></span>
+<span><span class="co">#&gt;     0.391    0.554</span></span>
+<span><span class="co">#&gt;     0.663    0.846</span></span>
+<span><span class="co">#&gt;     0.134    0.314</span></span>
+<span><span class="co">#&gt;     0.496    0.552</span></span>
+<span><span class="co">#&gt;     0.560    0.688</span></span>
+<span><span class="co">#&gt;     0.591    0.802</span></span>
+<span><span class="co">#&gt;     0.487    0.592</span></span>
+<span><span class="co">#&gt;     0.278    0.418</span></span>
+<span><span class="co">#&gt;     0.676    0.918</span></span>
+<span><span class="co">#&gt;     0.921    1.122</span></span>
+<span><span class="co">#&gt;     0.436    0.605</span></span>
+<span><span class="co">#&gt;     0.788    0.889</span></span>
+<span><span class="co">#&gt;     0.708    0.828</span></span>
+<span><span class="co">#&gt;     0.688    0.901</span></span>
+<span><span class="co">#&gt;     0.378    0.485</span></span>
+<span><span class="co">#&gt;     0.000    0.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .BDI1              0.287    0.021   13.687    0.000</span></span>
+<span><span class="co">#&gt;    .BDI2              0.279    0.023   11.888    0.000</span></span>
+<span><span class="co">#&gt;    .BDI3              0.236    0.018   13.273    0.000</span></span>
+<span><span class="co">#&gt;    .BDI4              0.339    0.024   13.925    0.000</span></span>
+<span><span class="co">#&gt;    .BDI5              0.302    0.017   17.306    0.000</span></span>
+<span><span class="co">#&gt;    .BDI6              0.413    0.037   11.232    0.000</span></span>
+<span><span class="co">#&gt;    .BDI7              0.270    0.019   13.971    0.000</span></span>
+<span><span class="co">#&gt;    .BDI8              0.417    0.023   18.342    0.000</span></span>
+<span><span class="co">#&gt;    .BDI9              0.150    0.019    7.732    0.000</span></span>
+<span><span class="co">#&gt;    .BDI10             0.553    0.036   15.323    0.000</span></span>
+<span><span class="co">#&gt;    .BDI11             0.504    0.034   14.943    0.000</span></span>
+<span><span class="co">#&gt;    .BDI12             0.359    0.023   15.813    0.000</span></span>
+<span><span class="co">#&gt;    .BDI13             0.468    0.032   14.807    0.000</span></span>
+<span><span class="co">#&gt;    .BDI14             0.311    0.028   10.907    0.000</span></span>
+<span><span class="co">#&gt;    .BDI15             0.379    0.021   17.842    0.000</span></span>
+<span><span class="co">#&gt;    .BDI16             0.580    0.025   23.143    0.000</span></span>
+<span><span class="co">#&gt;    .BDI17             0.375    0.028   13.486    0.000</span></span>
+<span><span class="co">#&gt;    .BDI18             0.649    0.031   20.872    0.000</span></span>
+<span><span class="co">#&gt;    .BDI19             0.512    0.024   21.019    0.000</span></span>
+<span><span class="co">#&gt;    .BDI20             0.421    0.024   17.796    0.000</span></span>
+<span><span class="co">#&gt;    .BDI21             0.496    0.037   13.346    0.000</span></span>
+<span><span class="co">#&gt;     DEP               1.000                           </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.287    0.599</span></span>
+<span><span class="co">#&gt;     0.279    0.687</span></span>
+<span><span class="co">#&gt;     0.236    0.654</span></span>
+<span><span class="co">#&gt;     0.339    0.644</span></span>
+<span><span class="co">#&gt;     0.302    0.738</span></span>
+<span><span class="co">#&gt;     0.413    0.750</span></span>
+<span><span class="co">#&gt;     0.270    0.541</span></span>
+<span><span class="co">#&gt;     0.417    0.678</span></span>
+<span><span class="co">#&gt;     0.150    0.831</span></span>
+<span><span class="co">#&gt;     0.553    0.685</span></span>
+<span><span class="co">#&gt;     0.504    0.762</span></span>
+<span><span class="co">#&gt;     0.359    0.661</span></span>
+<span><span class="co">#&gt;     0.468    0.690</span></span>
+<span><span class="co">#&gt;     0.311    0.704</span></span>
+<span><span class="co">#&gt;     0.379    0.699</span></span>
+<span><span class="co">#&gt;     0.580    0.860</span></span>
+<span><span class="co">#&gt;     0.375    0.723</span></span>
+<span><span class="co">#&gt;     0.649    0.826</span></span>
+<span><span class="co">#&gt;     0.512    0.701</span></span>
+<span><span class="co">#&gt;     0.421    0.723</span></span>
+<span><span class="co">#&gt;     0.496    0.818</span></span>
+<span><span class="co">#&gt;     1.000    1.000</span></span>
+<span>  <span class="co"># fit.measures will show the model fit indicators such as RMSSEA and CFI</span></span></code></pre></div>
+<p>Alright, a lot of output. Recall that output interpretation is beyond the scope of this guide but I note two things:
+1. you could argue that there is room for improvement based on multiple fit indicators. Some would argue that the <strong>CFI and TLI should preferably be above .90, perhaps even above .950.</strong> Further, The RMSEA looks “ok” but <strong>some would prefer this value below 0.05.</strong> Of course there is not really a real cut-off, only conventions.
+2. The factor loadings (see “Latent Variables” in the output) are not equal. This can be taken as a violation of the tau equivalence assumption, so Cronbach’s alpha may not be that appropriate to report.</p>
+<p>Next to the above two points, notice that the current values of alpha and omega are very similar. However, sometimes it could be that notable differences emerge upon improving your model fit.</p>
+<p>How do we do that?</p>
+<p><strong>Well a straightforward way is to can inspect the residual correlations in the CFA object</strong> and “adjust/account” for (manifest) variables show a… “notable” correlation. High residual correlations may indicate to some items sare unique variance, that is, variance that is not explained by the latent construct (extra variance beyond the latent construct so to speak). Let’s have a look at the residual correlations and note correlations of at least say .075 (<strong>arbitrary example</strong>).</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen<span class="op">=</span><span class="fl">999</span><span class="op">)</span> <span class="co"># Disables the scientific notation</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">mycfa</span>, type <span class="op">=</span> <span class="st">"cor"</span><span class="op">)</span><span class="op">$</span><span class="va">cor</span> <span class="co"># For visual inspection of </span></span>
+<span><span class="co">#&gt; NULL</span></span>
+<span>  </span>
+<span>  <span class="co"># TIP, since I have a lot of correlations visual inspection of correlations &gt;.075 becomes cumbersome</span></span>
+<span>  <span class="co"># Below a code that will prompt a window showing the variables with correlations above .075</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>  <span class="fu"><a href="https://rdrr.io/r/base/table.html">as.table</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">mycfa</span>, type <span class="op">=</span> <span class="st">"cor"</span><span class="op">)</span><span class="op">$</span><span class="va">cov</span><span class="op">)</span>  <span class="op">)</span></span>
+<span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">&gt;</span><span class="fl">0.075</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># with Freq being the correlations. Unfortunately this will output duplicates so I will filter them out</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>is_duplicated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">Freq</span><span class="op">)</span><span class="op">==</span><span class="cn">TRUE</span> , <span class="st">"yes"</span>,<span class="st">"no"</span>    <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># i.e., yes to duplicate correlations</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">is_duplicated</span> <span class="op">==</span><span class="st">"yes"</span><span class="op">)</span> <span class="co"># get rid of duplicates</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>My code tells me yhat there are 13 (unique) correlations above .075. Remember the step where we defined a model for the CFA (I called this “mymodel”)? Within this model definition, I will also add that the correlations between the <em>13 (manifest) factors</em> are correlated. Then I’ll check my CFA model output again.</p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mymodel</span> <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st">  DEP =~ BDI1 + BDI2 +  BDI3 +  BDI4 +  BDI5 +  BDI6 +  BDI7 +  </span></span>
+<span><span class="st">  BDI8 +  BDI9 +  BDI10 +  BDI11 +  BDI12 +  BDI13 +  BDI14 + </span></span>
+<span><span class="st">  BDI15 +  BDI16 +  BDI17 +  BDI18 +  BDI19 +  BDI20 +  BDI21</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st">  # the ~~ stands for correlation. So I tell R to consider their correlations these (and to not set them to 0 by default)</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st">  BDI10 ~~ BDI1</span></span>
+<span><span class="st">  BDI4 ~~  BDI2</span></span>
+<span><span class="st">  BDI5 ~~  BDI3</span></span>
+<span><span class="st">  BDI7 ~~  BDI3</span></span>
+<span><span class="st">  BDI9 ~~  BDI3</span></span>
+<span><span class="st">  BDI6 ~~  BDI5</span></span>
+<span><span class="st">  BDI8 ~~  BDI5</span></span>
+<span><span class="st">  BDI17 ~~ BDI11</span></span>
+<span><span class="st">  BDI19 ~~ BDI3</span></span>
+<span><span class="st">  BDI16 ~~ BDI15</span></span>
+<span><span class="st">  BDI20 ~~ BDI15</span></span>
+<span><span class="st">  BDI18 ~~ BDI16</span></span>
+<span><span class="st">  BDI20 ~~ BDI16</span></span>
+<span><span class="st">  '</span></span>
+<span></span>
+<span><span class="va">mycfa</span><span class="op">=</span><span class="fu">cfa</span><span class="op">(</span><span class="va">mymodel</span>, data <span class="op">=</span> <span class="va">mydata</span>, std.lv<span class="op">=</span><span class="cn">TRUE</span>, missing <span class="op">=</span> <span class="st">"direct"</span>, estimator <span class="op">=</span> <span class="st">"MLR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mycfa</span>, fit.measures<span class="op">=</span><span class="cn">TRUE</span>, standardized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 34 iterations</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                        76</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                          1040</span></span>
+<span><span class="co">#&gt;   Number of missing patterns                         1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                               Standard      Scaled</span></span>
+<span><span class="co">#&gt;   Test Statistic                               551.368     340.106</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                               176         176</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.000       0.000</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.621</span></span>
+<span><span class="co">#&gt;     Yuan-Bentler correction (Mplus variant)                       </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test Baseline Model:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Test statistic                              6110.882    3716.183</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                               210         210</span></span>
+<span><span class="co">#&gt;   P-value                                        0.000       0.000</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.644</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; User Model versus Baseline Model:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Comparative Fit Index (CFI)                    0.936       0.953</span></span>
+<span><span class="co">#&gt;   Tucker-Lewis Index (TLI)                       0.924       0.944</span></span>
+<span><span class="co">#&gt;                                                                   </span></span>
+<span><span class="co">#&gt;   Robust Comparative Fit Index (CFI)                         0.954</span></span>
+<span><span class="co">#&gt;   Robust Tucker-Lewis Index (TLI)                            0.945</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Loglikelihood and Information Criteria:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Loglikelihood user model (H0)             -21252.244  -21252.244</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.797</span></span>
+<span><span class="co">#&gt;       for the MLR correction                                      </span></span>
+<span><span class="co">#&gt;   Loglikelihood unrestricted model (H1)             NA          NA</span></span>
+<span><span class="co">#&gt;   Scaling correction factor                                  1.674</span></span>
+<span><span class="co">#&gt;       for the MLR correction                                      </span></span>
+<span><span class="co">#&gt;                                                                   </span></span>
+<span><span class="co">#&gt;   Akaike (AIC)                               42656.489   42656.489</span></span>
+<span><span class="co">#&gt;   Bayesian (BIC)                             43032.459   43032.459</span></span>
+<span><span class="co">#&gt;   Sample-size adjusted Bayesian (SABIC)      42791.073   42791.073</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Root Mean Square Error of Approximation:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   RMSEA                                          0.045       0.030</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - lower         0.041       0.026</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - upper         0.050       0.034</span></span>
+<span><span class="co">#&gt;   P-value H_0: RMSEA &lt;= 0.050                    0.965       1.000</span></span>
+<span><span class="co">#&gt;   P-value H_0: RMSEA &gt;= 0.080                    0.000       0.000</span></span>
+<span><span class="co">#&gt;                                                                   </span></span>
+<span><span class="co">#&gt;   Robust RMSEA                                               0.038</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - lower                     0.032</span></span>
+<span><span class="co">#&gt;   90 Percent confidence interval - upper                     0.044</span></span>
+<span><span class="co">#&gt;   P-value H_0: Robust RMSEA &lt;= 0.050                         1.000</span></span>
+<span><span class="co">#&gt;   P-value H_0: Robust RMSEA &gt;= 0.080                         0.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Standardized Root Mean Square Residual:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   SRMR                                           0.036       0.036</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                             Sandwich</span></span>
+<span><span class="co">#&gt;   Information bread                           Observed</span></span>
+<span><span class="co">#&gt;   Observed information based on                Hessian</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Latent Variables:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   DEP =~                                              </span></span>
+<span><span class="co">#&gt;     BDI1              0.429    0.029   15.002    0.000</span></span>
+<span><span class="co">#&gt;     BDI2              0.354    0.031   11.324    0.000</span></span>
+<span><span class="co">#&gt;     BDI3              0.343    0.031   11.097    0.000</span></span>
+<span><span class="co">#&gt;     BDI4              0.431    0.028   15.126    0.000</span></span>
+<span><span class="co">#&gt;     BDI5              0.312    0.029   10.685    0.000</span></span>
+<span><span class="co">#&gt;     BDI6              0.368    0.034   10.800    0.000</span></span>
+<span><span class="co">#&gt;     BDI7              0.479    0.028   17.150    0.000</span></span>
+<span><span class="co">#&gt;     BDI8              0.445    0.031   14.244    0.000</span></span>
+<span><span class="co">#&gt;     BDI9              0.174    0.022    8.005    0.000</span></span>
+<span><span class="co">#&gt;     BDI10             0.492    0.033   14.712    0.000</span></span>
+<span><span class="co">#&gt;     BDI11             0.393    0.034   11.617    0.000</span></span>
+<span><span class="co">#&gt;     BDI12             0.436    0.027   16.044    0.000</span></span>
+<span><span class="co">#&gt;     BDI13             0.466    0.033   13.926    0.000</span></span>
+<span><span class="co">#&gt;     BDI14             0.365    0.029   12.384    0.000</span></span>
+<span><span class="co">#&gt;     BDI15             0.388    0.029   13.333    0.000</span></span>
+<span><span class="co">#&gt;     BDI16             0.284    0.028   10.096    0.000</span></span>
+<span><span class="co">#&gt;     BDI17             0.373    0.029   12.718    0.000</span></span>
+<span><span class="co">#&gt;     BDI18             0.365    0.032   11.255    0.000</span></span>
+<span><span class="co">#&gt;     BDI19             0.473    0.031   15.250    0.000</span></span>
+<span><span class="co">#&gt;     BDI20             0.383    0.029   13.411    0.000</span></span>
+<span><span class="co">#&gt;     BDI21             0.337    0.036    9.244    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.429    0.621</span></span>
+<span><span class="co">#&gt;     0.354    0.556</span></span>
+<span><span class="co">#&gt;     0.343    0.572</span></span>
+<span><span class="co">#&gt;     0.431    0.594</span></span>
+<span><span class="co">#&gt;     0.312    0.489</span></span>
+<span><span class="co">#&gt;     0.368    0.496</span></span>
+<span><span class="co">#&gt;     0.479    0.678</span></span>
+<span><span class="co">#&gt;     0.445    0.568</span></span>
+<span><span class="co">#&gt;     0.174    0.410</span></span>
+<span><span class="co">#&gt;     0.492    0.547</span></span>
+<span><span class="co">#&gt;     0.393    0.483</span></span>
+<span><span class="co">#&gt;     0.436    0.592</span></span>
+<span><span class="co">#&gt;     0.466    0.565</span></span>
+<span><span class="co">#&gt;     0.365    0.550</span></span>
+<span><span class="co">#&gt;     0.388    0.527</span></span>
+<span><span class="co">#&gt;     0.284    0.347</span></span>
+<span><span class="co">#&gt;     0.373    0.517</span></span>
+<span><span class="co">#&gt;     0.365    0.411</span></span>
+<span><span class="co">#&gt;     0.473    0.554</span></span>
+<span><span class="co">#&gt;     0.383    0.502</span></span>
+<span><span class="co">#&gt;     0.337    0.433</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Covariances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;  .BDI1 ~~                                             </span></span>
+<span><span class="co">#&gt;    .BDI10             0.096    0.020    4.901    0.000</span></span>
+<span><span class="co">#&gt;  .BDI2 ~~                                             </span></span>
+<span><span class="co">#&gt;    .BDI4              0.038    0.017    2.294    0.022</span></span>
+<span><span class="co">#&gt;  .BDI3 ~~                                             </span></span>
+<span><span class="co">#&gt;    .BDI5              0.037    0.012    3.041    0.002</span></span>
+<span><span class="co">#&gt;    .BDI7              0.041    0.015    2.763    0.006</span></span>
+<span><span class="co">#&gt;    .BDI9              0.021    0.010    2.138    0.033</span></span>
+<span><span class="co">#&gt;  .BDI5 ~~                                             </span></span>
+<span><span class="co">#&gt;    .BDI6              0.059    0.016    3.719    0.000</span></span>
+<span><span class="co">#&gt;    .BDI8              0.046    0.014    3.294    0.001</span></span>
+<span><span class="co">#&gt;  .BDI11 ~~                                            </span></span>
+<span><span class="co">#&gt;    .BDI17             0.050    0.018    2.824    0.005</span></span>
+<span><span class="co">#&gt;  .BDI3 ~~                                             </span></span>
+<span><span class="co">#&gt;    .BDI19            -0.008    0.016   -0.478    0.633</span></span>
+<span><span class="co">#&gt;  .BDI15 ~~                                            </span></span>
+<span><span class="co">#&gt;    .BDI16             0.065    0.017    3.916    0.000</span></span>
+<span><span class="co">#&gt;    .BDI20             0.165    0.020    8.371    0.000</span></span>
+<span><span class="co">#&gt;  .BDI16 ~~                                            </span></span>
+<span><span class="co">#&gt;    .BDI18             0.100    0.022    4.631    0.000</span></span>
+<span><span class="co">#&gt;    .BDI20             0.091    0.018    5.144    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.096    0.235</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.038    0.124</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.037    0.135</span></span>
+<span><span class="co">#&gt;     0.041    0.160</span></span>
+<span><span class="co">#&gt;     0.021    0.111</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.059    0.163</span></span>
+<span><span class="co">#&gt;     0.046    0.129</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.050    0.114</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;    -0.008   -0.021</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.065    0.136</span></span>
+<span><span class="co">#&gt;     0.165    0.399</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.100    0.162</span></span>
+<span><span class="co">#&gt;     0.091    0.180</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Intercepts:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .BDI1              0.346    0.021   16.142    0.000</span></span>
+<span><span class="co">#&gt;    .BDI2              0.295    0.020   14.938    0.000</span></span>
+<span><span class="co">#&gt;    .BDI3              0.287    0.019   15.397    0.000</span></span>
+<span><span class="co">#&gt;    .BDI4              0.467    0.022   20.782    0.000</span></span>
+<span><span class="co">#&gt;    .BDI5              0.475    0.020   23.953    0.000</span></span>
+<span><span class="co">#&gt;    .BDI6              0.329    0.023   14.281    0.000</span></span>
+<span><span class="co">#&gt;    .BDI7              0.391    0.022   17.853    0.000</span></span>
+<span><span class="co">#&gt;    .BDI8              0.663    0.024   27.270    0.000</span></span>
+<span><span class="co">#&gt;    .BDI9              0.134    0.013   10.126    0.000</span></span>
+<span><span class="co">#&gt;    .BDI10             0.496    0.028   17.804    0.000</span></span>
+<span><span class="co">#&gt;    .BDI11             0.560    0.025   22.184    0.000</span></span>
+<span><span class="co">#&gt;    .BDI12             0.591    0.023   25.866    0.000</span></span>
+<span><span class="co">#&gt;    .BDI13             0.487    0.026   19.083    0.000</span></span>
+<span><span class="co">#&gt;    .BDI14             0.278    0.021   13.494    0.000</span></span>
+<span><span class="co">#&gt;    .BDI15             0.676    0.023   29.607    0.000</span></span>
+<span><span class="co">#&gt;    .BDI16             0.921    0.025   36.169    0.000</span></span>
+<span><span class="co">#&gt;    .BDI17             0.436    0.022   19.500    0.000</span></span>
+<span><span class="co">#&gt;    .BDI18             0.788    0.027   28.680    0.000</span></span>
+<span><span class="co">#&gt;    .BDI19             0.708    0.026   26.713    0.000</span></span>
+<span><span class="co">#&gt;    .BDI20             0.688    0.024   29.058    0.000</span></span>
+<span><span class="co">#&gt;    .BDI21             0.378    0.024   15.651    0.000</span></span>
+<span><span class="co">#&gt;     DEP               0.000                           </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.346    0.501</span></span>
+<span><span class="co">#&gt;     0.295    0.463</span></span>
+<span><span class="co">#&gt;     0.287    0.478</span></span>
+<span><span class="co">#&gt;     0.467    0.644</span></span>
+<span><span class="co">#&gt;     0.475    0.744</span></span>
+<span><span class="co">#&gt;     0.329    0.443</span></span>
+<span><span class="co">#&gt;     0.391    0.554</span></span>
+<span><span class="co">#&gt;     0.663    0.846</span></span>
+<span><span class="co">#&gt;     0.134    0.314</span></span>
+<span><span class="co">#&gt;     0.496    0.552</span></span>
+<span><span class="co">#&gt;     0.560    0.688</span></span>
+<span><span class="co">#&gt;     0.591    0.802</span></span>
+<span><span class="co">#&gt;     0.487    0.592</span></span>
+<span><span class="co">#&gt;     0.278    0.418</span></span>
+<span><span class="co">#&gt;     0.676    0.918</span></span>
+<span><span class="co">#&gt;     0.921    1.123</span></span>
+<span><span class="co">#&gt;     0.436    0.605</span></span>
+<span><span class="co">#&gt;     0.788    0.889</span></span>
+<span><span class="co">#&gt;     0.708    0.828</span></span>
+<span><span class="co">#&gt;     0.688    0.901</span></span>
+<span><span class="co">#&gt;     0.378    0.485</span></span>
+<span><span class="co">#&gt;     0.000    0.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .BDI1              0.294    0.022   13.545    0.000</span></span>
+<span><span class="co">#&gt;    .BDI2              0.281    0.024   11.752    0.000</span></span>
+<span><span class="co">#&gt;    .BDI3              0.242    0.019   13.038    0.000</span></span>
+<span><span class="co">#&gt;    .BDI4              0.340    0.025   13.644    0.000</span></span>
+<span><span class="co">#&gt;    .BDI5              0.310    0.018   17.449    0.000</span></span>
+<span><span class="co">#&gt;    .BDI6              0.416    0.037   11.200    0.000</span></span>
+<span><span class="co">#&gt;    .BDI7              0.270    0.020   13.588    0.000</span></span>
+<span><span class="co">#&gt;    .BDI8              0.417    0.023   18.242    0.000</span></span>
+<span><span class="co">#&gt;    .BDI9              0.151    0.019    7.734    0.000</span></span>
+<span><span class="co">#&gt;    .BDI10             0.566    0.037   15.313    0.000</span></span>
+<span><span class="co">#&gt;    .BDI11             0.507    0.034   14.969    0.000</span></span>
+<span><span class="co">#&gt;    .BDI12             0.353    0.023   15.557    0.000</span></span>
+<span><span class="co">#&gt;    .BDI13             0.462    0.032   14.528    0.000</span></span>
+<span><span class="co">#&gt;    .BDI14             0.308    0.028   10.829    0.000</span></span>
+<span><span class="co">#&gt;    .BDI15             0.392    0.022   18.068    0.000</span></span>
+<span><span class="co">#&gt;    .BDI16             0.592    0.025   23.500    0.000</span></span>
+<span><span class="co">#&gt;    .BDI17             0.380    0.028   13.398    0.000</span></span>
+<span><span class="co">#&gt;    .BDI18             0.653    0.031   20.910    0.000</span></span>
+<span><span class="co">#&gt;    .BDI19             0.506    0.025   20.483    0.000</span></span>
+<span><span class="co">#&gt;    .BDI20             0.436    0.024   18.173    0.000</span></span>
+<span><span class="co">#&gt;    .BDI21             0.492    0.037   13.289    0.000</span></span>
+<span><span class="co">#&gt;     DEP               1.000                           </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.294    0.615</span></span>
+<span><span class="co">#&gt;     0.281    0.691</span></span>
+<span><span class="co">#&gt;     0.242    0.673</span></span>
+<span><span class="co">#&gt;     0.340    0.647</span></span>
+<span><span class="co">#&gt;     0.310    0.761</span></span>
+<span><span class="co">#&gt;     0.416    0.754</span></span>
+<span><span class="co">#&gt;     0.270    0.540</span></span>
+<span><span class="co">#&gt;     0.417    0.678</span></span>
+<span><span class="co">#&gt;     0.151    0.832</span></span>
+<span><span class="co">#&gt;     0.566    0.700</span></span>
+<span><span class="co">#&gt;     0.507    0.766</span></span>
+<span><span class="co">#&gt;     0.353    0.650</span></span>
+<span><span class="co">#&gt;     0.462    0.680</span></span>
+<span><span class="co">#&gt;     0.308    0.698</span></span>
+<span><span class="co">#&gt;     0.392    0.722</span></span>
+<span><span class="co">#&gt;     0.592    0.880</span></span>
+<span><span class="co">#&gt;     0.380    0.732</span></span>
+<span><span class="co">#&gt;     0.653    0.831</span></span>
+<span><span class="co">#&gt;     0.506    0.693</span></span>
+<span><span class="co">#&gt;     0.436    0.748</span></span>
+<span><span class="co">#&gt;     0.492    0.812</span></span>
+<span><span class="co">#&gt;     1.000    1.000</span></span></code></pre></div>
+<p>Ok, the model fit indicators did improve a bit. Did the omega change?</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/reliability.html">reliability</a></span><span class="op">(</span><span class="va">mycfa</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              DEP</span></span>
+<span><span class="co">#&gt; alpha  0.8889281</span></span>
+<span><span class="co">#&gt; omega  0.8677875</span></span>
+<span><span class="co">#&gt; omega2 0.8677875</span></span>
+<span><span class="co">#&gt; omega3 0.8657039</span></span>
+<span><span class="co">#&gt; avevar 0.2784132</span></span></code></pre></div>
+<p>There is bigger difference between alpha and omega but it is not that… “notable”. Of course, what is small or large (there is a reason you often see me put “” around certain words)? From my own experience, the omega sometimes changes “a little”, sometimes more “notably”. Various factors likely play a role in this, e.g., in how far Cronbach’s alpha held assumptions are violated.</p>
+</div>
+</div>
+<div id="exploratory-factor-analysis" class="section level2" number="5.3">
+<h2>
+<span class="header-section-number">5.3</span> Exploratory factor analysis<a class="anchor" aria-label="anchor" href="#exploratory-factor-analysis"><i class="fas fa-link"></i></a>
+</h2>
+<p>Until now, we assumed that we knew the number of factors and constructs that could explain our data. This is especially clear in CFA where we define our models and say how many (latent) factors there are and what loads on them (<strong>but again, a model that fit does not mean a confirmed true model</strong>). Still, what if you don’t know? You receive a couple of questionnaire items <strong>and</strong>, for whatever reason, you want to try to identify what variables/factors could explain patterns of (co)relations between your variables. For this purpose we could conduct an <strong>e</strong>xploratory <strong>f</strong>actor <strong>a</strong>nalysis (EFA). In the following parts I will use the PoliticalDemocracy dataset which is a built-in dataset from the lavaan package. Note that I renamed the last variables.</p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">=</span> <span class="va">PoliticalDemocracy</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fl">9</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"y9"</span>, <span class="st">"y10"</span>, <span class="st">"y11"</span><span class="op">)</span></span></code></pre></div>
+<p>Alright, now before you plan to conduct an EFA, <strong>always check your data</strong>. Several points need to be considered before conducting an EFA. For example, the sample size (sometimes debated), missing data, <strong>multicollinearity</strong>, skewness and kurtosis (whether our variables resemble a <strong>univariate/multivariate normal distribution</strong>), (univariate/multivariate) outliers, and so on.</p>
+<p>Here I want to quickly inspect the last three points: multicollinearity, the distribution of the data, and outliers. These may help us determine what methods to consider when conducting our EFA later on.</p>
+<div id="efa-check-multicollinearity" class="section level3" number="5.3.1">
+<h3>
+<span class="header-section-number">5.3.1</span> EFA check: multicollinearity<a class="anchor" aria-label="anchor" href="#efa-check-multicollinearity"><i class="fas fa-link"></i></a>
+</h3>
+<p>How would you inspect multicollinearity between your variables? Did you spontaneously think about a correlation matrix? <strong>Well, you might miss out on multicollinearity</strong> as correlation matrices might miss complex interactions among multiple variables. <strong>Correlations could be “low” but that does not necessarily imply the absence of multicollinearity</strong>.</p>
+<p>As an extra indicator, we can use the <strong>variance inflation factor (VIF)</strong> using the <strong>vif()</strong> function from the <a href="https://cran.r-project.org/web/packages/car/index.html">car package</a>. In short, the VIF indicates whether the variance of a <strong>regression coefficient</strong> is inflated due to inter-correlations between predictors in a regression model. A VIF around 1 suggests “no” multicollinearity, a VIF between 1-5 suggests “moderate” multicollinearity. However, a VIF of <strong>5 and above</strong> as suggests “high” multicollinearity. For example, a VIF of 5 suggests that the variance of that predictor is 5 times the value it would be without multicollinearity.</p>
+<p>I admit that VIF is more typically used in regression analysis rather than factor analysis. Still it can provide useful if you use it before you conduct your EFA. Spoilers for the upcoming part about linear regression but to compute the VIF, I will fit a linear model in which one variable of my dataset is regressed on all remaining ones. To regress one variable on all others, I will create a text that shows the formula for the linear regression model. That text object is then restyled to not be read as a text but as a formula so it can be used in the lm() function to fit a simple linear model.</p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mylm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span></span>
+<span>  <span class="co"># A text that will look like y1 ~ y1 + y2 + ... y11. This text will be "restyled" as a formula (basicially dropping the "" signs)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="st">"~"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>, collapse <span class="op">=</span><span class="st">"+"</span><span class="op">)</span>,</span>
+<span>  sep <span class="op">=</span> <span class="st">""</span></span>
+<span>      <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span></code></pre></div>
+<p>Now we can put our linear model in the vif() function, as simple as that.</p>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: carData</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'car'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     recode</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html">vif</a></span><span class="op">(</span><span class="va">mylm</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       y2       y3       y4       y5       y6       y7 </span></span>
+<span><span class="co">#&gt; 2.875379 2.005594 3.669274 2.669889 3.070501 2.984355 </span></span>
+<span><span class="co">#&gt;       y8       y9      y10      y11 </span></span>
+<span><span class="co">#&gt; 3.619843 6.045630 6.930182 3.907849</span></span></code></pre></div>
+</div>
+<div id="efa-check-univariatemultivariate-normal-distribution" class="section level3" number="5.3.2">
+<h3>
+<span class="header-section-number">5.3.2</span> EFA check: univariate/multivariate normal distribution<a class="anchor" aria-label="anchor" href="#efa-check-univariatemultivariate-normal-distribution"><i class="fas fa-link"></i></a>
+</h3>
+<p>Skewness and kurtosis affect correlations (<strong>especially Pearson correlations</strong>), and therefore EFA. If you detect “notable” skewness and/or kurtosis, you might want to consider looking into e.g., Spearman or polychoric correlations instead of Pearson ones. Important to know, <strong>both</strong> the univariate distribution of your individual variables and the multivariate distribution of your data, can play a role. Think of a multivariate distribution as multidimensional overview of combinations (cross-points of the values of multiple variables). Univariate distributions can be plotted on a (2D) histogram that only has one axis, multivariate distributions have multiple axes (one per variable) so it looks multidimensional. Here an example of a bivariate normal distribution <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution">from Wikipedia</a>
+<img src="images/Reliability/Reliability_03.png"></p>
+<p>Univariate distributions can be inspected by histograms or by calculation of the skew and kurtosis. Multivariate distributions - and whether they resemble a “normal gaussian distribution” - can be checked with the <strong>mardia()</strong> function from the <strong>psych package</strong>.</p>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'psych'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:car':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     logit</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:MBESS':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     cor2cov</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:semTools':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     reliability, skew</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:lavaan':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     cor2cov</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/skew.html">mardia</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="05-Reliability_CFA_EFA_files/figure-html/unnamed-chunk-16-1.png" width="672"></div>
+<pre><code>#&gt; Call: mardia(x = mydata)
+#&gt; 
+#&gt; Mardia tests of multivariate skew and kurtosis
+#&gt; Use describe(x) the to get univariate tests
+#&gt; n.obs = 75   num.vars =  11 
+#&gt; b1p =  26.47   skew =  330.9  with probability  &lt;=  0.035
+#&gt;  small sample skew =  346.41  with probability &lt;=  0.0083
+#&gt; b2p =  134.57   kurtosis =  -2.16  with probability &lt;=  0.031</code></pre>
+<p>The output shows the multivariate kurtosis, skewness, and corresponding <em>p</em> values. If you want to follow convention, then <em>p</em> values above .05 on kurtosis and/or skewness are deemed to suggest a multivariate normal distribution.</p>
+</div>
+<div id="efa-check-univariatemultivariate-outliers" class="section level3" number="5.3.3">
+<h3>
+<span class="header-section-number">5.3.3</span> EFA check: univariate/multivariate outliers<a class="anchor" aria-label="anchor" href="#efa-check-univariatemultivariate-outliers"><i class="fas fa-link"></i></a>
+</h3>
+<p>Correlations are sensitive to “notable” data values that are much “larger” or “smaller” in value, as compared to others. Consequently, EFA can be affected by outliers as well. You can spot univariate outliers (i.e., “extreme values” in one variable) using <strong>e.g., box plots</strong>.</p>
+<p>Then you have multivariate outliers which are “extremities” in the combinations of two or more variables. A simple example, suppose you measure height and weight in a human adult population. Some people are 1.98 meters tall, some people weight 53 kilograms. Now imagine a person who is both 1.98 meters tall and (only) weights 53 kilograms. This could be considered as an “outlying” combination.</p>
+<p>Multivariate outliers can be checked by the <strong>Mahalanobis distance</strong> using the mahalanobis() function. We’ll feed this function the mean per variable and the covariance between all variables. Afterwards, we can test whether a given distance score is “statistically significantly different” compared to others. Commonly, a chi-square test with k-1 degrees of freedom (here our number of variables -1) is used to test the Mahalanobis distance, with statistically significant differences noted by <em>p</em> values below or equal to .001. In the example below I will put these distances in a dataframe object, add p-values, and an indicator of whether these are significant (thus “outliers”).</p>
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydistances</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  distance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/mahalanobis.html">mahalanobis</a></span><span class="op">(</span><span class="va">mydata</span>, center <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span>, cov <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">mydistances</span><span class="op">$</span><span class="va">pvalues</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Chisquare.html">pchisq</a></span><span class="op">(</span>q <span class="op">=</span> <span class="va">mydistances</span><span class="op">$</span><span class="va">distance</span>, df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span>, lower.tail <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
+<span><span class="va">mydistances</span> <span class="op">=</span> <span class="va">mydistances</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>outlier <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>  <span class="va">pvalues</span><span class="op">&lt;=</span><span class="fl">0.001</span>,<span class="st">"outlier"</span>,<span class="st">"not outlier"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="efa-how-many-factors" class="section level3" number="5.3.4">
+<h3>
+<span class="header-section-number">5.3.4</span> EFA: how many factors?<a class="anchor" aria-label="anchor" href="#efa-how-many-factors"><i class="fas fa-link"></i></a>
+</h3>
+<p>Asking the big questions: what is the number of factors that “sufficiently” explain our data? Several indications can give use an idea including the on <strong>scree plots depicting eigenvalues</strong> and <strong>parallel analysis</strong>.</p>
+<div id="efa-scree-plots-with-eigenvalues" class="section level4" number="5.3.4.1">
+<h4>
+<span class="header-section-number">5.3.4.1</span> EFA: scree plots with eigenvalues<a class="anchor" aria-label="anchor" href="#efa-scree-plots-with-eigenvalues"><i class="fas fa-link"></i></a>
+</h4>
+<p>Scree plots are line plots showing and connecting eigenvalues. Eigenvalues represent the amount of variance explained by each factor. You can compute the eigenvalues using the <strong>eigenComputes() function</strong> from the <a href="https://cran.r-project.org/web/packages/nFactors/index.html">nFactors package</a>. To this function I will enter my dataset and specify to use the (Pearson) correlation matrix from that dataset (the function will automatically compute it for me) instead of a covariance matrix.</p>
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">nFactors</span><span class="op">)</span></span>
+<span><span class="va">myeigenvalues</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nFactors/man/eigenComputes.html">eigenComputes</a></span><span class="op">(</span><span class="va">mydata</span>, cor <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><strong>In case you deem your variables not sufficiently univariate/multivariate normal distributed</strong>, you could e.g. compute the polychoric correlations using the <strong>polychoric()</strong> function from the <strong>psych package</strong>, store these correlations in a separate variable, and enter that variable in eigenComputes(). We could also use e.g., Spearman correlations which already have a built-in option within eigenComputes(): <em>eigenComputes(mydata, cor = TRUE, method=“spearman”)</em>.</p>
+<p>Ok, let’s create the scree plot. Commonly, the number of factors to be retained is conventionally deemed to be the number of eigenvalues above the value 1. I will be use the ggplot2 package (see also the previous part) to make the plot.</p>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># First I make a dataset containing the eigenvalues and the amount of variables (to create the x- and y-axis)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'ggplot2'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:psych':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     %+%, alpha</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span> </span>
+<span>  variable <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span>,</span>
+<span>  eigenvalues <span class="op">=</span> <span class="va">myeigenvalues</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># From I create the scree plot</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">variable</span>, y<span class="op">=</span><span class="va">eigenvalues</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, color<span class="op">=</span><span class="st">"red"</span>,alpha<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"red"</span>, alpha<span class="op">=</span><span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>yintercept<span class="op">=</span><span class="fl">1</span><span class="op">)</span>, linetype<span class="op">=</span><span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="05-Reliability_CFA_EFA_files/figure-html/unnamed-chunk-19-1.png" width="672"></div>
+</div>
+<div id="efa-parallel-analysis" class="section level4" number="5.3.4.2">
+<h4>
+<span class="header-section-number">5.3.4.2</span> EFA: parallel analysis<a class="anchor" aria-label="anchor" href="#efa-parallel-analysis"><i class="fas fa-link"></i></a>
+</h4>
+<p>Parallel analysis simultaneously simulates the eigenvalues based on both our own observed data (like we did above) and by those based on a simulated dataset that is parallel to our own observed data. To determine the number of factors to retain, we have to look at the number of factors above those of the simulated data. We can use the <strong>fa.parallel()</strong> function from the <strong>psych package</strong> to run this function with principal components analysis, common factor analysis, or both.</p>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/fa.parallel.html">fa.parallel</a></span><span class="op">(</span><span class="va">mydata</span>, fa <span class="op">=</span> <span class="st">"pc"</span>, cor <span class="op">=</span> <span class="st">"cor"</span>, n.iter<span class="op">=</span><span class="fl">500</span><span class="op">)</span> </span></code></pre></div>
+<div class="inline-figure"><img src="05-Reliability_CFA_EFA_files/figure-html/unnamed-chunk-20-1.png" width="672"></div>
+<pre><code>#&gt; Parallel analysis suggests that the number of factors =  NA  and the number of components =  2
+  # Pearson correlations by default but this can be modified
+  # fa both will output both principal components and principal factor analysis</code></pre>
+</div>
+<div id="efa-minimum-average-partial-correlations" class="section level4" number="5.3.4.3">
+<h4>
+<span class="header-section-number">5.3.4.3</span> EFA: Minimum Average Partial (correlations)<a class="anchor" aria-label="anchor" href="#efa-minimum-average-partial-correlations"><i class="fas fa-link"></i></a>
+</h4>
+<p>The last technique that I want to discuss, <strong>the M</strong>inimum <strong>A</strong>verage <strong>P</strong>artial, is used to select the number of factors with the smallest mean partial correlation. Partial correlations measure the relation between variables, while adjusting for the influence of other variables. These partial correlations progress to 0 with a more <em>optimal</em> number of factors. We can use the <strong>VSS()function</strong> from the <strong>psych package</strong></p>
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/VSS.html">VSS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; n.obs was not specified and was arbitrarily set to 1000.  This only affects the chi square values.</span></span></code></pre></div>
+<div class="inline-figure"><img src="05-Reliability_CFA_EFA_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
+<pre><code>#&gt; 
+#&gt; Very Simple Structure
+#&gt; Call: vss(x = x, n = n, rotate = rotate, diagonal = diagonal, fm = fm, 
+#&gt;     n.obs = n.obs, plot = plot, title = title, use = use, cor = cor)
+#&gt; VSS complexity 1 achieves a maximimum of 0.89  with  1  factors
+#&gt; VSS complexity 2 achieves a maximimum of 0.97  with  2  factors
+#&gt; 
+#&gt; The Velicer MAP achieves a minimum of 0.05  with  2  factors 
+#&gt; BIC achieves a minimum of  38.92  with  6  factors
+#&gt; Sample Size adjusted BIC achieves a minimum of  51.63  with  6  factors
+#&gt; 
+#&gt; Statistics by number of factors 
+#&gt;   vss1 vss2   map dof        chisq
+#&gt; 1 0.89 0.00 0.096  44 3431.3938136
+#&gt; 2 0.81 0.97 0.046  34  831.5327108
+#&gt; 3 0.51 0.89 0.054  25  434.9763651
+#&gt; 4 0.49 0.80 0.076  17  259.3664968
+#&gt; 5 0.47 0.75 0.100  10  135.9475999
+#&gt; 6 0.40 0.71 0.145   4   66.5522974
+#&gt; 7 0.34 0.55 0.216  -1   13.9568471
+#&gt; 8 0.44 0.70 0.345  -5    0.0000057
+#&gt;                                                                                                                                                          prob
+#&gt; 1 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+#&gt; 2 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011
+#&gt; 3 0.000000000000000000000000000000000000000000000000000000000000000000000000000205989781877151495567863925817420067687635309994220733642578125000000000000000
+#&gt; 4 0.000000000000000000000000000000000000000000002537310578025230469682155254318445258832070976495742797851562500000000000000000000000000000000000000000000000
+#&gt; 5 0.000000000000000000000002847326567079168220270740663480069088109303265810012817382812500000000000000000000000000000000000000000000000000000000000000000000
+#&gt; 6 0.000000000000121155814533981051996439082252265961869852617383003234863281250000000000000000000000000000000000000000000000000000000000000000000000000000000
+#&gt; 7                                                                                                                                                          NA
+#&gt; 8                                                                                                                                                          NA
+#&gt;   sqresid  fit RMSEA  BIC SABIC complex        eChisq
+#&gt; 1    4.93 0.89  0.28 3127  3267     1.0 2375.35970442
+#&gt; 2    1.33 0.97  0.15  597   705     1.2  199.31215851
+#&gt; 3    0.83 0.98  0.13  262   342     1.7   55.44789599
+#&gt; 4    0.67 0.99  0.12  142   196     1.8   31.78593735
+#&gt; 5    0.53 0.99  0.11   67    99     2.1   11.62641311
+#&gt; 6    0.46 0.99  0.13   39    52     2.1    3.90783385
+#&gt; 7    0.34 0.99    NA   NA    NA     2.5    0.63731046
+#&gt; 8    0.30 0.99    NA   NA    NA     2.3    0.00000029
+#&gt;        SRMR eCRMS eBIC
+#&gt; 1 0.1469496 0.164 2071
+#&gt; 2 0.0425668 0.054  -36
+#&gt; 3 0.0224515 0.033 -117
+#&gt; 4 0.0169989 0.031  -86
+#&gt; 5 0.0102808 0.024  -57
+#&gt; 6 0.0059603 0.022  -24
+#&gt; 7 0.0024070    NA   NA
+#&gt; 8 0.0000016    NA   NA</code></pre>
+<p>You will receive a plot and plenty of output. The Velicer MAP achieved a minimum (partial correlation) with 2 factors. Note that you also get the <strong>B</strong>ayesian <strong>I</strong>nformation <strong>C</strong>riterium (BIC) as well as the sample adjusted version (SABIC). These suggests 2 (Velicer MAP), and 6 (BIC and SABIC) factors. Of course, six factors maybe a bit too much with our dataset of 11 variables.</p>
+</div>
+</div>
+<div id="efa-example" class="section level3" number="5.3.5">
+<h3>
+<span class="header-section-number">5.3.5</span> EFA example<a class="anchor" aria-label="anchor" href="#efa-example"><i class="fas fa-link"></i></a>
+</h3>
+<p>Finally, we arrive at running the EFA. Before we can run it we need to consider two additional points (almost there). On one hand, we will need to choose what factor extraction method to use. This includes principal components, maximum likelihood (which some recommend when data is “suficiently” normal distributed), principal axis factoring (which some recommend if the data is not), and more. One another hand, we need to decide what factor rotation methods to use to enhance the factor interpret ability. We have orthogonal rotation which assumes that factors are not correlated. We also have oblique factor rotation which assumes inter-factor correlations. The psych packages includes various rotation methods. Popular ones include the “oblimin” (oblique factor rotation) and “varimax” (orthogonal). Just as an example I will go with Maximumlikelihood and varimax factor rotation, and enter 2 factors.</p>
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/fa.html">fa</a></span><span class="op">(</span><span class="va">mydata</span>, nfactors<span class="op">=</span><span class="fl">2</span>,fm<span class="op">=</span><span class="st">"ML"</span>, rotate<span class="op">=</span><span class="st">"varimax"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Factor Analysis using method =  ml</span></span>
+<span><span class="co">#&gt; Call: fa(r = mydata, nfactors = 2, rotate = "varimax", fm = "ML")</span></span>
+<span><span class="co">#&gt; Standardized loadings (pattern matrix) based upon correlation matrix</span></span>
+<span><span class="co">#&gt;      ML2  ML1   h2    u2 com</span></span>
+<span><span class="co">#&gt; y1  0.83 0.15 0.71 0.286 1.1</span></span>
+<span><span class="co">#&gt; y2  0.77 0.07 0.59 0.407 1.0</span></span>
+<span><span class="co">#&gt; y3  0.68 0.17 0.49 0.512 1.1</span></span>
+<span><span class="co">#&gt; y4  0.81 0.28 0.74 0.264 1.2</span></span>
+<span><span class="co">#&gt; y5  0.71 0.39 0.66 0.342 1.6</span></span>
+<span><span class="co">#&gt; y6  0.77 0.19 0.62 0.378 1.1</span></span>
+<span><span class="co">#&gt; y7  0.78 0.24 0.67 0.334 1.2</span></span>
+<span><span class="co">#&gt; y8  0.79 0.29 0.71 0.292 1.3</span></span>
+<span><span class="co">#&gt; y9  0.26 0.89 0.85 0.147 1.2</span></span>
+<span><span class="co">#&gt; y10 0.22 0.94 0.94 0.058 1.1</span></span>
+<span><span class="co">#&gt; y11 0.17 0.86 0.76 0.236 1.1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;                        ML2  ML1</span></span>
+<span><span class="co">#&gt; SS loadings           4.87 2.88</span></span>
+<span><span class="co">#&gt; Proportion Var        0.44 0.26</span></span>
+<span><span class="co">#&gt; Cumulative Var        0.44 0.70</span></span>
+<span><span class="co">#&gt; Proportion Explained  0.63 0.37</span></span>
+<span><span class="co">#&gt; Cumulative Proportion 0.63 1.00</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mean item complexity =  1.2</span></span>
+<span><span class="co">#&gt; Test of the hypothesis that 2 factors are sufficient.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; df null model =  55  with the objective function =  9.74 with Chi Square =  677.07</span></span>
+<span><span class="co">#&gt; df of  the model are 34  and the objective function was  0.83 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The root mean square of the residuals (RMSR) is  0.04 </span></span>
+<span><span class="co">#&gt; The df corrected root mean square of the residuals is  0.05 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The harmonic n.obs is  75 with the empirical chi square  15.11  with prob &lt;  1 </span></span>
+<span><span class="co">#&gt; The total n.obs was  75  with Likelihood Chi Square =  56.66  with prob &lt;  0.0087 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Tucker Lewis Index of factoring reliability =  0.94</span></span>
+<span><span class="co">#&gt; RMSEA index =  0.093  and the 90 % confidence intervals are  0.048 0.137</span></span>
+<span><span class="co">#&gt; BIC =  -90.14</span></span>
+<span><span class="co">#&gt; Fit based upon off diagonal values = 0.99</span></span>
+<span><span class="co">#&gt; Measures of factor score adequacy             </span></span>
+<span><span class="co">#&gt;                                                    ML2  ML1</span></span>
+<span><span class="co">#&gt; Correlation of (regression) scores with factors   0.96 0.98</span></span>
+<span><span class="co">#&gt; Multiple R square of scores with factors          0.92 0.95</span></span>
+<span><span class="co">#&gt; Minimum correlation of possible factor scores     0.84 0.90</span></span></code></pre></div>
+<p>Lots of output. From to the top you see the factor loadings (PA1-PA2), communalities (h2), uniqueness values (u2), and complexity (com). Scroll down, the “Proportion var” indicates that the first factor “explains” 44% of the total variance, the second factor 26%.</p>
+</div>
+</div>
+<div id="referred-article" class="section level2" number="5.4">
+<h2>
+<span class="header-section-number">5.4</span> Referred article<a class="anchor" aria-label="anchor" href="#referred-article"><i class="fas fa-link"></i></a>
+</h2>
+<p>(McDonald’s omega reliability index)
+Flora, D. B. (2020). Your coefficient alpha is probably wrong, but which coefficient omega is right? A tutorial on using R to obtain better reliability estimates. <em>Advances in Methods and Practices in Psychological Science, 3</em>(4), 484–501. <a href="https://doi.org/10.1177/2515245920951747">https://doi.org/10.1177/2515245920951747</a></p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></div>
+<div class="next"><a href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis"><span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a></li>
+<li>
+<a class="nav-link" href="#cronbachs-alpha"><span class="header-section-number">5.1</span> Cronbach’s alpha</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#alpha-by-hand"><span class="header-section-number">5.1.1</span> Alpha by hand</a></li></ul>
+</li>
+<li>
+<a class="nav-link" href="#omega"><span class="header-section-number">5.2</span> Omega</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#fit-indices-and-how-to-potentially-improve-model-fit"><span class="header-section-number">5.2.1</span> Fit indices and how to potentially improve model fit</a></li></ul>
+</li>
+<li>
+<a class="nav-link" href="#exploratory-factor-analysis"><span class="header-section-number">5.3</span> Exploratory factor analysis</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#efa-check-multicollinearity"><span class="header-section-number">5.3.1</span> EFA check: multicollinearity</a></li>
+<li><a class="nav-link" href="#efa-check-univariatemultivariate-normal-distribution"><span class="header-section-number">5.3.2</span> EFA check: univariate/multivariate normal distribution</a></li>
+<li><a class="nav-link" href="#efa-check-univariatemultivariate-outliers"><span class="header-section-number">5.3.3</span> EFA check: univariate/multivariate outliers</a></li>
+<li><a class="nav-link" href="#efa-how-many-factors"><span class="header-section-number">5.3.4</span> EFA: how many factors?</a></li>
+<li><a class="nav-link" href="#efa-example"><span class="header-section-number">5.3.5</span> EFA example</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#referred-article"><span class="header-section-number">5.4</span> Referred article</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/05-Reliability_CFA_EFA.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/05-Reliability_CFA_EFA.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

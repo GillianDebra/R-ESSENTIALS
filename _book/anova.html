@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 7 Anova | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<meta name="author" content="Gillian Debra">
+<meta name="description" content="In linear regression the goal is to “forcefully” draw a straight line (the slope) by using the full range of your continuous predictor (your whole x-axis). But what if our predictor is a...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 7 Anova | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:type" content="book">
+<meta property="og:description" content="In linear regression the goal is to “forcefully” draw a straight line (the slope) by using the full range of your continuous predictor (your whole x-axis). But what if our predictor is a...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 7 Anova | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:description" content="In linear regression the goal is to “forcefully” draw a straight line (the slope) by using the full range of your continuous predictor (your whole x-axis). But what if our predictor is a...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.2/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Delighted to have you!Welcome to:</a></li>
+<li><a class="" href="loading-datafiles.html"><span class="header-section-number">1</span> Loading datafiles</a></li>
+<li><a class="" href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></li>
+<li><a class="" href="data-cleaning-and-descriptive-statistics.html"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></li>
+<li><a class="" href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></li>
+<li><a class="" href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a></li>
+<li><a class="" href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></li>
+<li><a class="active" href="anova.html"><span class="header-section-number">7</span> Anova</a></li>
+<li><a class="" href="structural-equation-modelling-and-mediation.html"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></li>
+<li><a class="" href="missing-data-and-multiple-imputation.html"><span class="header-section-number">9</span> Missing data and multiple imputation</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="anova" class="section level1" number="7">
+<h1>
+<span class="header-section-number">7</span> Anova<a class="anchor" aria-label="anchor" href="#anova"><i class="fas fa-link"></i></a>
+</h1>
+<p>In linear regression the goal is to “forcefully” draw a straight line (the slope) by using the full range of your continuous predictor (your whole x-axis). But what if our predictor is a categorical variable, a variable that offers only a few discrete values, two, three, or a few categories? Instead of estimating a slope, the focus shifts to comparing group means, corresponding to the levels of your categorical predictors.</p>
+<p>This part will tackle a special case of linear regression, the analysis of variance, or ANOVA for short. ANOVA tests if the group means per categorical variable (e.g., the experimental vs control condition) differ statistically from one another. ANOVA does this by comparing the variance between each group to the variance within groups, hence the name.</p>
+<p>you can consider using ANOVA when all of your predictors are categorical and you want to see whether there exist statistically significant differences (based on <em>p</em> value) in the mean of the outcome per category. This part will all be about making contrasts, comparing groups to one another.</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>We start with how contrasts are created to allow comparing groups.</strong> Two common ones, <strong>sum and treatment contrasts</strong>, will be discussed. Along the lines, I will tell you the story of <strong>dummy-coding</strong>
+</li>
+<li>
+<strong>Then we finally conduct our first ANOVA with one factor and multiple factors</strong>. From the <strong>omnibus test</strong> I will show some <strong>post-hoc group comparisons techniques</strong>, how to <strong>create your own contrasts</strong> using the <strong>linearhypothesis() function</strong>, and how to calculate some <strong>effect sizes</strong>.</li>
+<li>
+<strong>Finally, I will discuss multivariate ANOVA (MANOVA)</strong>. You will learn how to create your own <strong>outcome contrast matrix</strong> to test specific “effects” and hypotheses.</li>
+</ol>
+<div id="sum-and-treatment-contrasts" class="section level2" number="7.1">
+<h2>
+<span class="header-section-number">7.1</span> Sum and Treatment Contrasts<a class="anchor" aria-label="anchor" href="#sum-and-treatment-contrasts"><i class="fas fa-link"></i></a>
+</h2>
+<p>As I mentioned earlier, ANOVA is all about comparing groups by e.g., making contrasts between them. Knowledge about how R contrasts groups is important if we want to properly interpret the output of ANOVA and if we want to flexibly create our own contrasts and restrictions (as part of <em>hypothesis testing</em>). Before conducting a series of ANOVAs (and special types), I will first discuss two common types of contrasts: <strong>treatment contrasts</strong> and <strong>sum contrasts</strong>. <strong>When treatment contrasts are applied to your factor or categorical variables</strong>, <strong>the default in R</strong>, all of your categories will be <strong>compared to a reference category</strong> (i.e., shown as the intercept of your model).</p>
+<p>Say I have a dataset containing a factor variable with three categories The mean scores of these factors are 20,60, and 10, respectively. When you fit a regression model with the factor as the predictor, and you do not change the default treatment contrasts, R will take a reference category to which all other categories are contrasted to.</p>
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">999</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  </span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">20</span>,<span class="fl">0.001</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">60</span>,<span class="fl">0.001</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">10</span>,<span class="fl">0.001</span><span class="op">)</span> <span class="op">)</span>,</span>
+<span>  factor_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">" A"</span>,<span class="st">" B"</span>, <span class="st">" C"</span>   <span class="op">)</span>,  each <span class="op">=</span> <span class="fl">20</span> <span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">score</span> <span class="op">~</span> <span class="va">factor_variable</span>, data<span class="op">=</span><span class="va">mydata</span><span class="op">)</span></span></code></pre></div>
+<p>What category will be the reference? By default, R will select the reference category alphabetically or based on the lowest value <strong>if you have unordered factors</strong>, so it will choose category “A” here. If you want another reference category like “B”, you can use the relevel() function.</p>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">score</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html">relevel</a></span><span class="op">(</span><span class="va">factor_variable</span>, ref<span class="op">=</span><span class="st">" B"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="co"># Disclaimer. I will NOT run the above code. The reference category will still be "A" in the parts below</span></span></code></pre></div>
+<p>Now, with treatment contrasts, category “B” (with an average score of 60) will be contrasted with the reference category “A” (20). Similarly, category “C” (10) will be contrasted with factor “A”. If I were to call for the coefficients, I can expect the values 20 (the reference), 40 (since factor B is, on average, 40 units higher than the reference), and - 10 (same reasoning). Let’s check.</p>
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       (Intercept) factor_variable B factor_variable C </span></span>
+<span><span class="co">#&gt;                20                40               -10</span></span></code></pre></div>
+<p>You can also check how treatment contrasts handles our factor variable by running the <strong>contrasts() function</strong>. This can come in handy when I’ll later reveal how you can create your own contrasts and restrictions to test specific group comparisons. For clarity purposes, I will discuss the output of the contrasts() function in the section: <em>Making your own specific hypotheses and contrasts</em>.</p>
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">factor_variable</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     B  C</span></span>
+<span><span class="co">#&gt;  A  0  0</span></span>
+<span><span class="co">#&gt;  B  1  0</span></span>
+<span><span class="co">#&gt;  C  0  1</span></span></code></pre></div>
+<p>Moving on to <strong>sum contrasts</strong>, these will <strong>compare (contrast) each category to the overall mean</strong>. If you use these type of contrasts then the sum of estimated coefficients will equal zero. As I discuss later on, this type of contrasts is required when conducting <strong>type III ANOVA</strong>. Recall that the means of our factors are 20,60, and 10, therefore the overall mean is 30. Now, the values of our coefficients will be different compared to the (default) threatment contrasts. For starters, the first coefficient will not be the mean of factor “A” but the overall mean (i.e., 30). The second coefficient will be difference between the first category “A” and the overall mean (i.e., 20-30 = -10). The value of the third and last coefficient will be the difference between the second category “B” and the overall mean (60-30 = 30).</p>
+<p>What about the coefficient of category “C”? It is hidden but we can easily uncover it. According to sum contrasts, the coefficient for the remaining category (“C”) is the value that makes the sum of the estimated coefficients (i.e., -10 and 30), zero. In other words you get the following equation: -10 + 30 + <em>coefficient for factor “C”</em> = 0. Just to be clear, the value of coefficient “C” is -20.</p>
+<p>All is good and well but how do we set sum contrasts? We can change contrasts both “locally” (per individual variable) and “globally” (for all variables at once). <strong>Note that you set contrasts before you fit your regression models</strong>.</p>
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># "Locally" setting contrasts per variable</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">factor_variable</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html">contr.sum</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="co"># 3 since we this variable has three levels/categories</span></span>
+<span></span>
+<span><span class="co"># "Globally" setting contrasts that will apply to all variables</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"contr.sum"</span>, <span class="st">"contr.sum"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># the first "contr.sum" applies it to categorical variables</span></span>
+<span>  <span class="co"># the second "contr.sum" applies it to ordered factor variables (ordered() instead of factor() )</span></span></code></pre></div>
+<p>Now you may be wondering, what contrasts to use? Without making your own custom contrasts (which is also a possibility), in my experience, the default treatment contrasts are fine and intuitive to interpret. <strong>However</strong>, as I will bring up later, if you want to <strong>test interaction effects</strong>, you might want to consider to set sum contrasts (when thinking about using a type III ANOVA).</p>
+<div id="dummy-coding" class="section level3" number="7.1.1">
+<h3>
+<span class="header-section-number">7.1.1</span> Dummy-coding<a class="anchor" aria-label="anchor" href="#dummy-coding"><i class="fas fa-link"></i></a>
+</h3>
+<p>One small thing, you may have heard about dummy coding or that you need to dummy-code your variables. There might a bit of confusing surrounding this topic, so let me clarify. <strong>Dummy coding</strong> is often deemed synonymous with the aforementioned <strong>treatment contrasts</strong>. <strong>Technically, however, dummy coding can refer to any contrasts that use non-negative binary values</strong>. Other contrasts such as sum contrasts (with negative binary values) are not dummy coded. Personally, to avoid confusing, I prefer to use the terms treatment, sum, or “custom” coded and I would say something like “you should contrast code your variables” (then you still can decide how to).</p>
+<p>However, when you fit regression models using lm(), lmer(), or aov() (I will demonstrate this function later on), <strong>R will automatically create contrasts (i.e., contrast code your factors)</strong>. In regression models and ANOVA, this will be the treatment contrasts by default.</p>
+<p>So <strong>within R</strong> you typically do not need to add contrast coded variables to your dataset for use in your ANOVAs. However, it still doesn’t hurt to do so if you want to share analysis scripts across software (Stata, SPSS, Mplus, and so on) and if you want to create your own special contrasts.</p>
+<p>I will quickly show you how to add contrast coded variables to your datasets. First, contrast coding identical to treatment contrasts (or “dummy-coding” as many people would call it).</p>
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter, lag</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">999</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">20</span>,<span class="fl">0.001</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">60</span>,<span class="fl">0.001</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">10</span>,<span class="fl">0.001</span><span class="op">)</span> <span class="op">)</span>,</span>
+<span>  factor_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">" A"</span>,<span class="st">" B"</span>, <span class="st">" C"</span>   <span class="op">)</span>,  each <span class="op">=</span> <span class="fl">20</span> <span class="op">)</span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>         treatment_B <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">factor_variable</span><span class="op">==</span><span class="st">" B"</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>,</span>
+<span>         treatment_C <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">factor_variable</span><span class="op">==</span><span class="st">" C"</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span>           <span class="op">)</span></span>
+<span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">score</span> <span class="op">~</span> <span class="va">factor_variable</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span> <span class="co"># To show that R automatically (by default) use treatment contrast coding</span></span>
+<span><span class="va">mymodel_dummy</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">score</span> <span class="op">~</span> <span class="va">treatment_B</span> <span class="op">+</span> <span class="va">treatment_C</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span> <span class="co"># treatment_A is the reference so I can leave that out</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      (Intercept) factor_variable1 factor_variable2 </span></span>
+<span><span class="co">#&gt;               30              -10               30</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel_dummy</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; (Intercept) treatment_B treatment_C </span></span>
+<span><span class="co">#&gt;          20          40         -10</span></span></code></pre></div>
+<p>Sum coding.</p>
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">999</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">20</span>,<span class="fl">0.001</span><span class="op">)</span>, </span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">60</span>,<span class="fl">0.001</span><span class="op">)</span>, </span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">10</span>,<span class="fl">0.001</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  factor_variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    sum_A <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">factor_variable</span> <span class="op">==</span> <span class="st">"A"</span>, <span class="fl">1</span>, </span>
+<span>                   <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">factor_variable</span> <span class="op">==</span> <span class="st">"C"</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    sum_B <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">factor_variable</span> <span class="op">==</span> <span class="st">"B"</span>, <span class="fl">1</span>, </span>
+<span>                   <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">factor_variable</span> <span class="op">==</span> <span class="st">"C"</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/contrasts.html">contrasts</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">factor_variable</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/contrast.html">contr.sum</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">score</span> <span class="op">~</span> <span class="va">factor_variable</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="va">mymodel_contrast</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">score</span> <span class="op">~</span> <span class="va">sum_A</span> <span class="op">+</span> <span class="va">sum_B</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      (Intercept) factor_variable1 factor_variable2 </span></span>
+<span><span class="co">#&gt;               30              -10               30</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel_contrast</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; (Intercept)       sum_A       sum_B </span></span>
+<span><span class="co">#&gt;          30         -10          30</span></span></code></pre></div>
+</div>
+</div>
+<div id="one-way-anova" class="section level2" number="7.2">
+<h2>
+<span class="header-section-number">7.2</span> One-way ANOVA<a class="anchor" aria-label="anchor" href="#one-way-anova"><i class="fas fa-link"></i></a>
+</h2>
+<p>For now let’s leave the contrasts for a bit. They will come back later if I demonstrate how you can flexible compare groups. Moving on to actually conducting an ANOVA, starting off with the classic example of one categorical variable in a simple linear regression.</p>
+<p>I will use the build in iris dataset to test whether the average sepal length differs per species, per group so to speak. Before we conduct the ANOVA it never hurts to plot the outcome per group. For this purpose, I personally like to create violin plots</p>
+<div class="sourceCode" id="cb145"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>, <span class="va">ggplot2</span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="va">iris</span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Length</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span>  <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="07-Anova_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<p>To conduct the ANOVA, we can use the <strong>aov() function</strong> and enter a regression formula just like we’ve done before to compute regression models. Here you can choose whether you want to directly conduct an ANOVA or make a linear regression model first. One important detail, make sure that your predictor variables are factors as the aov() function requires this.</p>
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Feeding the regression formula directly to aov()</span></span>
+<span><span class="va">myanova</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">myanova</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              Df Sum Sq Mean Sq F value Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; Species       2  63.21  31.606   119.3 &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; Residuals   147  38.96   0.265                   </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span></span>
+<span><span class="co"># Or compute a separate regression model first</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="va">myanova</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">myanova</span><span class="op">)</span></span>
+<span><span class="co">#&gt;              Df Sum Sq Mean Sq F value Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; Species       2  63.21  31.606   119.3 &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; Residuals   147  38.96   0.265                   </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p>Time for summary output. We receive the degrees of freedom, the sum of squares (i.e., total variance between the overall mean and the means per group), the mean of the sum of squares (i.e., the sum of squares divided by the degrees of freedom of each parameter, except for the residuals), <em>F</em>- and <em>p</em> values. The <em>p</em> value suggests that the mean in outcome of <strong>at least</strong> one group is statistically significantly different from the others. Indeed, the aov() function has conducted the omnibus test to test whether at least one group-comparison is different. Nice, but what groups are statistically significant different from each other?</p>
+<div id="post-hoc-group-comparisons" class="section level3" number="7.2.1">
+<h3>
+<span class="header-section-number">7.2.1</span> Post-hoc group-comparisons<a class="anchor" aria-label="anchor" href="#post-hoc-group-comparisons"><i class="fas fa-link"></i></a>
+</h3>
+<p>There exist a couple of group-comparison methods to determine which pair of groups are statistically significantly different, after you have done the omnibus test (post-hoc). Let’s start with a popular one, the <strong>Tukey Honest Significant Differences test</strong> for multiple pairwise-comparisons of our groups (I know, a mouthful). This method is called through the TukeyHSD() function. This test can be recommended if you have <strong>equal sample size per group</strong> (and if e.g., the groups are <strong>sufficiently normal distributed</strong>).</p>
+<div class="sourceCode" id="cb147"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/TukeyHSD.html">TukeyHSD</a></span><span class="op">(</span><span class="va">myanova</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Tukey multiple comparisons of means</span></span>
+<span><span class="co">#&gt;     95% family-wise confidence level</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Fit: aov(formula = mymodel)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $Species</span></span>
+<span><span class="co">#&gt;                       diff       lwr       upr p adj</span></span>
+<span><span class="co">#&gt; versicolor-setosa    0.930 0.6862273 1.1737727     0</span></span>
+<span><span class="co">#&gt; virginica-setosa     1.582 1.3382273 1.8257727     0</span></span>
+<span><span class="co">#&gt; virginica-versicolor 0.652 0.4082273 0.8957727     0</span></span></code></pre></div>
+<p>Conveniently, we receive the difference in sepal length, the <em>p</em> value per group comparison, and the corresponding 95% confidence interval. Note that the <em>p</em> values are adjusted for multiple comparisons.</p>
+<p>Other methods in context of one-way ANOVA include the <strong>Bonferroni correction</strong>(a classic), which could be ok if you have a <strong>small number of group comparisons</strong> (e.g., three) but but may be conservative otherwise. A less conservative post-hoc comparison test is the <strong>Holm correction</strong> and the <strong>Benjamini-Hochberg correction</strong>, which is even less conservative to the Bonferroni and Holm (which could be recommended if you have large sample and a lot of group comparisons). To do the above tests you use <strong>pairwise.t.test() function</strong> and specify the <em>p</em> value adjustment method.</p>
+<div class="sourceCode" id="cb148"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen<span class="op">=</span><span class="fl">999</span><span class="op">)</span> <span class="co"># prevents the scientific notation</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/pairwise.t.test.html">pairwise.t.test</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">Species</span>, p.adj <span class="op">=</span> <span class="st">"bonf"</span><span class="op">)</span> <span class="co"># Outcome ; predictor ; adjustment method</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/pairwise.t.test.html">pairwise.t.test</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">Species</span>, p.adj <span class="op">=</span> <span class="st">"holm"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/pairwise.t.test.html">pairwise.t.test</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">Species</span>, p.adj <span class="op">=</span> <span class="st">"BH"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="making-your-own-specific-hypotheses-and-contrasts." class="section level3" number="7.2.2">
+<h3>
+<span class="header-section-number">7.2.2</span> Making your own specific hypotheses and contrasts.<a class="anchor" aria-label="anchor" href="#making-your-own-specific-hypotheses-and-contrasts."><i class="fas fa-link"></i></a>
+</h3>
+<p>All of the above methods create their own group-comparisons by using contrasts (which I explained in detail at the start of this part). However, if desired, you can flexibly manipulate the contrasts, and make your very own group-comparisons for whatever differences you want to test with any restrictions or <em>“special rule”</em> you can imagine.</p>
+<p>In this part we will create combinations of specific group-comparisons that we we want to test separately or simultaneously. This will also yield knowledge relevant for special types of ANOVA (see later on).
+1. Create a <strong>“contrast matrix”</strong> that will be made up with <strong>“contrast/restriction vectors”</strong>. These contrast matrices will reflect the specific group-comparisons that we want
+2. Conduct the specific (or combinations of) group-comparison(s) using the <strong>linearhypothesis() function</strong> from the <strong>car package</strong></p>
+<p>Before you create your own contrast matrix, it could be handy to have a look at the coefficients of your regression model. Indeed, we will work with <strong>the coefficients of our factors</strong> and specifically the order of coefficients. Let’s keep the model from before with the three species of flowers.</p>
+<div class="sourceCode" id="cb149"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">=</span> <span class="va">iris</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt; (Intercept)    Species1    Species2 </span></span>
+<span><span class="co">#&gt;  5.84333333 -0.83733333  0.09266667</span></span></code></pre></div>
+<p>Note that the regression model used treatment contrasts as by default. I got three coefficients/categories: Setosa (the intercept, hence the “reference category” when using treatment contrasts), versicolor, and virginica. These categories/groups can be represented as a vector, a “contrast/restriction vector” so to speak, that looks like: c(<em>category 1</em>, <em>category 2</em>,<em>categoy 3</em>). Importantly, I can easily manipulate the categories within the matrix/restriction vector. You can “activate” and “deactivate” a category by asigning a “0” or “1” to it.</p>
+<p>For example, the vector (0,1,0) will “activate” “category 2” (i.e., the coefficient will be multiplied by 1) while “category 3” will be “deactivated” (since this coefficient will be multiplied with 0). The linearHypothesis() function will take this contrast/restriction matrix made up from contrast/restriction vectors (in our example binded by the rbind function) and read it as: test whether the coefficient/ the average of “category 2” (versicolor) is different from zero. <strong>Remember, we work with coefficients</strong> (differences with the reference category) so <em>different from zero</em> actually means <strong>different from the average of the reference category</strong> (setosa flowers).</p>
+<div class="sourceCode" id="cb150"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">restriction</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: carData</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'car'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     recode</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/linearHypothesis.html">linearHypothesis</a></span><span class="op">(</span><span class="va">mymodel</span>, hypothesis.matrix <span class="op">=</span> <span class="va">restriction</span>, test<span class="op">=</span><span class="st">"F"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linear hypothesis test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypothesis:</span></span>
+<span><span class="co">#&gt; Species1 = 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model 1: restricted model</span></span>
+<span><span class="co">#&gt; Model 2: Sepal.Length ~ Species</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; 1    148 91.541                                  </span></span>
+<span><span class="co">#&gt; 2    147 38.956  1    52.585 198.43 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p>We can also combine multiple “contrast/restriction” vectors to a create a restriction matrix that tests multiple group-comparisons <strong>simultaneously</strong>. For example, we can recreate the omnibus test based on a treatment contrast style .</p>
+<div class="sourceCode" id="cb151"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">restriction</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>,</span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/linearHypothesis.html">linearHypothesis</a></span><span class="op">(</span><span class="va">mymodel</span>, hypothesis.matrix <span class="op">=</span> <span class="va">restriction</span>, test<span class="op">=</span><span class="st">"F"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linear hypothesis test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypothesis:</span></span>
+<span><span class="co">#&gt; Species1 = 0</span></span>
+<span><span class="co">#&gt; Species2 = 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model 1: restricted model</span></span>
+<span><span class="co">#&gt; Model 2: Sepal.Length ~ Species</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Res.Df     RSS Df Sum of Sq      F    Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; 1    149 102.168                                  </span></span>
+<span><span class="co">#&gt; 2    147  38.956  2    63.212 119.26 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p>Another thing that we can do is to make contrasts between groups (similar to sum contrasts). Have a look at this vector: (0,1,-1). We “activate category 2” but now we asign a negative value to “category 3”. This can be interpret as a contrast between “category 2” and “category 3, so does the average of versicolor differ from virginica? Let’s find out:</p>
+<div class="sourceCode" id="cb152"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">restriction</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>           <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/linearHypothesis.html">linearHypothesis</a></span><span class="op">(</span><span class="va">mymodel</span>, hypothesis.matrix <span class="op">=</span> <span class="va">restriction</span>, test<span class="op">=</span><span class="st">"F"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linear hypothesis test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypothesis:</span></span>
+<span><span class="co">#&gt; Species1 - Species2 = 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model 1: restricted model</span></span>
+<span><span class="co">#&gt; Model 2: Sepal.Length ~ Species</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Res.Df    RSS Df Sum of Sq      F   Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; 1    148 60.579                                 </span></span>
+<span><span class="co">#&gt; 2    147 38.956  1    21.622 81.592 8.77e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<div id="let-us-get-creative-with-hypothesis-testing" class="section level4" number="7.2.2.1">
+<h4>
+<span class="header-section-number">7.2.2.1</span> Let us get creative with hypothesis testing<a class="anchor" aria-label="anchor" href="#let-us-get-creative-with-hypothesis-testing"><i class="fas fa-link"></i></a>
+</h4>
+<p>Alright, I promised that we can get creative with hypothesis testing did I not? Well, to give a couple of examples, <strong>suppose</strong>, for some reason, that we want to test whether the category “versicolor” is five times larger than the reference category “setosa”.</p>
+<p>We already know that by default R uses treatment contrasts and that setosa will be the reference category (since “s” comes first in the alphabet). Now for the restriction/contrast vector, did you thought of using something like:</p>
+<div class="sourceCode" id="cb153"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">restriction</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">rbind</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">5</span>,<span class="fl">0</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<p>Well, I get why you would think so but this would test whether the coefficient (i.e., the <strong>difference in mean between versicolor and setosa</strong>) of the versicolor group times five is zero. <strong>This is not the same as testing whether the mean for versicolor is five times that of the reference setosa</strong></p>
+<p><strong>Instead</strong>, to get the <em>“a specific group (and not a difference score) is five time larger than…”</em> part, we can use the <strong>rhs</strong> argument. If we set a prespecified value to rhs, it will test whether a linear combination of the coefficients equals your prespecified value. Therefore, if we “activate” versicolor, “deactivate” virginica, and set to rhs to be the coefficient for versicolor times five, we will test whether versicolor is five times larger than the reference.</p>
+<div class="sourceCode" id="cb154"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">restriction</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/linearHypothesis.html">linearHypothesis</a></span><span class="op">(</span><span class="va">mymodel</span>, hypothesis.matrix <span class="op">=</span> <span class="va">restriction</span>, rhs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="fl">5</span>, test<span class="op">=</span><span class="st">"F"</span><span class="op">)</span> <span class="co"># with coef(mymodel)[1] being the versicolor category</span></span>
+<span><span class="co">#&gt; Linear hypothesis test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypothesis:</span></span>
+<span><span class="co">#&gt; Species1 = 29.2166666666667</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model 1: restricted model</span></span>
+<span><span class="co">#&gt; Model 2: Sepal.Length ~ Species</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Res.Df   RSS Df Sum of Sq      F    Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; 1    148 67782                                  </span></span>
+<span><span class="co">#&gt; 2    147    39  1     67743 255627 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p><strong>Another example</strong>, suppose I want to test whether the sum of the coefficients of “versicolor” and “virginica” is 10. In this case we need to use both these categories so we will need to activate both of them. Remember that the rhs argument allows to test whether the linear combination equals a value. Therefore, if we activate “versicolor”, activate “virginica”, and set rhs to 10, we will test whether the sum of these coefficients is 10.</p>
+<div class="sourceCode" id="cb155"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">restriction</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/linearHypothesis.html">linearHypothesis</a></span><span class="op">(</span><span class="va">mymodel</span>, hypothesis.matrix <span class="op">=</span> <span class="va">restriction</span>, test<span class="op">=</span><span class="st">"F"</span>, rhs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linear hypothesis test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypothesis:</span></span>
+<span><span class="co">#&gt; Species1  + Species2 = 10</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model 1: restricted model</span></span>
+<span><span class="co">#&gt; Model 2: Sepal.Length ~ Species</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Res.Df    RSS Df Sum of Sq     F    Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; 1    148 8697.5                                 </span></span>
+<span><span class="co">#&gt; 2    147   39.0  1    8658.6 32673 &lt; 2.2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
+</div>
+<div id="effect-sizes-1" class="section level3" number="7.2.3">
+<h3>
+<span class="header-section-number">7.2.3</span> Effect sizes<a class="anchor" aria-label="anchor" href="#effect-sizes-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Continuing the spirit from the last part, it is useful to include effect sizes next to the common F statistics obtained from your output. Several effect sizes are appropriate to use in the context of ANOVA. Let’s start with perhaps the most known effect size Cohen’s d which is the difference between the group means divided by the pooled standard deviations of the groups. We can use the <strong>cohens_d() function</strong> from our old acquaintance, the <strong>effectsize package</strong>, to compute this effect size. Before you use this function, make sure you (temporarily) remove categories until you have two groups as an error is outputted otherwise.</p>
+<div class="sourceCode" id="cb156"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/effectsize/">effectsize</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="va">iris</span></span>
+<span><span class="va">mydata_temp</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">Species</span><span class="op">==</span><span class="st">"virginica"</span><span class="op">)</span> <span class="co"># the cohens_d functions asks for exactly two groups, hence I temporarily filter out "virginica" as an example</span></span>
+<span></span>
+<span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/cohens_d.html">cohens_d</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">mydata_temp</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; Cohen's d |         95% CI</span></span>
+<span><span class="co">#&gt; --------------------------</span></span>
+<span><span class="co">#&gt; -2.10     | [-2.59, -1.61]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - Estimated using pooled SD.</span></span></code></pre></div>
+<p>Moving on. Similar to the discussed semi-partial R² in linear regressions (with continuous predictors), in the ANOVA context, we have <strong>the (partial) eta-squared</strong> and <strong>the omega-squared measure</strong>. The eta-squared measures shows the proportion of total variance explained <strong>by your (one) factor variable</strong> whereas the partial eta-squared shows the proportion of variance explained by <strong>a specific factor</strong> after controlling for others. <strong>However, as (partial) eta-squared is biased and with this bias decreasing the more the size of your groups increases</strong>, you could consider the omega-square measure instead (especially in “small” sample sizes). To compute these effect sizes, you can consider The <strong>eta_squared() and omega_squared() function</strong> from the <strong>effectsize package</strong>.</p>
+<div class="sourceCode" id="cb157"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/effectsize/">effectsize</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">myanova</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/eta_squared.html">eta_squared</a></span><span class="op">(</span><span class="va">myanova</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # Effect Size for ANOVA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter | Eta2 |       95% CI</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; Species   | 0.62 | [0.54, 1.00]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - One-sided CIs: upper bound fixed at [1.00].</span></span>
+<span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/eta_squared.html">omega_squared</a></span><span class="op">(</span><span class="va">myanova</span><span class="op">)</span>  </span>
+<span><span class="co">#&gt; # Effect Size for ANOVA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter | Omega2 |       95% CI</span></span>
+<span><span class="co">#&gt; ---------------------------------</span></span>
+<span><span class="co">#&gt; Species   |   0.61 | [0.53, 1.00]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; - One-sided CIs: upper bound fixed at [1.00].</span></span></code></pre></div>
+<p><strong>One thing I want to notice</strong>. Recently, <a href="https://journalofcognition.org/articles/10.5334/joc.409">the use eta-squared in ANOVA from a mixed-effects model has been criticized (click here)</a>. As discussed in the previous part, effect sizes in mixed-effects models should acknowledge that there is a fixed and random effects part. <strong>If you want to compute the (partial) eta-squared in mixed-effects models that include a 2 x 2 design (i.e., two categorical predictors with two levels)</strong>, It is recommended to use the sum contrast coding and to use the cluster-mean centered outcome variables to obtain <strong>eta-squared within</strong>. Full details are provided in the linked article, the reference to this article is shown at the end of this part.</p>
+</div>
+</div>
+<div id="two-way-anova" class="section level2" number="7.3">
+<h2>
+<span class="header-section-number">7.3</span> Two-way ANOVA<a class="anchor" aria-label="anchor" href="#two-way-anova"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s add an extra categorical variable to the equation. Suppose we also included the location of the flower (location “a”,“b”,…“e”). Now we can test the main effect of species and location on sepal length as well the interaction effect between these two predictors.</p>
+<div class="sourceCode" id="cb158"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">=</span> <span class="va">iris</span></span>
+<span><span class="va">mydata</span><span class="op">$</span><span class="va">Location</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"c"</span>,<span class="st">"d"</span>,<span class="st">"e"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Length</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.6</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="st">"mean"</span><span class="op">)</span>  <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Location</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="07-Anova_files/figure-html/unnamed-chunk-21-1.png" width="672"></div>
+<div class="sourceCode" id="cb159"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Location</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        (Intercept)           Species1           Species2 </span></span>
+<span><span class="co">#&gt;       5.843333e+00      -8.373333e-01       9.266667e-02 </span></span>
+<span><span class="co">#&gt;          Location1          Location2          Location3 </span></span>
+<span><span class="co">#&gt;       4.658198e-17       2.666667e-02       1.233333e-01 </span></span>
+<span><span class="co">#&gt;          Location4 Species1:Location1 Species2:Location1 </span></span>
+<span><span class="co">#&gt;       3.666667e-02      -1.460000e-01       1.640000e-01 </span></span>
+<span><span class="co">#&gt; Species1:Location2 Species2:Location2 Species1:Location3 </span></span>
+<span><span class="co">#&gt;       1.773333e-01      -1.126667e-01      -1.193333e-01 </span></span>
+<span><span class="co">#&gt; Species2:Location3 Species1:Location4 Species2:Location4 </span></span>
+<span><span class="co">#&gt;       2.006667e-01       2.733333e-02      -1.426667e-01</span></span></code></pre></div>
+<p>Since we used the default treatment contrasts, note that our “reference category” consists of two variables: the <em>setosa</em> flower measured on location <em>“a”</em>. The Coefficient versicolor shows the difference between itself and the reference flower <em>setosa</em> at the reference location <em>“a”</em>. Similarly, the coefficient “c” shows the difference between itself and the reference location <em>“a”</em> in the reference flower setosa. If we look at the coefficients for interaction terms, say virginica and location d, then it shows how the difference between virginica and setosa, differs at location “c” compared to location <em>“a”</em>.</p>
+<p>Since we have more factors and an interaction effect, a novel decision will pop up. What type of ANOVA do we want to use?</p>
+<div id="four-different-types-of-anova" class="section level3" number="7.3.1">
+<h3>
+<span class="header-section-number">7.3.1</span> Four different types of ANOVA<a class="anchor" aria-label="anchor" href="#four-different-types-of-anova"><i class="fas fa-link"></i></a>
+</h3>
+<p>Since we introduced an interaction effect to our regression models and ANOVA, it may be a good time to acknowledge the existence of different types of ANOVA. The aov() function we used so far computes the <strong>type I ANOVA</strong> which tests each factor in the order you specified in the model (handy if the order of factors is crucial). Next to type I, you also have type II, III, and IV. The <strong>type II ANOVA</strong> tests each main effect while adjusting for other main effects (<strong>however it ignores all interactions so not suitable when interactions are included</strong>). <strong>Type III</strong> tests each of yours factors accounting for all others, including interactions. If you consider to go for type III (since you want to include interactions), <strong>use sum contrasts instead of the default treatment contrasts</strong>. Finally, <strong>type IV</strong>, could be considered when you have complex models with categories or category combinations that are empty (no data).</p>
+<p>To access type II to IV, you can use the <strong>Anova() function</strong> from the <strong>car package</strong>.</p>
+<div class="sourceCode" id="cb160"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Type II ANOVA</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Location</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html">Anova</a></span><span class="op">(</span><span class="va">mymodel</span>, type<span class="op">=</span><span class="st">"II"</span><span class="op">)</span> <span class="co"># the type ignoring the interaction</span></span>
+<span><span class="co">#&gt; Anova Table (Type II tests)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Response: Sepal.Length</span></span>
+<span><span class="co">#&gt;                  Sum Sq  Df  F value Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; Species          63.212   2 120.9107 &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; Location          1.563   4   1.4952 0.2071    </span></span>
+<span><span class="co">#&gt; Species:Location  2.104   8   1.0061 0.4345    </span></span>
+<span><span class="co">#&gt; Residuals        35.289 135                    </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span></span>
+<span><span class="co"># Type III ANOVA</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"contr.sum"</span>, <span class="st">"contr.sum"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html">Anova</a></span><span class="op">(</span><span class="va">mymodel</span>, type<span class="op">=</span><span class="st">"III"</span><span class="op">)</span> <span class="co"># the type you should use with sum  contrasts, see above</span></span>
+<span><span class="co">#&gt; Anova Table (Type III tests)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Response: Sepal.Length</span></span>
+<span><span class="co">#&gt;                  Sum Sq  Df    F value Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; (Intercept)      5121.7   1 19593.2734 &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; Species            63.2   2   120.9107 &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; Location            1.6   4     1.4952 0.2071    </span></span>
+<span><span class="co">#&gt; Species:Location    2.1   8     1.0061 0.4345    </span></span>
+<span><span class="co">#&gt; Residuals          35.3 135                      </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p>The difference between type II and type III ANOVA will depend on how “strong” the interaction effect in your models will be. For the remainder of the examples I will use type III as it is a flexible approach (i.e., it has no strong assumptions or limitations).</p>
+<p>Irrespective of your choice of ANOVA type, the model will conduct an omnibus test. Therefore, once again, we need to dive deeper into individual post-hoc group-comparisons.</p>
+</div>
+<div id="two-way-anova-post-hoc-comparisons" class="section level3" number="7.3.2">
+<h3>
+<span class="header-section-number">7.3.2</span> Two-way ANOVA: Post-hoc comparisons<a class="anchor" aria-label="anchor" href="#two-way-anova-post-hoc-comparisons"><i class="fas fa-link"></i></a>
+</h3>
+<p>Instead of the pairwise t tests that we did with one-way ANOVA, I prefer to use the emmeans() function from the <a href="https://cran.r-project.org/web/packages/emmeans/index.html">emmeans package</a>. This function allows to do comparisons in the main effects: comparing the petal length of species with one another per location and comparing location with one another per species, and interaction effects: compare the difference in petal length of species across different locations. Similar to the pairwise.t.test() function, we can choose how we want to adjust the <em>p</em> value (Bonferroni, Benjamini-Hochberg, etc.).</p>
+<p>Now you could approach the group-comparisons in different ways. For example, you could check whether the interaction effect is statistically significant in your regression model or ANOVA (or if you deem it yourself sufficiently significant). If so, you can zoom in how the mean of sepal length differs per species but <strong>within</strong> each location, and how it differs per location <strong>within</strong> each species. <strong>That way, when checking the main effects, you involve the other variable</strong>. In addition, you could look more to the interaction effect to <strong>check whether combinations between species and locations differ between all other combinations</strong></p>
+<div class="sourceCode" id="cb161"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mydata</span> <span class="op">=</span> <span class="va">iris</span></span>
+<span><span class="va">mydata</span><span class="op">$</span><span class="va">Location</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"c"</span>,<span class="st">"d"</span>,<span class="st">"e"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Location</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rvlenth/emmeans">emmeans</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">Location</span> <span class="op">|</span> <span class="va">Species</span>, adjust <span class="op">=</span> <span class="st">"Tukey"</span><span class="op">)</span> <span class="co"># Main effect: differences between locations WITHIN species</span></span>
+<span><span class="co">#&gt; $emmeans</span></span>
+<span><span class="co">#&gt; Species = setosa:</span></span>
+<span><span class="co">#&gt;  Location emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  a          4.86 0.162 135     4.54     5.18</span></span>
+<span><span class="co">#&gt;  b          5.21 0.162 135     4.89     5.53</span></span>
+<span><span class="co">#&gt;  c          5.01 0.162 135     4.69     5.33</span></span>
+<span><span class="co">#&gt;  d          5.07 0.162 135     4.75     5.39</span></span>
+<span><span class="co">#&gt;  e          4.88 0.162 135     4.56     5.20</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Species = versicolor:</span></span>
+<span><span class="co">#&gt;  Location emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  a          6.10 0.162 135     5.78     6.42</span></span>
+<span><span class="co">#&gt;  b          5.85 0.162 135     5.53     6.17</span></span>
+<span><span class="co">#&gt;  c          6.26 0.162 135     5.94     6.58</span></span>
+<span><span class="co">#&gt;  d          5.83 0.162 135     5.51     6.15</span></span>
+<span><span class="co">#&gt;  e          5.64 0.162 135     5.32     5.96</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Species = virginica:</span></span>
+<span><span class="co">#&gt;  Location emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  a          6.57 0.162 135     6.25     6.89</span></span>
+<span><span class="co">#&gt;  b          6.55 0.162 135     6.23     6.87</span></span>
+<span><span class="co">#&gt;  c          6.63 0.162 135     6.31     6.95</span></span>
+<span><span class="co">#&gt;  d          6.74 0.162 135     6.42     7.06</span></span>
+<span><span class="co">#&gt;  e          6.45 0.162 135     6.13     6.77</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Confidence level used: 0.95 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $contrasts</span></span>
+<span><span class="co">#&gt; Species = setosa:</span></span>
+<span><span class="co">#&gt;  contrast estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  a - b       -0.35 0.229 135  -1.531  0.5444</span></span>
+<span><span class="co">#&gt;  a - c       -0.15 0.229 135  -0.656  0.9652</span></span>
+<span><span class="co">#&gt;  a - d       -0.21 0.229 135  -0.918  0.8894</span></span>
+<span><span class="co">#&gt;  a - e       -0.02 0.229 135  -0.087  1.0000</span></span>
+<span><span class="co">#&gt;  b - c        0.20 0.229 135   0.875  0.9057</span></span>
+<span><span class="co">#&gt;  b - d        0.14 0.229 135   0.612  0.9729</span></span>
+<span><span class="co">#&gt;  b - e        0.33 0.229 135   1.443  0.6009</span></span>
+<span><span class="co">#&gt;  c - d       -0.06 0.229 135  -0.262  0.9989</span></span>
+<span><span class="co">#&gt;  c - e        0.13 0.229 135   0.569  0.9794</span></span>
+<span><span class="co">#&gt;  d - e        0.19 0.229 135   0.831  0.9206</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Species = versicolor:</span></span>
+<span><span class="co">#&gt;  contrast estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  a - b        0.25 0.229 135   1.093  0.8097</span></span>
+<span><span class="co">#&gt;  a - c       -0.16 0.229 135  -0.700  0.9562</span></span>
+<span><span class="co">#&gt;  a - d        0.27 0.229 135   1.181  0.7623</span></span>
+<span><span class="co">#&gt;  a - e        0.46 0.229 135   2.012  0.2660</span></span>
+<span><span class="co">#&gt;  b - c       -0.41 0.229 135  -1.793  0.3818</span></span>
+<span><span class="co">#&gt;  b - d        0.02 0.229 135   0.087  1.0000</span></span>
+<span><span class="co">#&gt;  b - e        0.21 0.229 135   0.918  0.8894</span></span>
+<span><span class="co">#&gt;  c - d        0.43 0.229 135   1.881  0.3328</span></span>
+<span><span class="co">#&gt;  c - e        0.62 0.229 135   2.712  0.0574</span></span>
+<span><span class="co">#&gt;  d - e        0.19 0.229 135   0.831  0.9206</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Species = virginica:</span></span>
+<span><span class="co">#&gt;  contrast estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  a - b        0.02 0.229 135   0.087  1.0000</span></span>
+<span><span class="co">#&gt;  a - c       -0.06 0.229 135  -0.262  0.9989</span></span>
+<span><span class="co">#&gt;  a - d       -0.17 0.229 135  -0.744  0.9458</span></span>
+<span><span class="co">#&gt;  a - e        0.12 0.229 135   0.525  0.9847</span></span>
+<span><span class="co">#&gt;  b - c       -0.08 0.229 135  -0.350  0.9968</span></span>
+<span><span class="co">#&gt;  b - d       -0.19 0.229 135  -0.831  0.9206</span></span>
+<span><span class="co">#&gt;  b - e        0.10 0.229 135   0.437  0.9923</span></span>
+<span><span class="co">#&gt;  c - d       -0.11 0.229 135  -0.481  0.9890</span></span>
+<span><span class="co">#&gt;  c - e        0.18 0.229 135   0.787  0.9339</span></span>
+<span><span class="co">#&gt;  d - e        0.29 0.229 135   1.268  0.7110</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; P value adjustment: tukey method for comparing a family of 5 estimates</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">|</span> <span class="va">Location</span>, adjust <span class="op">=</span> <span class="st">"Bonferroni"</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; $emmeans</span></span>
+<span><span class="co">#&gt; Location = a:</span></span>
+<span><span class="co">#&gt;  Species    emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa       4.86 0.162 135     4.54     5.18</span></span>
+<span><span class="co">#&gt;  versicolor   6.10 0.162 135     5.78     6.42</span></span>
+<span><span class="co">#&gt;  virginica    6.57 0.162 135     6.25     6.89</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = b:</span></span>
+<span><span class="co">#&gt;  Species    emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa       5.21 0.162 135     4.89     5.53</span></span>
+<span><span class="co">#&gt;  versicolor   5.85 0.162 135     5.53     6.17</span></span>
+<span><span class="co">#&gt;  virginica    6.55 0.162 135     6.23     6.87</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = c:</span></span>
+<span><span class="co">#&gt;  Species    emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa       5.01 0.162 135     4.69     5.33</span></span>
+<span><span class="co">#&gt;  versicolor   6.26 0.162 135     5.94     6.58</span></span>
+<span><span class="co">#&gt;  virginica    6.63 0.162 135     6.31     6.95</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = d:</span></span>
+<span><span class="co">#&gt;  Species    emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa       5.07 0.162 135     4.75     5.39</span></span>
+<span><span class="co">#&gt;  versicolor   5.83 0.162 135     5.51     6.15</span></span>
+<span><span class="co">#&gt;  virginica    6.74 0.162 135     6.42     7.06</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = e:</span></span>
+<span><span class="co">#&gt;  Species    emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa       4.88 0.162 135     4.56     5.20</span></span>
+<span><span class="co">#&gt;  versicolor   5.64 0.162 135     5.32     5.96</span></span>
+<span><span class="co">#&gt;  virginica    6.45 0.162 135     6.13     6.77</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Confidence level used: 0.95 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $contrasts</span></span>
+<span><span class="co">#&gt; Location = a:</span></span>
+<span><span class="co">#&gt;  contrast               estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  setosa - versicolor       -1.24 0.229 135  -5.423  &lt;.0001</span></span>
+<span><span class="co">#&gt;  setosa - virginica        -1.71 0.229 135  -7.479  &lt;.0001</span></span>
+<span><span class="co">#&gt;  versicolor - virginica    -0.47 0.229 135  -2.056  0.1253</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = b:</span></span>
+<span><span class="co">#&gt;  contrast               estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  setosa - versicolor       -0.64 0.229 135  -2.799  0.0176</span></span>
+<span><span class="co">#&gt;  setosa - virginica        -1.34 0.229 135  -5.861  &lt;.0001</span></span>
+<span><span class="co">#&gt;  versicolor - virginica    -0.70 0.229 135  -3.061  0.0080</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = c:</span></span>
+<span><span class="co">#&gt;  contrast               estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  setosa - versicolor       -1.25 0.229 135  -5.467  &lt;.0001</span></span>
+<span><span class="co">#&gt;  setosa - virginica        -1.62 0.229 135  -7.085  &lt;.0001</span></span>
+<span><span class="co">#&gt;  versicolor - virginica    -0.37 0.229 135  -1.618  0.3239</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = d:</span></span>
+<span><span class="co">#&gt;  contrast               estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  setosa - versicolor       -0.76 0.229 135  -3.324  0.0034</span></span>
+<span><span class="co">#&gt;  setosa - virginica        -1.67 0.229 135  -7.304  &lt;.0001</span></span>
+<span><span class="co">#&gt;  versicolor - virginica    -0.91 0.229 135  -3.980  0.0003</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Location = e:</span></span>
+<span><span class="co">#&gt;  contrast               estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  setosa - versicolor       -0.76 0.229 135  -3.324  0.0034</span></span>
+<span><span class="co">#&gt;  setosa - virginica        -1.57 0.229 135  -6.866  &lt;.0001</span></span>
+<span><span class="co">#&gt;  versicolor - virginica    -0.81 0.229 135  -3.543  0.0016</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; P value adjustment: bonferroni method for 3 tests</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Location</span>, adjust <span class="op">=</span> <span class="st">"BH"</span><span class="op">)</span> <span class="co"># interaction effect: comparing combinations to all other combinations</span></span>
+<span><span class="co">#&gt; $emmeans</span></span>
+<span><span class="co">#&gt;  Species    Location emmean    SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa     a          4.86 0.162 135     4.54     5.18</span></span>
+<span><span class="co">#&gt;  versicolor a          6.10 0.162 135     5.78     6.42</span></span>
+<span><span class="co">#&gt;  virginica  a          6.57 0.162 135     6.25     6.89</span></span>
+<span><span class="co">#&gt;  setosa     b          5.21 0.162 135     4.89     5.53</span></span>
+<span><span class="co">#&gt;  versicolor b          5.85 0.162 135     5.53     6.17</span></span>
+<span><span class="co">#&gt;  virginica  b          6.55 0.162 135     6.23     6.87</span></span>
+<span><span class="co">#&gt;  setosa     c          5.01 0.162 135     4.69     5.33</span></span>
+<span><span class="co">#&gt;  versicolor c          6.26 0.162 135     5.94     6.58</span></span>
+<span><span class="co">#&gt;  virginica  c          6.63 0.162 135     6.31     6.95</span></span>
+<span><span class="co">#&gt;  setosa     d          5.07 0.162 135     4.75     5.39</span></span>
+<span><span class="co">#&gt;  versicolor d          5.83 0.162 135     5.51     6.15</span></span>
+<span><span class="co">#&gt;  virginica  d          6.74 0.162 135     6.42     7.06</span></span>
+<span><span class="co">#&gt;  setosa     e          4.88 0.162 135     4.56     5.20</span></span>
+<span><span class="co">#&gt;  versicolor e          5.64 0.162 135     5.32     5.96</span></span>
+<span><span class="co">#&gt;  virginica  e          6.45 0.162 135     6.13     6.77</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Confidence level used: 0.95 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $contrasts</span></span>
+<span><span class="co">#&gt;  contrast                    estimate    SE  df t.ratio</span></span>
+<span><span class="co">#&gt;  setosa a - versicolor a        -1.24 0.229 135  -5.423</span></span>
+<span><span class="co">#&gt;  setosa a - virginica a         -1.71 0.229 135  -7.479</span></span>
+<span><span class="co">#&gt;  setosa a - setosa b            -0.35 0.229 135  -1.531</span></span>
+<span><span class="co">#&gt;  setosa a - versicolor b        -0.99 0.229 135  -4.330</span></span>
+<span><span class="co">#&gt;  setosa a - virginica b         -1.69 0.229 135  -7.391</span></span>
+<span><span class="co">#&gt;  setosa a - setosa c            -0.15 0.229 135  -0.656</span></span>
+<span><span class="co">#&gt;  setosa a - versicolor c        -1.40 0.229 135  -6.123</span></span>
+<span><span class="co">#&gt;  setosa a - virginica c         -1.77 0.229 135  -7.741</span></span>
+<span><span class="co">#&gt;  setosa a - setosa d            -0.21 0.229 135  -0.918</span></span>
+<span><span class="co">#&gt;  setosa a - versicolor d        -0.97 0.229 135  -4.242</span></span>
+<span><span class="co">#&gt;  setosa a - virginica d         -1.88 0.229 135  -8.222</span></span>
+<span><span class="co">#&gt;  setosa a - setosa e            -0.02 0.229 135  -0.087</span></span>
+<span><span class="co">#&gt;  setosa a - versicolor e        -0.78 0.229 135  -3.411</span></span>
+<span><span class="co">#&gt;  setosa a - virginica e         -1.59 0.229 135  -6.954</span></span>
+<span><span class="co">#&gt;  versicolor a - virginica a     -0.47 0.229 135  -2.056</span></span>
+<span><span class="co">#&gt;  versicolor a - setosa b         0.89 0.229 135   3.892</span></span>
+<span><span class="co">#&gt;  versicolor a - versicolor b     0.25 0.229 135   1.093</span></span>
+<span><span class="co">#&gt;  versicolor a - virginica b     -0.45 0.229 135  -1.968</span></span>
+<span><span class="co">#&gt;  versicolor a - setosa c         1.09 0.229 135   4.767</span></span>
+<span><span class="co">#&gt;  versicolor a - versicolor c    -0.16 0.229 135  -0.700</span></span>
+<span><span class="co">#&gt;  versicolor a - virginica c     -0.53 0.229 135  -2.318</span></span>
+<span><span class="co">#&gt;  versicolor a - setosa d         1.03 0.229 135   4.505</span></span>
+<span><span class="co">#&gt;  versicolor a - versicolor d     0.27 0.229 135   1.181</span></span>
+<span><span class="co">#&gt;  versicolor a - virginica d     -0.64 0.229 135  -2.799</span></span>
+<span><span class="co">#&gt;  versicolor a - setosa e         1.22 0.229 135   5.336</span></span>
+<span><span class="co">#&gt;  versicolor a - versicolor e     0.46 0.229 135   2.012</span></span>
+<span><span class="co">#&gt;  versicolor a - virginica e     -0.35 0.229 135  -1.531</span></span>
+<span><span class="co">#&gt;  virginica a - setosa b          1.36 0.229 135   5.948</span></span>
+<span><span class="co">#&gt;  virginica a - versicolor b      0.72 0.229 135   3.149</span></span>
+<span><span class="co">#&gt;  virginica a - virginica b       0.02 0.229 135   0.087</span></span>
+<span><span class="co">#&gt;  virginica a - setosa c          1.56 0.229 135   6.823</span></span>
+<span><span class="co">#&gt;  virginica a - versicolor c      0.31 0.229 135   1.356</span></span>
+<span><span class="co">#&gt;  virginica a - virginica c      -0.06 0.229 135  -0.262</span></span>
+<span><span class="co">#&gt;  virginica a - setosa d          1.50 0.229 135   6.560</span></span>
+<span><span class="co">#&gt;  virginica a - versicolor d      0.74 0.229 135   3.236</span></span>
+<span><span class="co">#&gt;  virginica a - virginica d      -0.17 0.229 135  -0.744</span></span>
+<span><span class="co">#&gt;  virginica a - setosa e          1.69 0.229 135   7.391</span></span>
+<span><span class="co">#&gt;  virginica a - versicolor e      0.93 0.229 135   4.067</span></span>
+<span><span class="co">#&gt;  virginica a - virginica e       0.12 0.229 135   0.525</span></span>
+<span><span class="co">#&gt;  setosa b - versicolor b        -0.64 0.229 135  -2.799</span></span>
+<span><span class="co">#&gt;  setosa b - virginica b         -1.34 0.229 135  -5.861</span></span>
+<span><span class="co">#&gt;  setosa b - setosa c             0.20 0.229 135   0.875</span></span>
+<span><span class="co">#&gt;  setosa b - versicolor c        -1.05 0.229 135  -4.592</span></span>
+<span><span class="co">#&gt;  setosa b - virginica c         -1.42 0.229 135  -6.210</span></span>
+<span><span class="co">#&gt;  setosa b - setosa d             0.14 0.229 135   0.612</span></span>
+<span><span class="co">#&gt;  setosa b - versicolor d        -0.62 0.229 135  -2.712</span></span>
+<span><span class="co">#&gt;  setosa b - virginica d         -1.53 0.229 135  -6.692</span></span>
+<span><span class="co">#&gt;  setosa b - setosa e             0.33 0.229 135   1.443</span></span>
+<span><span class="co">#&gt;  setosa b - versicolor e        -0.43 0.229 135  -1.881</span></span>
+<span><span class="co">#&gt;  setosa b - virginica e         -1.24 0.229 135  -5.423</span></span>
+<span><span class="co">#&gt;  versicolor b - virginica b     -0.70 0.229 135  -3.061</span></span>
+<span><span class="co">#&gt;  versicolor b - setosa c         0.84 0.229 135   3.674</span></span>
+<span><span class="co">#&gt;  versicolor b - versicolor c    -0.41 0.229 135  -1.793</span></span>
+<span><span class="co">#&gt;  versicolor b - virginica c     -0.78 0.229 135  -3.411</span></span>
+<span><span class="co">#&gt;  versicolor b - setosa d         0.78 0.229 135   3.411</span></span>
+<span><span class="co">#&gt;  versicolor b - versicolor d     0.02 0.229 135   0.087</span></span>
+<span><span class="co">#&gt;  versicolor b - virginica d     -0.89 0.229 135  -3.892</span></span>
+<span><span class="co">#&gt;  versicolor b - setosa e         0.97 0.229 135   4.242</span></span>
+<span><span class="co">#&gt;  versicolor b - versicolor e     0.21 0.229 135   0.918</span></span>
+<span><span class="co">#&gt;  versicolor b - virginica e     -0.60 0.229 135  -2.624</span></span>
+<span><span class="co">#&gt;  virginica b - setosa c          1.54 0.229 135   6.735</span></span>
+<span><span class="co">#&gt;  virginica b - versicolor c      0.29 0.229 135   1.268</span></span>
+<span><span class="co">#&gt;  virginica b - virginica c      -0.08 0.229 135  -0.350</span></span>
+<span><span class="co">#&gt;  virginica b - setosa d          1.48 0.229 135   6.473</span></span>
+<span><span class="co">#&gt;  virginica b - versicolor d      0.72 0.229 135   3.149</span></span>
+<span><span class="co">#&gt;  virginica b - virginica d      -0.19 0.229 135  -0.831</span></span>
+<span><span class="co">#&gt;  virginica b - setosa e          1.67 0.229 135   7.304</span></span>
+<span><span class="co">#&gt;  virginica b - versicolor e      0.91 0.229 135   3.980</span></span>
+<span><span class="co">#&gt;  virginica b - virginica e       0.10 0.229 135   0.437</span></span>
+<span><span class="co">#&gt;  setosa c - versicolor c        -1.25 0.229 135  -5.467</span></span>
+<span><span class="co">#&gt;  setosa c - virginica c         -1.62 0.229 135  -7.085</span></span>
+<span><span class="co">#&gt;  setosa c - setosa d            -0.06 0.229 135  -0.262</span></span>
+<span><span class="co">#&gt;  setosa c - versicolor d        -0.82 0.229 135  -3.586</span></span>
+<span><span class="co">#&gt;  setosa c - virginica d         -1.73 0.229 135  -7.566</span></span>
+<span><span class="co">#&gt;  setosa c - setosa e             0.13 0.229 135   0.569</span></span>
+<span><span class="co">#&gt;  setosa c - versicolor e        -0.63 0.229 135  -2.755</span></span>
+<span><span class="co">#&gt;  setosa c - virginica e         -1.44 0.229 135  -6.298</span></span>
+<span><span class="co">#&gt;  versicolor c - virginica c     -0.37 0.229 135  -1.618</span></span>
+<span><span class="co">#&gt;  versicolor c - setosa d         1.19 0.229 135   5.205</span></span>
+<span><span class="co">#&gt;  versicolor c - versicolor d     0.43 0.229 135   1.881</span></span>
+<span><span class="co">#&gt;  versicolor c - virginica d     -0.48 0.229 135  -2.099</span></span>
+<span><span class="co">#&gt;  versicolor c - setosa e         1.38 0.229 135   6.035</span></span>
+<span><span class="co">#&gt;  versicolor c - versicolor e     0.62 0.229 135   2.712</span></span>
+<span><span class="co">#&gt;  versicolor c - virginica e     -0.19 0.229 135  -0.831</span></span>
+<span><span class="co">#&gt;  virginica c - setosa d          1.56 0.229 135   6.823</span></span>
+<span><span class="co">#&gt;  virginica c - versicolor d      0.80 0.229 135   3.499</span></span>
+<span><span class="co">#&gt;  virginica c - virginica d      -0.11 0.229 135  -0.481</span></span>
+<span><span class="co">#&gt;  virginica c - setosa e          1.75 0.229 135   7.654</span></span>
+<span><span class="co">#&gt;  virginica c - versicolor e      0.99 0.229 135   4.330</span></span>
+<span><span class="co">#&gt;  virginica c - virginica e       0.18 0.229 135   0.787</span></span>
+<span><span class="co">#&gt;  setosa d - versicolor d        -0.76 0.229 135  -3.324</span></span>
+<span><span class="co">#&gt;  setosa d - virginica d         -1.67 0.229 135  -7.304</span></span>
+<span><span class="co">#&gt;  setosa d - setosa e             0.19 0.229 135   0.831</span></span>
+<span><span class="co">#&gt;  setosa d - versicolor e        -0.57 0.229 135  -2.493</span></span>
+<span><span class="co">#&gt;  setosa d - virginica e         -1.38 0.229 135  -6.035</span></span>
+<span><span class="co">#&gt;  versicolor d - virginica d     -0.91 0.229 135  -3.980</span></span>
+<span><span class="co">#&gt;  versicolor d - setosa e         0.95 0.229 135   4.155</span></span>
+<span><span class="co">#&gt;  versicolor d - versicolor e     0.19 0.229 135   0.831</span></span>
+<span><span class="co">#&gt;  versicolor d - virginica e     -0.62 0.229 135  -2.712</span></span>
+<span><span class="co">#&gt;  virginica d - setosa e          1.86 0.229 135   8.135</span></span>
+<span><span class="co">#&gt;  virginica d - versicolor e      1.10 0.229 135   4.811</span></span>
+<span><span class="co">#&gt;  virginica d - virginica e       0.29 0.229 135   1.268</span></span>
+<span><span class="co">#&gt;  setosa e - versicolor e        -0.76 0.229 135  -3.324</span></span>
+<span><span class="co">#&gt;  setosa e - virginica e         -1.57 0.229 135  -6.866</span></span>
+<span><span class="co">#&gt;  versicolor e - virginica e     -0.81 0.229 135  -3.543</span></span>
+<span><span class="co">#&gt;  p.value</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.1748</span></span>
+<span><span class="co">#&gt;   0.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.5729</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.4447</span></span>
+<span><span class="co">#&gt;   0.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.9304</span></span>
+<span><span class="co">#&gt;   0.0017</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0635</span></span>
+<span><span class="co">#&gt;   0.0004</span></span>
+<span><span class="co">#&gt;   0.3494</span></span>
+<span><span class="co">#&gt;   0.0756</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.5479</span></span>
+<span><span class="co">#&gt;   0.0344</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.3070</span></span>
+<span><span class="co">#&gt;   0.0103</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0693</span></span>
+<span><span class="co">#&gt;   0.1748</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0037</span></span>
+<span><span class="co">#&gt;   0.9304</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.2358</span></span>
+<span><span class="co">#&gt;   0.8167</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0029</span></span>
+<span><span class="co">#&gt;   0.5233</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0002</span></span>
+<span><span class="co">#&gt;   0.6501</span></span>
+<span><span class="co">#&gt;   0.0103</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.4680</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.5984</span></span>
+<span><span class="co">#&gt;   0.0124</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.2036</span></span>
+<span><span class="co">#&gt;   0.0894</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0048</span></span>
+<span><span class="co">#&gt;   0.0008</span></span>
+<span><span class="co">#&gt;   0.1067</span></span>
+<span><span class="co">#&gt;   0.0017</span></span>
+<span><span class="co">#&gt;   0.0017</span></span>
+<span><span class="co">#&gt;   0.9304</span></span>
+<span><span class="co">#&gt;   0.0004</span></span>
+<span><span class="co">#&gt;   0.0001</span></span>
+<span><span class="co">#&gt;   0.4447</span></span>
+<span><span class="co">#&gt;   0.0156</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.2682</span></span>
+<span><span class="co">#&gt;   0.7633</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0037</span></span>
+<span><span class="co">#&gt;   0.4754</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0003</span></span>
+<span><span class="co">#&gt;   0.7027</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.8167</span></span>
+<span><span class="co">#&gt;   0.0010</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.6241</span></span>
+<span><span class="co">#&gt;   0.0115</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.1511</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0894</span></span>
+<span><span class="co">#&gt;   0.0581</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0124</span></span>
+<span><span class="co">#&gt;   0.4754</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0014</span></span>
+<span><span class="co">#&gt;   0.6763</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0001</span></span>
+<span><span class="co">#&gt;   0.4991</span></span>
+<span><span class="co">#&gt;   0.0022</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.4754</span></span>
+<span><span class="co">#&gt;   0.0221</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0003</span></span>
+<span><span class="co">#&gt;   0.0002</span></span>
+<span><span class="co">#&gt;   0.4754</span></span>
+<span><span class="co">#&gt;   0.0124</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.2682</span></span>
+<span><span class="co">#&gt;   0.0022</span></span>
+<span><span class="co">#&gt;   &lt;.0001</span></span>
+<span><span class="co">#&gt;   0.0012</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; P value adjustment: BH method for 105 tests</span></span></code></pre></div>
+<p>Instead, if you deem the interaction effect “not significant”, you could also decide to skip the interaction effect and to keep the main effects separate of the other variable that is, you don’t look at species within locations or locations within different species but across locations or species.</p>
+<div class="sourceCode" id="cb162"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">Species</span>, adjust <span class="op">=</span> <span class="st">"Holm"</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; $emmeans</span></span>
+<span><span class="co">#&gt;  Species    emmean     SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  setosa       5.01 0.0723 135     4.86     5.15</span></span>
+<span><span class="co">#&gt;  versicolor   5.94 0.0723 135     5.79     6.08</span></span>
+<span><span class="co">#&gt;  virginica    6.59 0.0723 135     6.45     6.73</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Results are averaged over the levels of: Location </span></span>
+<span><span class="co">#&gt; Confidence level used: 0.95 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $contrasts</span></span>
+<span><span class="co">#&gt;  contrast               estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  setosa - versicolor      -0.930 0.102 135  -9.095  &lt;.0001</span></span>
+<span><span class="co">#&gt;  setosa - virginica       -1.582 0.102 135 -15.471  &lt;.0001</span></span>
+<span><span class="co">#&gt;  versicolor - virginica   -0.652 0.102 135  -6.376  &lt;.0001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Results are averaged over the levels of: Location </span></span>
+<span><span class="co">#&gt; P value adjustment: holm method for 3 tests</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html">emmeans</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">pairwise</span> <span class="op">~</span> <span class="va">Location</span>, adjust <span class="op">=</span> <span class="st">"Holm"</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; $emmeans</span></span>
+<span><span class="co">#&gt;  Location emmean     SE  df lower.CL upper.CL</span></span>
+<span><span class="co">#&gt;  a          5.84 0.0933 135     5.66     6.03</span></span>
+<span><span class="co">#&gt;  b          5.87 0.0933 135     5.69     6.05</span></span>
+<span><span class="co">#&gt;  c          5.97 0.0933 135     5.78     6.15</span></span>
+<span><span class="co">#&gt;  d          5.88 0.0933 135     5.70     6.06</span></span>
+<span><span class="co">#&gt;  e          5.66 0.0933 135     5.47     5.84</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Results are averaged over the levels of: Species </span></span>
+<span><span class="co">#&gt; Confidence level used: 0.95 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $contrasts</span></span>
+<span><span class="co">#&gt;  contrast estimate    SE  df t.ratio p.value</span></span>
+<span><span class="co">#&gt;  a - b     -0.0267 0.132 135  -0.202  1.0000</span></span>
+<span><span class="co">#&gt;  a - c     -0.1233 0.132 135  -0.934  1.0000</span></span>
+<span><span class="co">#&gt;  a - d     -0.0367 0.132 135  -0.278  1.0000</span></span>
+<span><span class="co">#&gt;  a - e      0.1867 0.132 135   1.414  1.0000</span></span>
+<span><span class="co">#&gt;  b - c     -0.0967 0.132 135  -0.732  1.0000</span></span>
+<span><span class="co">#&gt;  b - d     -0.0100 0.132 135  -0.076  1.0000</span></span>
+<span><span class="co">#&gt;  b - e      0.2133 0.132 135   1.616  0.8674</span></span>
+<span><span class="co">#&gt;  c - d      0.0867 0.132 135   0.657  1.0000</span></span>
+<span><span class="co">#&gt;  c - e      0.3100 0.132 135   2.348  0.2031</span></span>
+<span><span class="co">#&gt;  d - e      0.2233 0.132 135   1.692  0.8369</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Results are averaged over the levels of: Species </span></span>
+<span><span class="co">#&gt; P value adjustment: holm method for 10 tests</span></span></code></pre></div>
+<p>So far we’ve dealth with groups manifesting in our predictors. Depending on our data, what we can also can do is to simultaneously compare different <strong>combinations/groups in our outcome</strong> as well. A special type of ANOVA can be found within the multivariate (i.e., multiple outcomes/dependent variables) regression models. One that is relatively robust against one not to be ignored issue.</p>
+</div>
+</div>
+<div id="manova" class="section level2" number="7.4">
+<h2>
+<span class="header-section-number">7.4</span> MANOVA<a class="anchor" aria-label="anchor" href="#manova"><i class="fas fa-link"></i></a>
+</h2>
+<p>When you consider to use a classic univariate repeated measures design with factors that have over two levels, you may encounter a violation of the assumption of <strong>sphericity</strong>. Violation of sphericity could confer a risk for unreliable <em>p</em> values. As an attempt to detect violations herein, you could consider to use e.g., Mauchly’s test for sphericity. Unfortunately, like with many other statistical tests, the reliability of these depend on different factors including your sample size, the degree of departure from a normal distribution, and so on. In short, it is a tricky situation.</p>
+<p>In context of e.g., experiments with a within-subject design (the same subject goes through all or multiple experimental conditions) and where you would consider to aggregate your data across conditions, the method of multivariate analysis of variance (MANOVA). In a MANOVA multiple outcomes/dependent variables are analyzed simultaneously.</p>
+<p>The MANOVA typically yields the following steps.
+1. <strong>Transform the data in wide format with the outcome - commonly a repeated measure from the same subject - aggregated across conditions</strong>
+2. Create contrast matrices for <strong>the outcomes</strong>
+3. Compute multivariate linear regression models and include the contrast matrices from step two.</p>
+<p>For the data I created myself. As the first step I will transform, or rather <em>reshape</em>, the data to wide format with the outcome “score” aggregated and spread across the the variable “condition_numbers”. As you may recall from the previous part, I prefer to use the <strong>dcast() function</strong> from the <strong>reshape2 package()</strong> to reshape from long to wide.</p>
+<div class="sourceCode" id="cb163"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">987</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  participant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span><span class="op">)</span>, times <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>,</span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">10</span>,<span class="fl">3</span><span class="op">)</span>,  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>,<span class="fl">5</span>,<span class="fl">1.5</span><span class="op">)</span>,  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">20</span>,<span class="fl">5</span><span class="op">)</span> <span class="op">)</span>, <span class="fl">2</span>  <span class="op">)</span>,</span>
+<span>  condition_numbers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Reshape to wide format with the outcome aggregated and spread across condition</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape">reshape2</a></span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/cast.html">dcast</a></span><span class="op">(</span><span class="va">participant</span> <span class="op">~</span> <span class="va">condition_numbers</span>, data<span class="op">=</span><span class="va">mydata</span>, value.var<span class="op">=</span><span class="st">"score"</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Condition_"</span> , <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">]</span>  <span class="op">)</span> <span class="co"># to rename "1" to "Condition_1", etc.</span></span></code></pre></div>
+<p>To create a contrast matrix for the outcomes, we can think in terms of vectors as we have done at the beginning of this part. Just like before we will work with coefficients. Different this time that we will have to model a multivariate regression model since our outcome “score” is spread across the multiple levels of “condition_number”. A multivariate regression model takes the form of a classic linear regression but with multiple outcomes which I will bind together using the cbind() function.</p>
+<div class="sourceCode" id="cb164"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">Condition_1</span>, <span class="va">Condition_2</span>, <span class="va">Condition_3</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span>  </span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt;             Condition_1 Condition_2 Condition_3</span></span>
+<span><span class="co">#&gt; (Intercept)     10.0528      5.2094     19.8799</span></span></code></pre></div>
+<div class="inline-figure">The coefficients tells us that there are three of them. Now,we can visualize the outcome contrast matrix like this.
+<img src="images/ANOVA/Manova_1.png">
+</div>
+<p>Our job will be to replace the x to <strong>activate or deactivate a given or multiple condition(s)</strong>. In other words, you will decide what part of the outcome you want to include and what parts you want to compare (all will become clear later on). However, the rules here are a bit different compared to the predictor contrast vectors and matrices. There is no treatment or sum contrast coding with a reference, at least not on the outcomes. Also, <strong>the sum of the values in the vector must be zero in most cases</strong>.</p>
+<p>Say I want to compare <em>Condition_1</em> with <em>Condition_2</em>. We can asign the value “1” to <em>Condition_1</em> and a “-1” to <em>Condition_2</em>, or vice versa. We are not interested in <em>Condition_3</em> so multiplying it with zero will <em>deactivate it</em>. We get the vector c(1,-1,0) in which <em>condition_1</em> will be <strong>multiplied with 1</strong> (it remains alive), condition_2 will be <strong>multiplied with -1</strong> (it also remains alive but it becomes negative, a contrast), and condition_3 is temporarily erased from existence as it <strong>multiplied with zero</strong>. The end product is the difference between <em>Condition_1</em> and <em>Condition_2</em>
+<img src="images/ANOVA/Manova_2.png"></p>
+<p>We feed the above vector to the (outcome) contrast matrix which I will call M. Within a classic linear regression model we multiply our outcome spread across Condition with our freshly created contrast matrix. Since we only created one vector, we will end up with a univariate regression, hence ANOVA.</p>
+<div class="sourceCode" id="cb165"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Contrast "Condition_1" vs "Condition_2"</span></span>
+<span><span class="va">diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">diff</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">Condition_1</span>, <span class="va">Condition_2</span>, <span class="va">Condition_3</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Analysis of Variance Table</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Response: cbind(Condition_1, Condition_2, Condition_3) %*% M</span></span>
+<span><span class="co">#&gt;           Df Sum Sq Mean Sq F value Pr(&gt;F)</span></span>
+<span><span class="co">#&gt; Residuals 99 1050.4  10.611</span></span></code></pre></div>
+<p>Let’s briefly check what the (outcome) contrast matrix did to our outcome within the regression.</p>
+<div class="sourceCode" id="cb166"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">Condition_1</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">Condition_2</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">Condition_3</span><span class="op">)</span>  <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span></span>
+<span><span class="co">#&gt;         diff</span></span>
+<span><span class="co">#&gt;   [1,]  2.09</span></span>
+<span><span class="co">#&gt;   [2,]  4.89</span></span>
+<span><span class="co">#&gt;   [3,]  9.21</span></span>
+<span><span class="co">#&gt;   [4,]  3.01</span></span>
+<span><span class="co">#&gt;   [5,]  6.91</span></span>
+<span><span class="co">#&gt;   [6,]  4.27</span></span>
+<span><span class="co">#&gt;   [7,]  2.49</span></span>
+<span><span class="co">#&gt;   [8,] -0.46</span></span>
+<span><span class="co">#&gt;   [9,]  1.61</span></span>
+<span><span class="co">#&gt;  [10,] -0.56</span></span>
+<span><span class="co">#&gt;  [11,]  6.49</span></span>
+<span><span class="co">#&gt;  [12,]  5.87</span></span>
+<span><span class="co">#&gt;  [13,] 11.65</span></span>
+<span><span class="co">#&gt;  [14,]  4.79</span></span>
+<span><span class="co">#&gt;  [15,]  2.19</span></span>
+<span><span class="co">#&gt;  [16,]  5.87</span></span>
+<span><span class="co">#&gt;  [17,]  4.50</span></span>
+<span><span class="co">#&gt;  [18,]  2.23</span></span>
+<span><span class="co">#&gt;  [19,]  2.66</span></span>
+<span><span class="co">#&gt;  [20,]  7.87</span></span>
+<span><span class="co">#&gt;  [21,]  6.80</span></span>
+<span><span class="co">#&gt;  [22,]  1.73</span></span>
+<span><span class="co">#&gt;  [23,] -0.75</span></span>
+<span><span class="co">#&gt;  [24,]  7.66</span></span>
+<span><span class="co">#&gt;  [25,]  3.34</span></span>
+<span><span class="co">#&gt;  [26,]  0.42</span></span>
+<span><span class="co">#&gt;  [27,]  6.81</span></span>
+<span><span class="co">#&gt;  [28,]  2.71</span></span>
+<span><span class="co">#&gt;  [29,] -1.54</span></span>
+<span><span class="co">#&gt;  [30,]  5.53</span></span>
+<span><span class="co">#&gt;  [31,]  4.74</span></span>
+<span><span class="co">#&gt;  [32,]  6.16</span></span>
+<span><span class="co">#&gt;  [33,]  8.93</span></span>
+<span><span class="co">#&gt;  [34,] 10.51</span></span>
+<span><span class="co">#&gt;  [35,]  7.14</span></span>
+<span><span class="co">#&gt;  [36,]  5.77</span></span>
+<span><span class="co">#&gt;  [37,]  4.87</span></span>
+<span><span class="co">#&gt;  [38,]  8.87</span></span>
+<span><span class="co">#&gt;  [39,]  8.78</span></span>
+<span><span class="co">#&gt;  [40,]  0.44</span></span>
+<span><span class="co">#&gt;  [41,]  4.03</span></span>
+<span><span class="co">#&gt;  [42,]  9.32</span></span>
+<span><span class="co">#&gt;  [43,]  0.11</span></span>
+<span><span class="co">#&gt;  [44,]  1.43</span></span>
+<span><span class="co">#&gt;  [45,] 10.19</span></span>
+<span><span class="co">#&gt;  [46,]  7.97</span></span>
+<span><span class="co">#&gt;  [47,]  4.75</span></span>
+<span><span class="co">#&gt;  [48,]  6.75</span></span>
+<span><span class="co">#&gt;  [49,]  1.87</span></span>
+<span><span class="co">#&gt;  [50,]  9.17</span></span>
+<span><span class="co">#&gt;  [51,]  9.55</span></span>
+<span><span class="co">#&gt;  [52,]  4.14</span></span>
+<span><span class="co">#&gt;  [53,] -1.70</span></span>
+<span><span class="co">#&gt;  [54,]  0.85</span></span>
+<span><span class="co">#&gt;  [55,]  4.70</span></span>
+<span><span class="co">#&gt;  [56,]  8.24</span></span>
+<span><span class="co">#&gt;  [57,]  6.97</span></span>
+<span><span class="co">#&gt;  [58,]  9.54</span></span>
+<span><span class="co">#&gt;  [59,]  7.95</span></span>
+<span><span class="co">#&gt;  [60,]  6.85</span></span>
+<span><span class="co">#&gt;  [61,] 12.92</span></span>
+<span><span class="co">#&gt;  [62,]  6.88</span></span>
+<span><span class="co">#&gt;  [63,]  3.12</span></span>
+<span><span class="co">#&gt;  [64,] -1.61</span></span>
+<span><span class="co">#&gt;  [65,]  3.10</span></span>
+<span><span class="co">#&gt;  [66,]  5.08</span></span>
+<span><span class="co">#&gt;  [67,]  6.64</span></span>
+<span><span class="co">#&gt;  [68,]  6.63</span></span>
+<span><span class="co">#&gt;  [69,]  5.16</span></span>
+<span><span class="co">#&gt;  [70,] -0.41</span></span>
+<span><span class="co">#&gt;  [71,]  1.27</span></span>
+<span><span class="co">#&gt;  [72,]  0.80</span></span>
+<span><span class="co">#&gt;  [73,]  6.27</span></span>
+<span><span class="co">#&gt;  [74,]  9.37</span></span>
+<span><span class="co">#&gt;  [75,]  1.12</span></span>
+<span><span class="co">#&gt;  [76,]  6.27</span></span>
+<span><span class="co">#&gt;  [77,]  0.33</span></span>
+<span><span class="co">#&gt;  [78,]  5.29</span></span>
+<span><span class="co">#&gt;  [79,]  4.01</span></span>
+<span><span class="co">#&gt;  [80,]  6.60</span></span>
+<span><span class="co">#&gt;  [81,]  3.61</span></span>
+<span><span class="co">#&gt;  [82,]  8.23</span></span>
+<span><span class="co">#&gt;  [83,]  5.25</span></span>
+<span><span class="co">#&gt;  [84,]  4.47</span></span>
+<span><span class="co">#&gt;  [85,]  5.21</span></span>
+<span><span class="co">#&gt;  [86,]  7.58</span></span>
+<span><span class="co">#&gt;  [87,]  2.91</span></span>
+<span><span class="co">#&gt;  [88,]  5.98</span></span>
+<span><span class="co">#&gt;  [89,]  0.66</span></span>
+<span><span class="co">#&gt;  [90,] 11.40</span></span>
+<span><span class="co">#&gt;  [91,]  6.34</span></span>
+<span><span class="co">#&gt;  [92,]  3.30</span></span>
+<span><span class="co">#&gt;  [93,]  3.35</span></span>
+<span><span class="co">#&gt;  [94,]  5.69</span></span>
+<span><span class="co">#&gt;  [95,]  2.83</span></span>
+<span><span class="co">#&gt;  [96,]  5.30</span></span>
+<span><span class="co">#&gt;  [97,] -0.79</span></span>
+<span><span class="co">#&gt;  [98,]  4.31</span></span>
+<span><span class="co">#&gt;  [99,]  5.41</span></span>
+<span><span class="co">#&gt; [100,]  5.28</span></span></code></pre></div>
+<p>Indeed, our vector <em>(1,-1,0)</em> created the difference between <em>Condition_1</em> and <em>Condition_2</em> and this difference was then used within the regression.</p>
+<p>Alright, next example. Let’s say we to compare <em>Condition_3</em> with the average of <em>Condition_1</em> and <em>Condition_2</em>. In this case we will need to “activate” all of our conditions so nothing will be multiplied by zero. There are different ways to compute an average. We could multiply <em>Condition_3</em> with two and contrast it with <em>Condition_1</em> and <em>Condition_2</em>. Doing so makes the outcome within <em>Condition_2</em> twice as high in value. Alternatively, we can half the values of <em>Condition_1</em> and <em>Condition_2</em> by multiplying them by 0.5. Either way, it creates an equal fight since <em>Condition_3</em> will be up against both (i.e., the sum of) <em>Condition_1</em> and <em>Condition_2</em> and it <strong>respects the rule that the sum of values inside the vector is zero</strong>.
+<img src="images/ANOVA/Manova_3.png"></p>
+<div class="sourceCode" id="cb167"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Contrast "Condition_3" vs the average between "Condition_1" and "Condition_2"</span></span>
+<span><span class="va">diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">diff</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">Condition_1</span>, <span class="va">Condition_2</span>, <span class="va">Condition_3</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Analysis of Variance Table</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Response: cbind(Condition_1, Condition_2, Condition_3) %*% M</span></span>
+<span><span class="co">#&gt;           Df Sum Sq Mean Sq F value Pr(&gt;F)</span></span>
+<span><span class="co">#&gt; Residuals 99 2616.2  26.426</span></span></code></pre></div>
+<p>Last example with one outcome variable, Up till now, we have only included one vector inside the (outcome) contrast matrix, and therefore we did not end up with a multivariate regression. Say you want to compare some conditions to one another.<br><img src="images/ANOVA/Manova_4.png"></p>
+<div class="sourceCode" id="cb168"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Contrast all</span></span>
+<span><span class="va">diff1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">diff2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">diff1</span>, <span class="va">diff2</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">Condition_1</span>, <span class="va">Condition_2</span>, <span class="va">Condition_3</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">mymodel</span>, test<span class="op">=</span><span class="st">"Wilks"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Analysis of Variance Table</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;             Df    Wilks approx F num Df den Df    Pr(&gt;F)</span></span>
+<span><span class="co">#&gt; (Intercept)  1 0.093849   473.11      2     98 &lt; 2.2e-16</span></span>
+<span><span class="co">#&gt; Residuals   99                                          </span></span>
+<span><span class="co">#&gt;                </span></span>
+<span><span class="co">#&gt; (Intercept) ***</span></span>
+<span><span class="co">#&gt; Residuals      </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+<p>We keep more than one outcome (i.e., two differences). One thing to note, the Anova() function will not anymore accept the classic F test statistic (or chi-squared test statistic). In the context of MANOVA, four common test statistics are used: the Pillai-Bartlett trace (coded as “pillai” within anova), Wilk’s likelihood ration (“Wilks”), Hoteling-Lawley trace (“Hoteling-Lawley”), and Roy’s Largest Root (“Roy”). Like with many tests, the power of these tests can depend on different factors including the sample size, (multivariate) normal distribution of outcomes, and so on. Therefore, at the moment of writing this guide, I cannot claim the superiority of one test above another.</p>
+<div id="practical-example-manova-two-outcome-variables" class="section level3" number="7.4.1">
+<h3>
+<span class="header-section-number">7.4.1</span> Practical example Manova: two outcome variables<a class="anchor" aria-label="anchor" href="#practical-example-manova-two-outcome-variables"><i class="fas fa-link"></i></a>
+</h3>
+<p>Let’s introduce the case of two outcomes variables. Suppose we receive data from a (quasi) experimental study. Participants went through two conditions, <em>condition_X</em> and <em>condition_Y</em> with two and three levels, respectively. In addition, participants’ gender was to be used as a predictor of the outcome.</p>
+<p>Like always we transform to wide format and aggregate our outcome across <em>condition_X</em> and <em>condition_Y</em>.</p>
+<div class="sourceCode" id="cb169"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">112358</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>contrasts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"contr.sum"</span>, <span class="st">"contr.sum"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">n_ID</span> <span class="op">=</span> <span class="fl">120</span>  <span class="co"># Increase number of IDs</span></span>
+<span><span class="va">n_rep</span> <span class="op">=</span> <span class="fl">60</span>  <span class="co"># Repetitions per ID</span></span>
+<span><span class="va">tot</span> <span class="op">=</span> <span class="va">n_ID</span> <span class="op">*</span> <span class="va">n_rep</span>  <span class="co"># Total number of rows</span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  ID <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_ID</span>, each <span class="op">=</span> <span class="va">n_rep</span><span class="op">)</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">tot</span>, <span class="fl">500</span>, <span class="fl">1000</span><span class="op">)</span>,</span>
+<span>  condition_X <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"absent"</span>, <span class="st">"present"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n_rep</span><span class="op">/</span><span class="fl">2</span>, times <span class="op">=</span> <span class="va">n_ID</span><span class="op">)</span>,</span>
+<span>  condition_Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"medium"</span>, <span class="st">"high"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n_rep</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span>, times <span class="op">=</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">n_ID</span><span class="op">)</span>,</span>
+<span>  gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"males"</span>, <span class="st">"female"</span><span class="op">)</span> , each <span class="op">=</span> <span class="fl">3600</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Long to wide</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape">reshape2</a></span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/cast.html">dcast</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mydata</span>, <span class="va">ID</span> <span class="op">+</span> <span class="va">gender</span> <span class="op">~</span> <span class="va">condition_X</span> <span class="op">+</span> <span class="va">condition_Y</span>, value.var <span class="op">=</span> <span class="st">"outcome"</span>, fun.aggregate <span class="op">=</span> <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"abs_l"</span>, <span class="st">"abs_m"</span>, <span class="st">"abs_h"</span>, <span class="st">"pres_l"</span>,<span class="st">"pres_m"</span>,<span class="st">"pres_h"</span><span class="op">)</span></span></code></pre></div>
+<p>Given the outcome (spreaded over two variables) and predictor we can test several things:
+1. Main effects in the outcomes
+2. Interaction effects in the outcomes
+3. Main effect in the predictor
+4. Interaction effects between outcomes and predictor</p>
+<p>In the remainder of this part, I will show you how to test each of these objectives and a way that does <strong>all in one go</strong> (without any outcome contrast matrix).</p>
+<p>First things first, I will fit a multivariate linear regression without a contrast matrix to extract the coefficients so that I know what to place where.</p>
+<div class="sourceCode" id="cb170"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span>  <span class="va">abs_l</span>, <span class="va">abs_m</span>, <span class="va">abs_h</span>, <span class="va">pres_l</span>, <span class="va">pres_m</span>, <span class="va">pres_h</span> <span class="op">)</span> <span class="op">~</span> <span class="va">gender</span> , data <span class="op">=</span> <span class="va">mydata</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   abs_l     abs_m       abs_h      pres_l</span></span>
+<span><span class="co">#&gt; (Intercept) 749.1389449 752.36649 748.6051946 746.4309883</span></span>
+<span><span class="co">#&gt; gender1      -0.0984652   2.10392   0.4240033   0.6321018</span></span>
+<span><span class="co">#&gt;                  pres_m    pres_h</span></span>
+<span><span class="co">#&gt; (Intercept) 749.1050034 751.80796</span></span>
+<span><span class="co">#&gt; gender1       0.8787361   7.01653</span></span></code></pre></div>
+<p>Alright, notice that <em>condition_X’s</em> “absent” level is spread across condition_Y’s low, medium, and high levels. The same goes for <em>condition_X’s</em> “present” level. Now, if we want to test the main effect of <em>condition_X</em> on the outcome we will need to look at the intercept. Specifically, we will need to test whether the difference between <em>condition_X</em>’s “absent” level is statistically significantly different from its “present” level. We could use the following outcome contrast matrix.
+<img src="images/ANOVA/Manova_5.png"></p>
+<div class="sourceCode" id="cb171"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">diff</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span>  <span class="va">abs_l</span>, <span class="va">abs_m</span>, <span class="va">abs_h</span>, <span class="va">pres_l</span>, <span class="va">pres_m</span>, <span class="va">pres_h</span> <span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="va">gender</span> , data <span class="op">=</span> <span class="va">mydata</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html">Anova</a></span><span class="op">(</span><span class="va">mymodel</span>, type<span class="op">=</span><span class="st">"III"</span>, test<span class="op">=</span><span class="st">"F"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Anova Table (Type III tests)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Response: cbind(abs_l, abs_m, abs_h, pres_l, pres_m, pres_h) %*% M</span></span>
+<span><span class="co">#&gt;              Sum Sq  Df F value Pr(&gt;F)</span></span>
+<span><span class="co">#&gt; (Intercept)     919   1  0.0860 0.7698</span></span>
+<span><span class="co">#&gt; gender         4462   1  0.4178 0.5193</span></span>
+<span><span class="co">#&gt; Residuals   1260382 118</span></span></code></pre></div>
+<p>As told before, the intercept will show you the main effect of <em>condition_X</em> but what about gender? <strong>Well this can be considered the interaction effect between gender and condition_X on the outcome, we have estimated a main effect and an interaction effect.</strong></p>
+<p>Good, onto <em>condition_Y</em> which has three levels “low”, “medium”, and “high” spread across the two levels of <em>condition_X</em>. The main effect here will be difference between these levels but there is a nuance You need only two out of three potential contrasts. If you know that low levels are not <strong>statistically significantly different</strong> from medium levels and that low levels are not <strong>statistically significantly different</strong> from high levels, then medium levels will not be <strong>statistically significantly different</strong> from high levels.
+<img src="images/ANOVA/Manova_6.png"></p>
+<div class="sourceCode" id="cb172"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Main effect</span></span>
+<span><span class="va">diff1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span> <span class="op">)</span> <span class="co"># low vs medium</span></span>
+<span><span class="va">diff2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fl">1</span>, <span class="fl">0</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="op">-</span><span class="fl">1</span> <span class="op">)</span> <span class="co"># low vs high</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">diff1</span>, <span class="va">diff2</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span>  <span class="va">abs_l</span>, <span class="va">abs_m</span>, <span class="va">abs_h</span>, <span class="va">pres_l</span>, <span class="va">pres_m</span>, <span class="va">pres_h</span> <span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="va">gender</span> , data <span class="op">=</span> <span class="va">mydata</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html">Anova</a></span><span class="op">(</span><span class="va">mymodel</span>, type<span class="op">=</span><span class="st">"III"</span>, test<span class="op">=</span><span class="st">"Wilks"</span><span class="op">)</span> <span class="co"># Just for demonstration purposes I switch the test statistic</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Type III MANOVA Tests: Wilks test statistic</span></span>
+<span><span class="co">#&gt;             Df test stat approx F num Df den Df Pr(&gt;F)</span></span>
+<span><span class="co">#&gt; (Intercept)  1   0.99582  0.24555      2    117 0.7827</span></span>
+<span><span class="co">#&gt; gender       1   0.99511  0.28725      2    117 0.7509</span></span></code></pre></div>
+<p>Again, the intercept shows the main effect and gender will show the interaction between itself and condition_Y.</p>
+<p>We can also have a look at the interaction between the outcome variables. In other words, is the difference <em>condition_X</em>’s “absent” and “present” levels, different over the levels of condition_y? To make a outcome contrast matrix for the interactions within outcome variables, you typically mirror the values (the “1” and “-1”) as shown below.</p>
+<div class="inline-figure"><img src="images/ANOVA/Manova_7.png"></div>
+<div class="sourceCode" id="cb173"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Interaction and three-way interaction</span></span>
+<span><span class="va">diff1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span> <span class="op">)</span> <span class="co"># high vs low</span></span>
+<span><span class="va">diff2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fl">0</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span> <span class="op">)</span> <span class="co"># high vs medium</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span><span class="va">diff1</span>, <span class="va">diff2</span><span class="op">)</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span>  <span class="va">abs_l</span>, <span class="va">abs_m</span>, <span class="va">abs_h</span>, <span class="va">pres_l</span>, <span class="va">pres_m</span>, <span class="va">pres_h</span> <span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="va">gender</span> , data <span class="op">=</span> <span class="va">mydata</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html">Anova</a></span><span class="op">(</span><span class="va">mymodel</span>, type<span class="op">=</span><span class="st">"III"</span>, test<span class="op">=</span><span class="st">"Hotelling-Lawley"</span><span class="op">)</span> <span class="co"># Just for demonstration purposes I switch the test statistic</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Type III MANOVA Tests: Hotelling-Lawley test statistic</span></span>
+<span><span class="co">#&gt;             Df test stat approx F num Df den Df Pr(&gt;F)</span></span>
+<span><span class="co">#&gt; (Intercept)  1 0.0108108  0.63243      2    117 0.5331</span></span>
+<span><span class="co">#&gt; gender       1 0.0094164  0.55086      2    117 0.5779</span></span></code></pre></div>
+<p>The intercepts shows the interaction effect, and <em>gender</em> now shows the three-way interaction between itself and <em>outcome_X</em>, and <em>outcome_Y</em>.</p>
+<p>Now, what if we want to look at the main effect of gender (i.e., separate from other variables)? <strong>This is will be the exception in which the sum of the values within the outcome contrast matrix is not zero.</strong> Specifically, I will set all values to 1/6 which will average the prediction of gender over each of our outcome variables.</p>
+<div class="sourceCode" id="cb174"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span> <span class="op">)</span> <span class="co"># high vs low</span></span>
+<span><span class="va">M</span> <span class="op">=</span> <span class="va">diff</span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span> <span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span>  <span class="va">abs_l</span>, <span class="va">abs_m</span>, <span class="va">abs_h</span>, <span class="va">pres_l</span>, <span class="va">pres_m</span>, <span class="va">pres_h</span> <span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">M</span> <span class="op">~</span> <span class="va">gender</span> , data <span class="op">=</span> <span class="va">mydata</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">mymodel</span>, test<span class="op">=</span><span class="st">"F"</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; Warning: In lm.fit(x, y, offset = offset, singular.ok = singular.ok, ...) :</span></span>
+<span><span class="co">#&gt;  extra argument 'test' will be disregarded</span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt;    aov(formula = mymodel, test = "F")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Terms:</span></span>
+<span><span class="co">#&gt;                   gender Residuals</span></span>
+<span><span class="co">#&gt; Sum of Squares    400.17  49919.47</span></span>
+<span><span class="co">#&gt; Deg. of Freedom        1       118</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residual standard error: 20.56809</span></span>
+<span><span class="co">#&gt; Estimated effects are balanced</span></span></code></pre></div>
+<p>I end this part with a neat trick. What if you could do all of the above without a single (outcome) contrast matrix? What is needed is a so called <strong>idata</strong> and <strong>idesign</strong>. The <strong>idata</strong> is a simple data frame object in which you specify your the variables that are contained within your conjoined outcome (here <em>condition_X</em> and <em>condition_Y</em>). In essence you recreate the following as a data set:
+<img src="images/ANOVA/Manova_8.png"></p>
+<div class="sourceCode" id="cb175"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">condition_X</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span>   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"absent"</span>,<span class="st">"present"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"absent"</span>,<span class="st">"present"</span><span class="op">)</span>   <span class="op">)</span></span>
+<span><span class="va">condition_Y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span>   <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"low"</span>,<span class="st">"medium"</span>, <span class="st">"high"</span><span class="op">)</span>, times <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"low"</span>,<span class="st">"medium"</span>, <span class="st">"high"</span><span class="op">)</span>   <span class="op">)</span></span>
+<span></span>
+<span><span class="va">idata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span> <span class="va">condition_X</span>, <span class="va">condition_Y</span> <span class="op">)</span></span>
+<span></span>
+<span><span class="va">mymodel</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="fu"><a href="https://amices.org/mice/reference/cbind.html">cbind</a></span><span class="op">(</span>  <span class="va">abs_l</span>, <span class="va">abs_m</span>, <span class="va">abs_h</span>, <span class="va">pres_l</span>, <span class="va">pres_m</span>, <span class="va">pres_h</span> <span class="op">)</span> <span class="op">~</span> <span class="va">gender</span>, data<span class="op">=</span><span class="va">mydata</span> <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/car/man/Anova.html">Anova</a></span><span class="op">(</span><span class="va">mymodel</span>, type<span class="op">=</span><span class="st">"III"</span>, idata<span class="op">=</span><span class="va">idata</span>, idesign<span class="op">=</span><span class="op">~</span><span class="va">condition_X</span><span class="op">*</span><span class="va">condition_Y</span>, test<span class="op">=</span><span class="st">"Wilks"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Type III Repeated Measures MANOVA Tests: Wilks test statistic</span></span>
+<span><span class="co">#&gt;                                Df test stat approx F num Df</span></span>
+<span><span class="co">#&gt; (Intercept)                     1   0.00074   159377      1</span></span>
+<span><span class="co">#&gt; gender                          1   0.99205        1      1</span></span>
+<span><span class="co">#&gt; condition_X                     1   0.99927        0      1</span></span>
+<span><span class="co">#&gt; gender:condition_X              1   0.99647        0      1</span></span>
+<span><span class="co">#&gt; condition_Y                     1   0.99582        0      2</span></span>
+<span><span class="co">#&gt; gender:condition_Y              1   0.99511        0      2</span></span>
+<span><span class="co">#&gt; condition_X:condition_Y         1   0.99340        0      2</span></span>
+<span><span class="co">#&gt; gender:condition_X:condition_Y  1   0.99146        1      2</span></span>
+<span><span class="co">#&gt;                                den Df Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; (Intercept)                       118 &lt;2e-16 ***</span></span>
+<span><span class="co">#&gt; gender                            118 0.3327    </span></span>
+<span><span class="co">#&gt; condition_X                       118 0.7698    </span></span>
+<span><span class="co">#&gt; gender:condition_X                118 0.5193    </span></span>
+<span><span class="co">#&gt; condition_Y                       117 0.7827    </span></span>
+<span><span class="co">#&gt; gender:condition_Y                117 0.7509    </span></span>
+<span><span class="co">#&gt; condition_X:condition_Y           117 0.6790    </span></span>
+<span><span class="co">#&gt; gender:condition_X:condition_Y    117 0.6056    </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  </span></span>
+<span><span class="co">#&gt; 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
+</div>
+<div id="referred-article-1" class="section level2" number="7.5">
+<h2>
+<span class="header-section-number">7.5</span> Referred article<a class="anchor" aria-label="anchor" href="#referred-article-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>(see the section concerning effect sizes):
+Brysbaert, M., &amp; Debeer, D. (2025). How to Run Linear Mixed Effects Analysis for Pairwise Comparisons? A Tutorial and a Proposal for the Calculation of Standardized Effect Sizes. <em>Journal of cognition, 8</em>(1), 5. <a href="https://doi.org/10.5334/joc.409">https://doi.org/10.5334/joc.409</a></p>
+
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></div>
+<div class="next"><a href="structural-equation-modelling-and-mediation.html"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#anova"><span class="header-section-number">7</span> Anova</a></li>
+<li>
+<a class="nav-link" href="#sum-and-treatment-contrasts"><span class="header-section-number">7.1</span> Sum and Treatment Contrasts</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#dummy-coding"><span class="header-section-number">7.1.1</span> Dummy-coding</a></li></ul>
+</li>
+<li>
+<a class="nav-link" href="#one-way-anova"><span class="header-section-number">7.2</span> One-way ANOVA</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#post-hoc-group-comparisons"><span class="header-section-number">7.2.1</span> Post-hoc group-comparisons</a></li>
+<li><a class="nav-link" href="#making-your-own-specific-hypotheses-and-contrasts."><span class="header-section-number">7.2.2</span> Making your own specific hypotheses and contrasts.</a></li>
+<li><a class="nav-link" href="#effect-sizes-1"><span class="header-section-number">7.2.3</span> Effect sizes</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#two-way-anova"><span class="header-section-number">7.3</span> Two-way ANOVA</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#four-different-types-of-anova"><span class="header-section-number">7.3.1</span> Four different types of ANOVA</a></li>
+<li><a class="nav-link" href="#two-way-anova-post-hoc-comparisons"><span class="header-section-number">7.3.2</span> Two-way ANOVA: Post-hoc comparisons</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#manova"><span class="header-section-number">7.4</span> MANOVA</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#practical-example-manova-two-outcome-variables"><span class="header-section-number">7.4.1</span> Practical example Manova: two outcome variables</a></li></ul>
+</li>
+<li><a class="nav-link" href="#referred-article-1"><span class="header-section-number">7.5</span> Referred article</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/07-Anova.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/07-Anova.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

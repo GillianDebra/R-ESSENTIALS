@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<meta name="author" content="Gillian Debra">
+<meta name="description" content="Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, merge datasets, and...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, merge datasets, and...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:description" content="Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, merge datasets, and...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.2/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Delighted to have you!Welcome to:</a></li>
+<li><a class="" href="loading-datafiles.html"><span class="header-section-number">1</span> Loading datafiles</a></li>
+<li><a class="" href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></li>
+<li><a class="active" href="data-cleaning-and-descriptive-statistics.html"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></li>
+<li><a class="" href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></li>
+<li><a class="" href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a></li>
+<li><a class="" href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></li>
+<li><a class="" href="anova.html"><span class="header-section-number">7</span> Anova</a></li>
+<li><a class="" href="structural-equation-modelling-and-mediation.html"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></li>
+<li><a class="" href="missing-data-and-multiple-imputation.html"><span class="header-section-number">9</span> Missing data and multiple imputation</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="data-cleaning-and-descriptive-statistics" class="section level1" number="3">
+<h1>
+<span class="header-section-number">3</span> Data cleaning and descriptive statistics<a class="anchor" aria-label="anchor" href="#data-cleaning-and-descriptive-statistics"><i class="fas fa-link"></i></a>
+</h1>
+<p>Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, <strong>merge datasets</strong>, and more.</p>
+<p>Fortunately, the data is fluid. It can be changed. reshaped. remade.</p>
+<p>This all requires some understanding of how to access different parts of your dataset, how to perform mathematical calculations in R, how to recode variables, and so on. After a brief overview, I will introduce you to <a href="https://dplyr.tidyverse.org/authors.html">dplyr package</a> - a personal favorite of mine - which simplifies preprocessing/cleaning.</p>
+<p>In this part I will be covering:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>How to access the different parts of dataset in R</strong>. This includes how to navigate and extract certain rows or columns from a dataset.</li>
+<li>
+<strong>How to do mathematical computations in R including the standard deviation and the kurtosis</strong>. In addition, I will show <strong>how to get multiple descriptive statistics of multiple variables</strong> in one code line. I will also show <strong>how to easily make a correlation matrix</strong>.</li>
+<li>
+<strong>Important functions of the dplyr package</strong>. I will explain and demonstrate a variety of functions that I commonly use in my data processing toolbox such as mutate and left_join.</li>
+<li>
+<strong>Ending with a demonstration of data preprocessing/cleaning a raw dataset from scratch</strong>.</li>
+</ol>
+<div id="access-different-parts-of-a-dataset" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Access different parts of a dataset<a class="anchor" aria-label="anchor" href="#access-different-parts-of-a-dataset"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s start with the demonstration or a refresher of the basics. For the examples below, I will generate my own dataset using the <strong>data.frame()</strong> function. As the values of this dataset will be generated at random, I will <em>set a seed</em> so that in each run, the generated data will be identical.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span> <span class="co"># Note, the number can be anything (but the results will be different )</span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  participant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, <span class="co"># generate the values 1 to 5 (1,2,3,4,5)</span></span>
+<span>  scores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">0</span>,<span class="fl">100</span><span class="op">)</span>, <span class="co"># generate 5 values (from a uniform distribution) between 0 and 100</span></span>
+<span>  gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"male"</span>,<span class="st">"female"</span>,<span class="st">"male"</span>,<span class="st">"female"</span>,<span class="st">"female"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div id="viewing-the-data" class="section level3" number="3.1.1">
+<h3>
+<span class="header-section-number">3.1.1</span> Viewing the data<a class="anchor" aria-label="anchor" href="#viewing-the-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now that I have made a dataset, I’ll briefly show you how to view your data as RStudio allows different ways to do so. With code:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">mydata</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> <span class="co"># shows the first 10 entries of a dataset</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> <span class="co"># Prompts the dataset in a separate window</span></span>
+<span><span class="co"># TEMPORARILY filter values, TEMPORARILY rearrange values, see changes in real-time, ... </span></span></code></pre></div>
+<p><strong>Next to writing code</strong>, you can also click on your datasets (under Environment, top right corner). The dataset will be shown in a separate window (similar to the <em>View()</em> code).
+<img src="images/Data%20cleaning/Cleaning_1.jpg"><br><br></p>
+<p>As shown in the image above, the “view window” allows to <strong>quickly track any changes</strong>. If you want you can use the view window outside of R**. Also practical, you can check specific entries in your dataset using the filter option and (temporarily) rearrange the data in an ascending or descending order to quickly check who or what has the highest or lowest score.</p>
+</div>
+<div id="several-examples" class="section level3" number="3.1.2">
+<h3>
+<span class="header-section-number">3.1.2</span> Several examples<a class="anchor" aria-label="anchor" href="#several-examples"><i class="fas fa-link"></i></a>
+</h3>
+<p>A dataset consists of rows and columns. In referring to these, R will <strong>first look at the rows</strong> and <strong>then at the columns</strong>. For example, <em>dataset</em>[1,2] will output the value at the cross point of the first row and second column (28.75775). Let’s learn through example.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># If I want to see the first row of all columns:</span></span>
+<span>  <span class="va">mydata</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span> <span class="co"># Again rows are on the left of the comma (columns on the right)</span></span>
+<span></span>
+<span>  <span class="co"># If I want to see rows 1 to 3 of all columns:</span></span>
+<span>  <span class="va">mydata</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># If I want to see rows 1,2, and 5 of all columns:</span></span>
+<span>  <span class="va">mydata</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>,<span class="op">]</span> <span class="co"># Here I have to use a "c" vector </span></span>
+<span></span>
+<span><span class="co"># Same goes for the columns. I can mention the column number (in my example 1= participant, 2= scores, 3=gender) </span></span>
+<span>  </span>
+<span>  <span class="co"># I want to see column 1 and 3 but by calling them by name instead their column number</span></span>
+<span>  <span class="va">mydata</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"participant"</span>, <span class="st">"gender"</span><span class="op">)</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># If you want to see one column. In R you can also ask it like this:</span></span>
+<span>  <span class="va">mydata</span><span class="op">$</span><span class="va">gender</span></span>
+<span></span>
+<span>  <span class="co"># If I want to see the value at column 2, row 3:</span></span>
+<span>  <span class="va">mydata</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># If I want to change the above value and add the value of row 5 and column 2</span></span>
+<span>  <span class="va">mydata</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">=</span> <span class="va">mydata</span><span class="op">[</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">mydata</span><span class="op">[</span><span class="fl">5</span>,<span class="fl">2</span><span class="op">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span> <span class="co"># Suppose I want to look at certain values. For example, I want to look at scores but only from females:</span></span>
+<span>  <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span><span class="va">mydata</span><span class="op">$</span><span class="va">gender</span><span class="op">==</span><span class="st">"female"</span><span class="op">]</span> <span class="co"># Within the column scores, search for scores that "row-wise"   corresponds with "female"</span></span>
+<span>  </span>
+<span>  <span class="co"># Suppose I want to look at scores from females who have a score of at least 85</span></span>
+<span>  <span class="co"># In other words: look to scores with condition "female" who have a "score&gt;=85"</span></span>
+<span>  <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span><span class="va">mydata</span><span class="op">$</span><span class="va">gender</span><span class="op">==</span><span class="st">"female"</span> <span class="op">&amp;</span> <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">&gt;=</span><span class="fl">85</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="co"># I want to look at scores from females and from participant 1 (a male)</span></span>
+<span>  <span class="co"># "female" OR "participant == 1"</span></span>
+<span>  <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span><span class="va">mydata</span><span class="op">$</span><span class="va">gender</span><span class="op">==</span><span class="st">"female"</span> <span class="op">|</span> <span class="va">mydata</span><span class="op">$</span><span class="va">participant</span><span class="op">==</span><span class="fl">1</span><span class="op">]</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class="co"># One final example, I want to look at scores from females with a score of above 90, males with a score below 30, and participant 3</span></span>
+<span>  <span class="co"># "female AND score&gt;90", "male AND score&lt;30"</span></span>
+<span>  <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">gender</span><span class="op">==</span><span class="st">"female"</span> <span class="op">&amp;</span> <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">&gt;</span><span class="fl">90</span><span class="op">)</span> <span class="op">|</span></span>
+<span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">gender</span><span class="op">==</span><span class="st">"male"</span> <span class="op">&amp;</span> <span class="va">mydata</span><span class="op">$</span><span class="va">scores</span><span class="op">&lt;</span><span class="fl">30</span><span class="op">)</span> <span class="op">|</span></span>
+<span>                <span class="va">mydata</span><span class="op">$</span><span class="va">participant</span> <span class="op">==</span><span class="fl">3</span></span>
+<span>              <span class="op">]</span></span></code></pre></div>
+<p>Insight in the above was required to compute novel variables and filter data. <strong>However</strong>, as I mentioned earlier, packages such as <strong>dplyr</strong> ease the majority of this work. There remains one obstacle before I move on to dplyr. While preprocessing/cleaning your data, you might have to transform your variables or compute new ones. Thus, knowledge concerning math calculations is essential.</p>
+<p>I will briefly show how to do different (basic) math calculations and how to make a correlation matrix in R. Although I have to note that there are different ways to do so.</p>
+</div>
+</div>
+<div id="mathematical-calculations-in-r" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Mathematical calculations in R<a class="anchor" aria-label="anchor" href="#mathematical-calculations-in-r"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Defining a new dataset (with the same name)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">0209</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>v1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">1</span>,<span class="fl">10</span><span class="op">)</span>,</span>
+<span>                     v2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">1</span>,<span class="fl">10</span><span class="op">)</span>,</span>
+<span>                     v3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">1</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div id="sum" class="section level3" number="3.2.1">
+<h3>
+<span class="header-section-number">3.2.1</span> Sum<a class="anchor" aria-label="anchor" href="#sum"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Take the sum across all values of column v1</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Take the sum row-wise (from v1 to v2) of each row</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span>    <span class="co"># Note, as expected, you get 10 outcomes.</span></span>
+<span>  </span>
+<span>  <span class="co"># Do the same but OUTPUT only the results of rows 1 to 3, 5, and 9 to 10</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">9</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="co"># Do the same but now CALCULATE and OUTPUT the "row wise sum" of v1 and 3</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"v1"</span>,<span class="st">"v3"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">5</span>,<span class="fl">9</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span></span>
+<span>  </span>
+<span>  <span class="co"># Compute the sum of values in column v2 and then do the same in column v3 </span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"v2"</span>,<span class="st">"v3"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Do the same but use only rows 5 and 7</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">7</span><span class="op">)</span>,</span>
+<span>               <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"v2"</span>,<span class="st">"v3"</span><span class="op">)</span><span class="op">]</span></span>
+<span>          <span class="op">)</span></span>
+<span>    <span class="co"># Quick note, I don't need to stay on the same line. To my knowledge, you can start a "new line" with "," "+/- etc." and brackets so that you provide R some expected "continuation" of the code.</span></span>
+<span>  </span></code></pre></div>
+</div>
+<div id="average" class="section level3" number="3.2.2">
+<h3>
+<span class="header-section-number">3.2.2</span> Average<a class="anchor" aria-label="anchor" href="#average"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Take the mean of column v1</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># take the mean rowwise</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Take the mean column wise but only using odd rows from v1 and v2 </span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="variance-standard-deviation-and-correlations" class="section level3" number="3.2.3">
+<h3>
+<span class="header-section-number">3.2.3</span> Variance, standard deviation, and correlations<a class="anchor" aria-label="anchor" href="#variance-standard-deviation-and-correlations"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># variance</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># standard deviation</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># (bivariate) correlations</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">v3</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">v3</span>, method<span class="op">=</span><span class="st">"spearman"</span><span class="op">)</span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span>, <span class="va">mydata</span><span class="op">$</span><span class="va">v3</span>, method<span class="op">=</span><span class="st">"kendall"</span><span class="op">)</span>  </span></code></pre></div>
+</div>
+<div id="other-calculations-and-the-describe-function" class="section level3" number="3.2.4">
+<h3>
+<span class="header-section-number">3.2.4</span> Other calculations and the describe function(!)<a class="anchor" aria-label="anchor" href="#other-calculations-and-the-describe-function"><i class="fas fa-link"></i></a>
+</h3>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># range</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># min/max (value)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Centering and standardizing</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span>, center<span class="op">=</span><span class="cn">TRUE</span>, scale<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="co"># will mean center variables</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span>, center<span class="op">=</span><span class="cn">TRUE</span>, scale<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="co"># will standardize variables</span></span>
+<span>  </span>
+<span>  <span class="co"># skewness and kurtosis (using the e1071 package)</span></span>
+<span>  <span class="fu">e1071</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/e1071/man/skewness.html">skewness</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span>
+<span>  <span class="fu">e1071</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/e1071/man/kurtosis.html">kurtosis</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">v1</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Or use the describe function from the <a href="https://cran.r-project.org/web/packages/psych/index.html">psych package</a> to have a quick overview</strong></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://personality-project.org/r/psych/">psych</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/describe.html">describe</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/psych/man/describe.html">describe</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"v1"</span>,<span class="st">"v3"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># If you want to use it for specific variables</span></span></code></pre></div>
+</div>
+<div id="what-if-there-are-missing-values" class="section level3" number="3.2.5">
+<h3>
+<span class="header-section-number">3.2.5</span> What if there are missing values?<a class="anchor" aria-label="anchor" href="#what-if-there-are-missing-values"><i class="fas fa-link"></i></a>
+</h3>
+<p>As it turns out, taking the sum, mean, correlation, among other things, will output NA if I would apply the above methods. Therefore, I will both illustrate and correct this issue:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">mini_data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">30</span>,<span class="fl">1</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                         b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">30</span>,<span class="fl">1</span>,<span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">mini_data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">]</span><span class="op">=</span><span class="cn">NA</span></span>
+<span>  <span class="va">mini_data</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">]</span><span class="op">=</span><span class="cn">NA</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">mini_data</span><span class="op">$</span><span class="va">a</span><span class="op">)</span> <span class="co"># NA</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mini_data</span><span class="op">)</span> <span class="co"># Only the last value is not NA</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mini_data</span><span class="op">$</span><span class="va">a</span>, <span class="va">mini_data</span><span class="op">$</span><span class="va">b</span><span class="op">)</span> <span class="co"># NA</span></span>
+<span>  </span>
+<span><span class="co"># To let the above functions ignore NA's (but proceed with caution, do the outcomes make sense in your individual specific case?)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">mini_data</span><span class="op">$</span><span class="va">a</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="co"># remove the NA ("ignore it")</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">mini_data</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> </span>
+<span>  </span>
+<span>  <span class="co"># With correlations we have to use different code:</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mini_data</span><span class="op">$</span><span class="va">a</span>, <span class="va">mini_data</span><span class="op">$</span><span class="va">b</span>, use <span class="op">=</span> <span class="st">"complete.obs"</span><span class="op">)</span> <span class="co"># Will apply listwise deletion (delete rows containing NA's)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">mini_data</span><span class="op">$</span><span class="va">a</span>, <span class="va">mini_data</span><span class="op">$</span><span class="va">b</span>, use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span><span class="op">)</span> <span class="co"># Will apply pairwise deletion (delete cases/cells containing NA's)</span></span>
+<span>    <span class="co"># In this example the result will remain the same irrespective from listwise or pairwise deletion</span></span></code></pre></div>
+</div>
+</div>
+<div id="correlation-matrices-and-visualisation" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Correlation matrices and visualisation<a class="anchor" aria-label="anchor" href="#correlation-matrices-and-visualisation"><i class="fas fa-link"></i></a>
+</h2>
+<p>It is often appreciated to show the correlations between all relevant variables in your dataset (personalliy, I frequently spot them in papers from social and behavioral disciplines). For this purpose I will create a new dataset in which variables are “taken from” a multivariate normal distribution and in which the correlations between variables are prespecified. For transparency I show how I made this dataset (in case you’re interested).</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># OPTIONAL, just if your interested in how to create a correlated dataset</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="co"># Using the MASS package I will create a dataset based on a multivariate normal distribution. To create one I need the following ingredients: the mean of the variables I want to generate and their variance covariance matrix</span></span>
+<span>  </span>
+<span>  <span class="co"># the mean (determined by me)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span>  <span class="va">a_mean</span> <span class="op">=</span> <span class="fl">6</span></span>
+<span>  <span class="va">b_mean</span> <span class="op">=</span> <span class="fl">8</span></span>
+<span>  <span class="va">c_mean</span> <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="va">d_mean</span> <span class="op">=</span> <span class="fl">5</span></span>
+<span></span>
+<span>  <span class="co"># the standard deviation for the variance covariance matrix (determined by me)</span></span>
+<span>  <span class="va">a_sd</span> <span class="op">=</span> <span class="fl">0.8</span> </span>
+<span>  <span class="va">b_sd</span> <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="va">c_sd</span> <span class="op">=</span> <span class="fl">0.4</span></span>
+<span>  <span class="va">d_sd</span> <span class="op">=</span> <span class="fl">1.5</span></span>
+<span>  </span>
+<span>  <span class="co"># Correlations between variables (determined by me)</span></span>
+<span>  <span class="va">cor_ab</span> <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span></span>
+<span>  <span class="va">cor_ac</span> <span class="op">=</span> <span class="fl">0.3</span></span>
+<span>  <span class="va">cor_ad</span> <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  <span class="va">cor_bc</span> <span class="op">=</span> <span class="fl">0.7</span></span>
+<span>  <span class="va">cor_bd</span> <span class="op">=</span> <span class="op">-</span><span class="fl">0.25</span></span>
+<span>  <span class="va">cor_cd</span> <span class="op">=</span> <span class="fl">0.15</span></span>
+<span></span>
+<span>  <span class="co"># Variance-covariance matrix</span></span>
+<span>  <span class="va">sigma</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">a_sd</span><span class="op">^</span><span class="fl">2</span>, <span class="va">a_sd</span><span class="op">*</span><span class="va">b_sd</span><span class="op">*</span><span class="va">cor_ab</span>, <span class="va">a_sd</span><span class="op">*</span><span class="va">c_sd</span><span class="op">*</span><span class="va">cor_ac</span>, <span class="va">a_sd</span><span class="op">*</span><span class="va">d_sd</span><span class="op">*</span><span class="va">cor_ad</span>,</span>
+<span>      <span class="va">b_sd</span><span class="op">*</span><span class="va">a_sd</span><span class="op">*</span><span class="va">cor_ab</span>, <span class="va">b_sd</span><span class="op">^</span><span class="fl">2</span>, <span class="va">b_sd</span><span class="op">*</span><span class="va">c_sd</span><span class="op">*</span><span class="va">cor_bc</span>, <span class="va">b_sd</span><span class="op">*</span><span class="va">d_sd</span><span class="op">*</span><span class="va">cor_bd</span>,</span>
+<span>      <span class="va">c_sd</span><span class="op">*</span><span class="va">a_sd</span><span class="op">*</span><span class="va">cor_ac</span>, <span class="va">c_sd</span><span class="op">*</span><span class="va">b_sd</span><span class="op">*</span><span class="va">cor_bc</span>, <span class="va">c_sd</span><span class="op">^</span><span class="fl">2</span>, <span class="va">c_sd</span><span class="op">*</span><span class="va">d_sd</span><span class="op">*</span><span class="va">cor_cd</span>,</span>
+<span>      <span class="va">d_sd</span><span class="op">*</span><span class="va">a_sd</span><span class="op">*</span><span class="va">cor_ad</span>, <span class="va">d_sd</span><span class="op">*</span><span class="va">b_sd</span><span class="op">*</span><span class="va">cor_bd</span>, <span class="va">d_sd</span><span class="op">*</span><span class="va">c_sd</span><span class="op">*</span><span class="va">cor_cd</span>, <span class="va">d_sd</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>    <span class="fl">4</span>,<span class="fl">4</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># The above variance-covariance matrix can also be made using the lazyCov() function from the rockchalk package</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rockchalk</span><span class="op">)</span></span>
+<span>  <span class="va">sigma</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/rockchalk/man/lazyCov.html">lazyCov</a></span><span class="op">(</span>Rho <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">cor_ab</span>, <span class="va">cor_ac</span>, <span class="va">cor_ad</span>, <span class="va">cor_bc</span>, <span class="va">cor_bd</span>, <span class="va">cor_cd</span><span class="op">)</span>,</span>
+<span>          Sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">a_sd</span>, <span class="va">b_sd</span>, <span class="va">c_sd</span>, <span class="va">d_sd</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Our correlations can be retrieved from our "sigma" object:</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="va">sigma</span><span class="op">)</span>,<span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1]  [,2] [,3]  [,4]</span></span>
+<span><span class="co">#&gt; [1,]  1.0 -0.20 0.30  0.50</span></span>
+<span><span class="co">#&gt; [2,] -0.2  1.00 0.70 -0.25</span></span>
+<span><span class="co">#&gt; [3,]  0.3  0.70 1.00  0.15</span></span>
+<span><span class="co">#&gt; [4,]  0.5 -0.25 0.15  1.00</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class="co"># Now we can create the dataset, I want 100 values per variable</span></span>
+<span>  <span class="va">n</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span>  </span>
+<span>  <span class="va">corr_data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">mvrnorm</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">n</span>, mu<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">a_mean</span>,<span class="va">b_mean</span>,<span class="va">c_mean</span>,<span class="va">d_mean</span><span class="op">)</span>, Sigma <span class="op">=</span> <span class="va">sigma</span>, empirical <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">corr_data</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"c"</span>,<span class="st">"d"</span><span class="op">)</span></span></code></pre></div>
+<p>Now, there are plethora of packages available to visualize correlations. I’ll point you to a relatively recent one <a href="https://cran.r-project.org/web/packages/corrtable/index.html">corrtable</a>. This package makes it easy to create and save a correlation matrix provided with frequentist p-value significance indications (“the significance stars”). In this dataset, I want to have the correlations between all variables. <strong>However</strong>, if you want to do this with a smaller subset of variables, then extract those variables first in a separate dataset and use this smaller dataset to create your correlation matrix.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span>  <span class="va">new_correlation_matrix</span> <span class="op">=</span> <span class="fu">corrtable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/corrtable/man/correlation_matrix.html">correlation_matrix</a></span><span class="op">(</span><span class="va">corr_data</span><span class="op">)</span> <span class="co"># your correlations accompanied with the significance stars</span></span>
+<span>  <span class="va">new_correlation_matrix</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/lower.tri.html">upper.tri</a></span><span class="op">(</span><span class="va">new_correlation_matrix</span><span class="op">)</span><span class="op">]</span><span class="op">=</span><span class="st">""</span> <span class="co"># Remove the upper part, so we get the typical triangle shape</span></span>
+<span>  <span class="va">new_correlation_matrix</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">new_correlation_matrix</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Or we can do the above in one step and save it to a csv file (to copy-paste it in Words)</span></span>
+<span>  <span class="fu">corrtable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/corrtable/man/save_correlation_matrix.html">save_correlation_matrix</a></span><span class="op">(</span>df<span class="op">=</span><span class="va">corr_data</span>,file<span class="op">=</span><span class="st">"data_files/corr_matrix.csv"</span>,digits<span class="op">=</span><span class="fl">3</span>,use<span class="op">=</span><span class="st">"lower"</span><span class="op">)</span></span></code></pre></div>
+<p>Note that you only get the significance stars. If you want the specific p-values from the above matrix you can use e.g., the cor_pmat() function from the <a href="https://cran.r-project.org/web/packages/ggcorrplot/index.html">ggcorrplot package</a>.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sthda.com/english/wiki/ggcorrplot-visualization-of-a-correlation-matrix-using-ggplot2">ggcorrplot</a></span><span class="op">)</span></span>
+<span>  <span class="va">mycorr_pvalues</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ggcorrplot/man/ggcorrplot.html">cor_pmat</a></span><span class="op">(</span><span class="va">corr_data</span><span class="op">)</span>,<span class="fl">3</span><span class="op">)</span> </span></code></pre></div>
+</div>
+<div id="dplyr-a-more-modern-approach-to-shape-data-." class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> Dplyr, a more modern approach to shape data (!).<a class="anchor" aria-label="anchor" href="#dplyr-a-more-modern-approach-to-shape-data-."><i class="fas fa-link"></i></a>
+</h2>
+<p>We finally arrive at the <strong>dplyr package</strong>. This package contains a variety of functions to ease data preprocessing/cleaning. For the purpose of this guide, I will go through some functions that I frequently use on my adventures in data analysis. If you are hungry for more, <strong>I highly recommend</strong> to have a look at the <a href="https://nyu-cdsc.github.io/learningr/assets/data-transformation.pdf">following cheat sheet (click here)</a>.</p>
+<p>In the various examples below, I will use a <strong>fabricated dataset</strong>. Next to the dplyr package, I will use the <a href="https://cran.r-project.org/web/packages/stringr/index.html">stringr package</a> (simplifying operations with strings/“text” variables) and the <a href="https://cran.r-project.org/web/packages/readxl/index.html">readxl package</a> (to load this fabricated dataset)</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">stringr</span>,<span class="va">readxl</span><span class="op">)</span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu">read_xlsx</span><span class="op">(</span><span class="st">"data_files/mydata.xlsx"</span><span class="op">)</span></span></code></pre></div>
+<div id="dplyr-filter" class="section level3" number="3.4.1">
+<h3>
+<span class="header-section-number">3.4.1</span> Dplyr: Filter<a class="anchor" aria-label="anchor" href="#dplyr-filter"><i class="fas fa-link"></i></a>
+</h3>
+<p>Let’s start with <strong>filter</strong> which “filters” entries (row-wise). The question here is what data (row-wise) you want to keep or what data you want to exclude. Off-note, in dplyr, we can do something called “pipelining” noted by adding <strong>%&gt;%</strong> in the code. Pipelining allows to do various calculations and functions on the same code line. So instead of
+do this
+do that
+do this…
+You can keep all of your code on the same line, <em>chaining your functions/calculations together</em> (<strong>as shown in later examples and my demonstration at the end</strong>).</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span>  <span class="co"># Suppose you want to only SHOW/KEEP rows that have a "1" in the variable "cond" (filtering out the rest)</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">cond</span><span class="op">==</span><span class="fl">1</span><span class="op">)</span> </span>
+<span>  <span class="co"># Notice the "%&gt;%" to start pipelining. Here I tell R in the dataset "mydata" to filter... </span></span>
+<span></span>
+<span>  <span class="co"># Show rows containing condition 1 and from participant 5</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">cond</span><span class="op">==</span><span class="fl">1</span>, <span class="va">participant</span><span class="op">==</span><span class="fl">5</span><span class="op">)</span> </span>
+<span>  </span>
+<span>  <span class="co"># Keep rows from participants 1 to 5</span></span>
+<span>  </span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">participant</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    <span class="co"># I recommend using %in% instead of only c(1:5) </span></span>
+<span>    <span class="co"># As the name suggests %in% implies "in range of ...". Here, in (range of) values of 1 to 5.</span></span>
+<span>  </span>
+<span>  <span class="co"># Keep all rows EXCEPT THOSE CONTAINING participant 4</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">participant</span> <span class="op">==</span><span class="fl">4</span><span class="op">)</span> </span>
+<span>    <span class="co"># Notice the "!" this mean NOT or in this context DO NOT KEEP/KICK OUT ...</span></span>
+<span>  </span>
+<span>  <span class="co"># Keep rows from participants 1, 3, and 5 EXCEPT THOSE containing a rt of 0.245</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">participant</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span>, <span class="op">!</span><span class="va">rt</span><span class="op">==</span><span class="st">"0.245"</span> <span class="op">)</span> </span>
+<span>    <span class="co"># Note that rt is written as a character (hence "")</span></span>
+<span>  </span>
+<span>  <span class="co"># Exclude rows containing NA's (Not Administered, empty cells) in q_2</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">q_2</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Keep rows that contain the characters: "sagree" (to get "disagree" &amp; "heavily disagree") in q_1.</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">q_1</span>,<span class="st">"sagree"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="co"># For this you can use the stringr package </span></span></code></pre></div>
+</div>
+<div id="dplyr-select" class="section level3" number="3.4.2">
+<h3>
+<span class="header-section-number">3.4.2</span> Dplyr: Select<a class="anchor" aria-label="anchor" href="#dplyr-select"><i class="fas fa-link"></i></a>
+</h3>
+<p>Similar to filter, but here we will select or exclude columns/variables so we go “column-wise” instead of row-wise.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Select (KEEP) columns q_1 and r_2</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="va">q_1</span>, <span class="va">r_2</span> <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Select the columns whose name has/contains a "q" character (we can't use stringr here)</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># DO NOT select (EXCLUDE) column names ending with "ge", beginning with an "r", and containing the characters "ond".</span></span>
+<span>  <span class="co"># Exlude rows containing participant 3</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"ge"</span><span class="op">)</span>, <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"r"</span><span class="op">)</span>, <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"ond"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">participant</span> <span class="op">==</span><span class="fl">3</span><span class="op">)</span></span>
+<span>    <span class="co"># Note the beauty of PIPELINING '%&gt;%', I chain SELECT and FILTER on the same code line</span></span>
+<span>    <span class="co"># Note that I use "-" in SELECT instead of the "!" that I use in FILTER</span></span>
+<span>    <span class="co"># Why? From personal experience, using "!" in SELECT does not always yield the intended results</span></span>
+<span>    </span>
+<span>  <span class="co"># Alternatively, we could also use only one "-" in the above code:</span></span>
+<span>    <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/lm.ridge.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>  <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"ge"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"r"</span><span class="op">)</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">contains</a></span><span class="op">(</span><span class="st">"ond"</span><span class="op">)</span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">participant</span> <span class="op">==</span><span class="fl">3</span><span class="op">)</span></span>
+<span>    <span class="co"># Note that I add some unnecessary "spaces" in the c() part. This is just for clarity, you can add as much of these spaces as you want without repercussion</span></span></code></pre></div>
+</div>
+<div id="dplyr-mutate" class="section level3" number="3.4.3">
+<h3>
+<span class="header-section-number">3.4.3</span> Dplyr: Mutate<a class="anchor" aria-label="anchor" href="#dplyr-mutate"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now that we can include or exclude certain columns and rows, we want to start transforming our variables. in dplyr language we will <strong>mutate</strong> them. The beauty with mutate, is that we can do multiple <em>mutations</em> in one go.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  </span>
+<span>  <span class="co"># Suppose I want to create a novel variable containing the natural logarithm of the variable "rt". I do NOT want to overwrite the original "rt" variable</span></span>
+<span>  <span class="co"># Since rt is a character (and not a number) I will FIRST transform/mutate it from character to numeric and THEN compute the natural logarithm</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rt_log <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, rt_log <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span> <span class="op">)</span> </span>
+<span>  </span>
+<span>  </span>
+<span>  <span class="co"># I will now permanently (because mydata = mydata %&gt;% ...) set rt to be a number (all code up til now were temporarily)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># You can also transform all variables into a specific type, here transform all numeric variables to "factor"</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_if</a></span><span class="op">(</span><span class="va">is.numeric</span>,<span class="va">as.factor</span><span class="op">)</span></span>
+<span></span>
+<span>  </span>
+<span>  <span class="co"># For the next example, suppose you questionnaire items (noted by a "q" in the variable name). Suppose you want to add 2 to each of these items (but temporarily). Here we can use "across" as will be explained below</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span>,</span>
+<span>                                    <span class="op">~</span><span class="va">.</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">)</span> <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># In this context, "across" can be translated as "in each". For each variable starting with "q", we add "~" to indicate that the following function should be applied. Next, The dot represents the variable itself (which starts with "q"). In summary. Across (in each) variable starting with "q", do the following: add 2 to each variable (starting with "q").</span></span>
+<span>  </span>
+<span>  <span class="co"># Important detail, across tends to "apply the following", one variable at a time, and not simultaneously. So pay attention with certain function (such as rowMeans), as explained below.</span></span></code></pre></div>
+<p><strong>Watch out if you use <em>across</em> in combination with another function that uses variables simultaneously (such as rowMeans or rowSums)!</strong> Again, <em>across</em> works with variables “one at a time”. Luckily, this can be easily fixed by knowing where to place <em>across</em>.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Lets take the row-wise average score of all variables starting with "q" (ignoring empty variables)</span></span>
+<span><span class="co"># HOWEVER, doing it wrong first (so expect an error)</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>average_score<span class="op">=</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="va">.</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    </span>
+<span>    <span class="co"># Why this error in the case of rowMeans? Well, rowMeans is function that works with all variables SIMULTANEOUSLY (since it is an average). This can be fixed by putting "across" within rowMeans. So pay attention were you put across and all will be fine.</span></span>
+<span>      <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>average_score<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>A final example</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>    <span class="co"># Similar example but a "bit more advanced". Say we want to have a sum score across variables starting with "q". However, now we want to set this sum score to NA (empty/not administered) if at least ONE value is NA/missing (row-wise).</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>na_count<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                             average_score<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">na_count</span><span class="op">&gt;=</span><span class="fl">1</span>, <span class="cn">NA</span>, <span class="va">average_score</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div id="recoding-questionnaire-items" class="section level4" number="3.4.3.1">
+<h4>
+<span class="header-section-number">3.4.3.1</span> (Re)coding (questionnaire) items<a class="anchor" aria-label="anchor" href="#recoding-questionnaire-items"><i class="fas fa-link"></i></a>
+</h4>
+<p>In surveys there is often a need to (re)code responses (like <em>agree</em> and <em>totally disagree</em>), giving these a numerical value. Fortunately, the mutate function is a versatile in this regard as well. One way is to use the versatile <em>ifelse</em> function within mutate (<strong>but see a more straightforward approach afterwards</strong>). In short, you first need to specify a condition (e.g., if the item is scored as <em>“agree”</em>), then you specify what should be done if so (the item should be given a value of…), and finally you indicate what value should be given if not. Lets give an <em>“easy”</em> example</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># If the variable q_1 is scored as "heavily disagree", give it value a 1, else give it a value of 0</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>q_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">q_1</span><span class="op">==</span><span class="st">"heavily disagree"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>       <span class="op">)</span></span></code></pre></div>
+<p>Looks straightforward right? However, suppose you have five response categories:</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>q_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
+<span>    <span class="va">q_1</span><span class="op">==</span><span class="st">"heavily disagree"</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
+<span>      <span class="va">q_1</span><span class="op">==</span> <span class="st">"disagree"</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
+<span>        <span class="va">q_1</span><span class="op">==</span><span class="st">"neutral"</span>, <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
+<span>          <span class="va">q_1</span><span class="op">==</span><span class="st">"agree"</span>, <span class="fl">4</span>, <span class="fl">5</span></span>
+<span>        <span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The above follows the same logic (if…, do …, else do…) but a lot of brackets… and unnecessary in this case. Not to speak ill about about the ifelse() function, it is very flexible in numerous situations. Fortunately in this context, there exist a more straightforward alternative: <strong>recode</strong>. With recode I can give text (“agree”) a numerical value, and a value (2) a textual value. Let us redo the above example and change text to numbers, and back.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span> <span class="co"># Take again the example with five response categories. </span></span>
+<span> <span class="co"># Lets recode text to numbers:</span></span>
+<span>  </span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    q_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/car/man/recode.html">recode</a></span><span class="op">(</span><span class="va">q_1</span>,</span>
+<span>      <span class="st">'heavily disagree'</span> <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>      <span class="st">'disagree'</span> <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>      <span class="st">'neutral'</span> <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>      <span class="st">'agree'</span> <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>      <span class="st">'heavily agree'</span> <span class="op">=</span> <span class="fl">5</span></span>
+<span>    <span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Lets change it back from numbers to text</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>  q_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/car/man/recode.html">recode</a></span><span class="op">(</span><span class="va">q_1</span>,</span>
+<span>  <span class="st">'1'</span>  <span class="op">=</span> <span class="st">"heavily disagree"</span>,</span>
+<span>  <span class="st">'2'</span> <span class="op">=</span> <span class="st">"disagree"</span>,</span>
+<span>  <span class="st">'3'</span>  <span class="op">=</span> <span class="st">"neutral"</span>,</span>
+<span>  <span class="st">'4'</span>  <span class="op">=</span> <span class="st">"agree"</span>,</span>
+<span>  <span class="st">'5'</span>  <span class="op">=</span> <span class="st">"heavily agree"</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Lets recode from text to numbers in all variables starting with "q".</span></span>
+<span>  <span class="co"># I will apply these changes permanently to my dataset (mydata = mydata %&gt;% ...)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q"</span><span class="op">)</span>,</span>
+<span>                             <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/car/man/recode.html">recode</a></span><span class="op">(</span><span class="va">.</span>,</span>
+<span>                                      <span class="st">'heavily disagree'</span> <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                      <span class="st">'disagree'</span> <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                                      <span class="st">'neutral'</span> <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                      <span class="st">'agree'</span> <span class="op">=</span>  <span class="fl">4</span>,</span>
+<span>                                      <span class="st">'heavily agree'</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>                             <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div id="dplyr-arrange" class="section level3" number="3.4.4">
+<h3>
+<span class="header-section-number">3.4.4</span> Dplyr: Arrange<a class="anchor" aria-label="anchor" href="#dplyr-arrange"><i class="fas fa-link"></i></a>
+</h3>
+<p>Arrange data in ascending or descending order based on value or alphabetical order.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span>  <span class="co"># Arrange reaction time (rt) from lowest value ascending to highest</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Arrange rt from highest value descending to lowest</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Arrange on both age and rt</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">age</span>,<span class="va">rt</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="dplyr-group_by-and-summarize" class="section level3" number="3.4.5">
+<h3>
+<span class="header-section-number">3.4.5</span> Dplyr: Group_by and Summarize<a class="anchor" aria-label="anchor" href="#dplyr-group_by-and-summarize"><i class="fas fa-link"></i></a>
+</h3>
+<p>Suppose we want to compute something like the sum or mean, per <em>“cluster variable”</em> such as per each participant, per each condition, per each plant or animal species… We can do so by grouping and then summarizing it, which will create <strong>a tinier dataset including the desired computation(s)</strong>. First we will need to define our “grouping/cluster” variables. Then we need to indicate what we want to do per this cluster variable. As an illustration, suppose you want to have an average per participant.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">tempdata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  participant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>, <span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>, <span class="fl">7</span>,<span class="fl">8</span>,<span class="fl">9</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">participant</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/rockchalk/man/summarize.html">summarize</a></span><span class="op">(</span>average_per_participant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">score</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure">You may “visualize” the above procedure as:
+<img src="images/Data%20cleaning/Cleaning_3.png">
+Note that you can group by multiple variables (e.g., participants within countries). Below, some examples with group by and summarize.</div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  </span>
+<span>  <span class="co"># Suppose we want to compute the mean and sd for rt per participant.</span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">participant</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/rockchalk/man/summarize.html">summarize</a></span><span class="op">(</span>aggr_rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, sd_rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    <span class="co"># Again, note that the output is a seperate dataset</span></span>
+<span>    <span class="co"># If you want, we can "glue" our freshly computed mean and standard deviation to each corresponding participant</span></span>
+<span>    <span class="co"># Below, a sneak peak on how to do the above (WITHOUT SAVING THE "NEW SMALLER DATASET" FIRST).  </span></span>
+<span>  <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">participant</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/rockchalk/man/summarize.html">summarize</a></span><span class="op">(</span>aggr_rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, sd_rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="dplyr-join" class="section level3" number="3.4.6">
+<h3>
+<span class="header-section-number">3.4.6</span> Dplyr: Join<a class="anchor" aria-label="anchor" href="#dplyr-join"><i class="fas fa-link"></i></a>
+</h3>
+<p>As I demonstrated above, the obtained smaller dataset can be <em>glued</em> to the original one if desired. This glueing of datasets often can come in handy. For example, suppose you ran an experiment and you obtain two separate data files: one from the experiment itself and one on the demographics from the participant. Say you want to <em>test</em> how the main effect of some variable is moderated by some demographic, you will need to merge both data files into one dataset.</p>
+<p>There exist different types of join() such as inner_join, right_join. Personally, I mainly use left_join() since it is straightforward. The idea is that I put two datasets into this function so e.g., left_join(dataset_1, dataset_2). What it will do is to <strong>find variables that both datasets share, variables that share the same name and the same type (numeric or character)</strong>. After identifying these shared so called “key variables”, it will then glue all “non-shared” variables. In our example with left_join(), it will glue data_set 2 to data_set 1 (so the second argument “dataset_2” <strong>to the left</strong> of argument “dataset_1). A visual example:
+<img src="images/Data%20cleaning/Cleaning_4.jpg"></p>
+<p>My advice, after joining, <strong>always check whether the amount of variables in your original dataset stayed the same</strong>. Sometimes it could be that (unbeknownst to you) there are <strong>duplicates</strong> or <strong>empty values (coded as NA)</strong> in your variables. This may lead to left_join returning more values. So check for these if you would encounter this problem. What also could help is to make sure that your second dataset (the one to glued on the main one) is as small as possible (while withholding necessary information) and here group_by and summarize could help. Below, a small example of left_join, the last one before we move to a “live” demonstration of data preprocessing.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span>  <span class="co"># Say we want to "join/glue" the aggregated rt and sd from the previous code exaple to the main dataset </span></span>
+<span>  <span class="va">data_aggr</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">participant</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/rockchalk/man/summarize.html">summarize</a></span><span class="op">(</span>aggr_rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, sd_rt<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">mydata</span>, <span class="va">data_aggr</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="practical-example-data-shapingcleaning" class="section level3" number="3.4.7">
+<h3>
+<span class="header-section-number">3.4.7</span> Practical example data shaping/cleaning<a class="anchor" aria-label="anchor" href="#practical-example-data-shapingcleaning"><i class="fas fa-link"></i></a>
+</h3>
+<p>If this was your first encounter with dplyr, all these different functions might be overwhelming. I understand.</p>
+<p>For me personally, what I find most appealing about dplyr is that by “chaining” different functions (pipelining) and by allowing to do multiple things at once, it made data preproccesing and my R scripts in general, less chaotic for myself. Yes, <em>%&gt;% this and %&gt;% that</em>… can lead to <em>behemoths of code</em> that may seem intimidating at first. As with everything new, the beginning can feel akward. Perhaps by further example, things become clearer.</p>
+<p>To conclude this section, I will demonstrate a complete example from scratch, integrating what we have learned about dplyr so far (plus some new elements added along the way). I made two raw datasets: a <em>main</em> dataset (<em>mydata_prac.xlsx</em>) and a smaller one (<em>mydata_prac_add.csv</em>). In a nutshell I will have to do the following preprocessing steps:
+1. Check my data
+2. Recode/rename/transform/create variables
+3. Join datasets
+4. Create the preprocessed dataset</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">############################</span></span>
+<span><span class="co"># Preprocessing example    #</span></span>
+<span><span class="co">############################  </span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">dplyr</span>,<span class="va">stringr</span>,<span class="va">corrtable</span>,<span class="va">readxl</span>, <span class="va">haven</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>scipen<span class="op">=</span><span class="fl">999</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">54321</span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="co">##</span></span>
+<span><span class="co"># Load data file and inspect data</span></span>
+<span><span class="co">##  </span></span>
+<span>  </span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="fu">read_xlsx</span><span class="op">(</span><span class="st">"data_files/mydata_prac.xlsx"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># -&gt; So far so good. However, one participant shows no data so here I decide to delete this one (filter it out)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">participant</span><span class="op">==</span><span class="fl">11</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># -&gt; Ok so now I should have 10 partipants, let's quickly check. </span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">participant</span><span class="op">)</span><span class="op">)</span> </span>
+<span>  </span>
+<span><span class="co">##</span></span>
+<span><span class="co">#  Recode variables</span></span>
+<span><span class="co">##</span></span>
+<span>  </span>
+<span>  <span class="co"># Items "q" need to be recoded to values (heavily disagree = 1 ; heavily agree = 5)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q_"</span><span class="op">)</span>,</span>
+<span>                                   <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/car/man/recode.html">recode</a></span><span class="op">(</span><span class="va">.</span>,<span class="st">'heavily disagree'</span> <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                             <span class="st">'disagree'</span> <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>                                             <span class="st">'neutral'</span> <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                             <span class="st">'agree'</span> <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                             <span class="st">'heavily agree'</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span>                                    <span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Turns out question q_1 and q_2 need to be REVERSED code</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q_"</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"3"</span><span class="op">)</span>,</span>
+<span>                                    <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">.</span><span class="op">-</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="co"># -&gt; note !ends_with = does NOT end with; abs take the absolute value otherwise I end up with negative values.                              </span></span>
+<span>                                    </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> <span class="co"># Check your data                            </span></span>
+<span></span>
+<span><span class="co">###  </span></span>
+<span><span class="co">#   Rename and transform variables  </span></span>
+<span><span class="co">###</span></span>
+<span>  </span>
+<span>  <span class="co"># First off the "age" variable was misnamed and should be called "date_of_birth"</span></span>
+<span>  <span class="co"># Similarly, "q_3" is actually "r_4"</span></span>
+<span>  <span class="co"># rt is not a character but should be coded as a numerical value. Participant should be coded as a factor</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>birth_date<span class="op">=</span><span class="va">age</span>, r_4 <span class="op">=</span> <span class="va">q_3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span>, participant <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">participant</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># -&gt; Note that the dataset reads as r_4; r_1; r_2; r_3</span></span>
+<span>    <span class="co"># -&gt; This may trigger someone so lets quickly change the order</span></span>
+<span>    <span class="co"># The current column number 7 ("r_4") needs to placed last:</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,<span class="fl">8</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">7</span><span class="op">)</span><span class="op">]</span> <span class="co"># from "participant" to "q_2", from "r_1" to "r_3", "r_4" </span></span>
+<span>  </span>
+<span><span class="co">###  </span></span>
+<span><span class="co">#   Compute new variables</span></span>
+<span><span class="co">###  </span></span>
+<span>  </span>
+<span>  <span class="co"># Moving on, I will create a variable "participant_age" which is the difference in time between the variable "birth_date" and a certain date (say the first of April 2023)</span></span>
+<span>  <span class="co"># I will use the packages anytime and lubridate </span></span>
+<span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">anytime</span>,<span class="va">lubridate</span><span class="op">)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>age <span class="op">=</span><span class="fu">time_length</span><span class="op">(</span></span>
+<span>    <span class="fu">interval</span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="fu">anytime</span><span class="op">(</span><span class="va">birth_date</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="st">"2023-04-01"</span><span class="op">)</span>  <span class="co"># Note, has to be in YYYY/MM/DD format.</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    unit <span class="op">=</span><span class="st">"year"</span> <span class="co"># To get the difference in years</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Next, I wish to compute the row-wise averages of the "q_" variables as well ass the "r_" variables. BUT I don't want to have the average (set to an empty value) if only one item was filled in (row-wise)</span></span>
+<span>  <span class="co"># Essentially, we have to base whether or not to average based on the sum of NA (a.k.a. empty values) per row</span></span>
+<span>  <span class="co"># In other technical words: if our the condition is met (the sum of NA's per row is 1 or lower), compute the mean (ignore NA's)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    q_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q_"</span><span class="op">)</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;=</span><span class="fl">1</span>,</span>
+<span>                     <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"q_"</span><span class="op">)</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,<span class="cn">NA</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    r_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"r_"</span><span class="op">)</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">&lt;=</span><span class="fl">1</span>,</span>
+<span>                     <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"r_"</span><span class="op">)</span><span class="op">)</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>,<span class="cn">NA</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>    <span class="co"># Again be mindfull of where to put across.</span></span>
+<span>    <span class="co"># Check your data</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> </span>
+<span>    </span>
+<span>      <span class="co"># It worked... but some ages are set to zero. Transform 'em to NA</span></span>
+<span>      <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span> <span class="va">age</span><span class="op">==</span><span class="fl">0</span>,<span class="cn">NA</span>, <span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
+<span>      </span>
+<span>      <span class="co"># It is a good thing we frequently check our data :-)</span></span>
+<span></span>
+<span>  <span class="co"># Next, PER PARTICIPANT, I want the average rt and the average of the freshly created "q_scale" and the "r_scale" (ignore NA).</span></span>
+<span>  <span class="co"># In addition, I want to grand-mean center the average rt per participant.</span></span>
+<span>  <span class="co"># For the first part, we can use the group_by() and summarize() combo. We could join the created miniature dataset with the main one to grand-mean center.</span></span>
+<span>  <span class="co"># I could glue datasets using left_join()... but in this example, I will "pipeline" all functions without "breaking the chain"</span></span>
+<span>  <span class="co"># To keep the chain intact, I will have to use right_join()</span></span>
+<span>  <span class="co"># You see, after "summarizing" the dataset, a miniature dataset will be created. From that moment, if you pipeline further, you will be using that miniature dataset. Now, with right_join(), you tell R: "use the first dataset (i.e., the miniature dataset) to glue it to the second one (i.e., our original dataset), which is exactly what we want to preserve the chain</span></span>
+<span>  </span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">participant</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/rockchalk/man/summarize.html">summarize</a></span><span class="op">(</span>  rt_average_part <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">rt</span>,na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                                                                                        q_average_part <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">q_scale</span>,na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                                                                                        r_average_part <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">r_scale</span>,na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">right_join</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rt_grand_mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">$</span><span class="va">rt</span>, center <span class="op">=</span> <span class="cn">TRUE</span>, scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Check. your. data.</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">###  </span></span>
+<span><span class="co">#   Merge datasets</span></span>
+<span><span class="co">###    </span></span>
+<span>  </span>
+<span>  <span class="co"># Let's wrap it up. Glue the "mydata_prac_add.csv" to the main one and recode gender into words (1 = female, 2 = male)</span></span>
+<span>  <span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">mydata</span>, <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"data_files/mydata_prac_add.csv"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>gender <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">gender</span> <span class="op">==</span> <span class="fl">1</span>,<span class="st">"female"</span>,<span class="st">"male"</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># You know what to do</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/View.html">View</a></span><span class="op">(</span><span class="va">mydata</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Everything looks fine, save the "clean" dataset in a "clean" datafile.</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">mydata</span>,<span class="st">"data_files/mydata_prac_finished.csv"</span><span class="op">)</span> </span>
+<span>  </span>
+<span>  <span class="co"># Done.</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></div>
+<div class="next"><a href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#data-cleaning-and-descriptive-statistics"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></li>
+<li>
+<a class="nav-link" href="#access-different-parts-of-a-dataset"><span class="header-section-number">3.1</span> Access different parts of a dataset</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#viewing-the-data"><span class="header-section-number">3.1.1</span> Viewing the data</a></li>
+<li><a class="nav-link" href="#several-examples"><span class="header-section-number">3.1.2</span> Several examples</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#mathematical-calculations-in-r"><span class="header-section-number">3.2</span> Mathematical calculations in R</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#sum"><span class="header-section-number">3.2.1</span> Sum</a></li>
+<li><a class="nav-link" href="#average"><span class="header-section-number">3.2.2</span> Average</a></li>
+<li><a class="nav-link" href="#variance-standard-deviation-and-correlations"><span class="header-section-number">3.2.3</span> Variance, standard deviation, and correlations</a></li>
+<li><a class="nav-link" href="#other-calculations-and-the-describe-function"><span class="header-section-number">3.2.4</span> Other calculations and the describe function(!)</a></li>
+<li><a class="nav-link" href="#what-if-there-are-missing-values"><span class="header-section-number">3.2.5</span> What if there are missing values?</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#correlation-matrices-and-visualisation"><span class="header-section-number">3.3</span> Correlation matrices and visualisation</a></li>
+<li>
+<a class="nav-link" href="#dplyr-a-more-modern-approach-to-shape-data-."><span class="header-section-number">3.4</span> Dplyr, a more modern approach to shape data (!).</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#dplyr-filter"><span class="header-section-number">3.4.1</span> Dplyr: Filter</a></li>
+<li><a class="nav-link" href="#dplyr-select"><span class="header-section-number">3.4.2</span> Dplyr: Select</a></li>
+<li><a class="nav-link" href="#dplyr-mutate"><span class="header-section-number">3.4.3</span> Dplyr: Mutate</a></li>
+<li><a class="nav-link" href="#dplyr-arrange"><span class="header-section-number">3.4.4</span> Dplyr: Arrange</a></li>
+<li><a class="nav-link" href="#dplyr-group_by-and-summarize"><span class="header-section-number">3.4.5</span> Dplyr: Group_by and Summarize</a></li>
+<li><a class="nav-link" href="#dplyr-join"><span class="header-section-number">3.4.6</span> Dplyr: Join</a></li>
+<li><a class="nav-link" href="#practical-example-data-shapingcleaning"><span class="header-section-number">3.4.7</span> Practical example data shaping/cleaning</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/03-Preprocessing.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/03-Preprocessing.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

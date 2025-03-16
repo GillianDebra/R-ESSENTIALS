@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 2 Communicate with others: a quick glance at R projects and R markdown | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<meta name="author" content="Gillian Debra">
+<meta name="description" content="2.1 R projects We finally loaded a data file and, after we got through the next parts, processed and analyzed it. One day someone (likely your colleague) who works on the same or similar project...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 2 Communicate with others: a quick glance at R projects and R markdown | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:type" content="book">
+<meta property="og:description" content="2.1 R projects We finally loaded a data file and, after we got through the next parts, processed and analyzed it. One day someone (likely your colleague) who works on the same or similar project...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 2 Communicate with others: a quick glance at R projects and R markdown | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:description" content="2.1 R projects We finally loaded a data file and, after we got through the next parts, processed and analyzed it. One day someone (likely your colleague) who works on the same or similar project...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.2/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Delighted to have you!Welcome to:</a></li>
+<li><a class="" href="loading-datafiles.html"><span class="header-section-number">1</span> Loading datafiles</a></li>
+<li><a class="active" href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></li>
+<li><a class="" href="data-cleaning-and-descriptive-statistics.html"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></li>
+<li><a class="" href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></li>
+<li><a class="" href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a></li>
+<li><a class="" href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></li>
+<li><a class="" href="anova.html"><span class="header-section-number">7</span> Anova</a></li>
+<li><a class="" href="structural-equation-modelling-and-mediation.html"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></li>
+<li><a class="" href="missing-data-and-multiple-imputation.html"><span class="header-section-number">9</span> Missing data and multiple imputation</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown<a class="anchor" aria-label="anchor" href="#communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown"><i class="fas fa-link"></i></a>
+</h1>
+<div id="r-projects" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> R projects<a class="anchor" aria-label="anchor" href="#r-projects"><i class="fas fa-link"></i></a>
+</h2>
+<p>We finally loaded a data file and, after we got through the next parts, processed and analyzed it. One day someone (likely your colleague) who works on the same or similar project wants to make some corrections to your code. They ask you to share the data file and R code. Inspect the following R code line. What would be inconvenient for your colleague?</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span> <span class="va">myfile</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"Users/Gillian/folder/datafile.csv"</span>, na.string<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>,<span class="st">"NA"</span>,<span class="st">"NaN"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Unless you’re close with that person and they can always use your computer, they likely have a different file location and working directory on their computer. Thus, they will need to <strong>adjust the R code</strong>. Sometime later, they send their version of the R script. On your computer, you will have to <strong>adjust the R code</strong>. Your computer crashes, you get a new one, you will need to <strong>adjust the R code</strong>.</p>
+<p><strong>Not efficient.</strong></p>
+<p>Fortunately, we can create a folder on our computer, let’s call it <strong>“My_Project”</strong>, and put a R project in it. Whenever you click on the R project, the working directory will automatically update to the location of this project. You can now move all your data files and scripts to this folder (or subfolders) and send it to your colleague. In turn, they can put this folder <strong>wherever</strong> they want <strong>without having to adjust the R code</strong>.</p>
+<p>Open R Studio and click on the blue cube (top right corner).</p>
+<p><img src="images/Prologue/Prologue_1.jpg"><br><br></p>
+<p>This will prompt a window to a New or Existing directory. With a “New Directory”, you create a new folder with an R project inside. So if I want to have a project in a folder “My_Project” on my desktop (with “etc.” = the location of the desktop):</p>
+<p><img src="images/Prologue/Prologue_2.jpg"><br><br></p>
+<p>With an “Existing Directory”, the R project will be placed in the desired location without creating extra (sub)folders. So after I create the folder “My_Project” on my desktop:</p>
+<p><img src="images/Prologue/Prologue_3.jpg"><br><br></p>
+<p>Navigate to the R project folder. I also made an new R script and put it in the folder</p>
+<p><img src="images/Prologue/Prologue_4.png"><br><br></p>
+<p>Click on the R project and you see the following window. Note the “Files” window that now contains the project and R script. This window will automatically update if you put any new files or folders, and the working directory will always equal the location of the <strong>project</strong>.</p>
+<p><img src="images/Prologue/Prologue_5.jpg"><br><br></p>
+<p>In the Files window (bottom left corner) click on your R script and add your data files. Instead of calling the data file using “C:/…”, you can now simply call its name, provided the file is in the same location as the project.</p>
+<p><img src="images/Prologue/Prologue_6.jpg"><br><br></p>
+<p>If you put all your data files in separate folders, you simply need to include them:</p>
+<p><img src="images/Prologue/Prologue_7.jpg"><br><br></p>
+</div>
+<div id="r-markdown-brief" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> R Markdown (brief)<a class="anchor" aria-label="anchor" href="#r-markdown-brief"><i class="fas fa-link"></i></a>
+</h2>
+<p>You know how to exchange your data files and other materials using R projects. However, often you want share your work without requiring your <em>audience</em> to run your code from scratch. To address this need, R Markdown <strong>makes it easy to create and share reports (pdf, Word, HTML, or Powerpoint format)</strong> that can contain your steps in the analysis, your plots, and so on. Thus, it is a handy tool that promotes <strong>transparency and reproducibility</strong>.</p>
+<p>Beyond reports, R Markdown has extra capabilities. For example, this very own guide was created by combining multiple R Markdown documents (using R bookdown). Now, explaining this <em>file format for making dynamic documents</em> in full detail would be too much. Instead, I will very briefly go over some basics and give you “a behind the scenes” look.</p>
+<p>In R Studio go the empty paper symbol (<em>New File</em>) (top right corner) and click on R Markdown. The following window pops up.</p>
+<p><img src="images/Prologue/Prologue_8.png"><br><br></p>
+<p>From here you can define a document title, author, and date. This info can be changed later or it can be left empty. Concerning the Output format, you can choose PDF or Word documents but I personally prefer HTML as it supports plots (see the part about data visualization). The following default screen appears.</p>
+<p><img src="images/Prologue/Prologue_9.png"><br><br></p>
+<p>What is all this? Let’s start from the top
+By default you see something like this:
+<br><br><img src="images/Prologue/Prologue_11.png"></p>
+<p>I believe this is more or less self-explanatory. My advice would be to change the date to: <em>“2025-03-16”</em> so that the date automatically updates to the time you <strong>knit</strong> the document.
+Now with HTML documents we can add some extra customization options including a <strong>t</strong>able <strong>o</strong>f <strong>c</strong>ontent, and more. Behold the following example.
+<br><br></p>
+<div class="inline-figure"><img src="images/Prologue/Prologue_12.png"></div>
+<p>We introduce a table of contents, we make it “float” so that <strong>it stays present when scrolling down</strong>, and we include up to 4-level headings. Next, you may be wondering why we included something about a yeti and haddock highlights. The “yeti”, refers to one of many themes (others include: “darkly”, “cerulean”, “journal”, “spacelab”,and more) that <strong>determine the appearance of our HTML document</strong>. Haddock refers to the <strong>highlight style that sets the appearance of the R syntax</strong> (others include:“tango”,“espresso”,“zenburn”,“kate”, and more). Next, we have the <strong>figure settings</strong>. Here we say that we want all figures (plots) generated inside the Markdown document to have a height and width of 3 inches. Finally, with <em>number_section: TRUE</em>, we want to automatically add numbered sections.</p>
+<p>Now, what would any type of R document be without R code. To include R code (or code chunks as they are often referred to), you can use the key combination <strong>Alt + Ctrl + I</strong>.</p>
+<p>On to the text, outside of R code chunks, you have already noticed that I can put text in <strong>bold</strong> and in <em>italics</em>? I can also include hyper links where you just have to <a href="https://www.google.com/">click on a word or a sentence (click here) to be brought on the web page</a>.</p>
+<p>I can also add bullet points</p>
+<ul>
+<li>bullet point one
+<ul>
+<li>first sub point</li>
+<li>second sub point
+<ul>
+<li>first sub sub point</li>
+<li>second sub sub point</li>
+<li>third sub sub point</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Or I can do something like this</p>
+<ol style="list-style-type: decimal">
+<li>first</li>
+<li>second (and so on)</li>
+</ol>
+<p>I can add multiple headings to my document</p>
+</div>
+<div id="a-heading-level-two" class="section level2 unnumbered">
+<h2>A heading (level two)<a class="anchor" aria-label="anchor" href="#a-heading-level-two"><i class="fas fa-link"></i></a>
+</h2>
+<div id="another-heading-level-three" class="section level3 unnumbered">
+<h3>Another heading (level three)<a class="anchor" aria-label="anchor" href="#another-heading-level-three"><i class="fas fa-link"></i></a>
+</h3>
+<p>I add images like this (see below). This is what I see.
+<img src="images/Prologue/Prologue_10.png"><br><br></p>
+<p>And there you have it, the above provides a good basis to start creating your R Markdown documents but do realize that I only scratched the surface. If you finish your R Markdown document, the next and potentially final step is to <em>Knit</em> the document by pressing the combination: <strong>Ctrl + Shift + K</strong>.</p>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="loading-datafiles.html"><span class="header-section-number">1</span> Loading datafiles</a></div>
+<div class="next"><a href="data-cleaning-and-descriptive-statistics.html"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></li>
+<li><a class="nav-link" href="#r-projects"><span class="header-section-number">2.1</span> R projects</a></li>
+<li><a class="nav-link" href="#r-markdown-brief"><span class="header-section-number">2.2</span> R Markdown (brief)</a></li>
+<li>
+<a class="nav-link" href="#a-heading-level-two">A heading (level two)</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#another-heading-level-three">Another heading (level three)</a></li></ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/02-Communication.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/02-Communication.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>

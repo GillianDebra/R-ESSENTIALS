@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 8 Structural Equation Modelling and mediation | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<meta name="author" content="Gillian Debra">
+<meta name="description" content="Structural Equation Modelling (SEM) can be used to test hypotheses about relations between latent and observed (or at least measured in some way) variables. We have already seen SEM in action when...">
+<meta name="generator" content="bookdown 0.42 with bs4_book()">
+<meta property="og:title" content="Chapter 8 Structural Equation Modelling and mediation | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:type" content="book">
+<meta property="og:description" content="Structural Equation Modelling (SEM) can be used to test hypotheses about relations between latent and observed (or at least measured in some way) variables. We have already seen SEM in action when...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 8 Structural Equation Modelling and mediation | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:description" content="Structural Equation Modelling (SEM) can be used to test hypotheses about relations between latent and observed (or at least measured in some way) variables. We have already seen SEM in action when...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.5.0/transition.js"></script><script src="libs/bs3compat-0.5.0/tabs.js"></script><script src="libs/bs3compat-0.5.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script><script src="libs/plotly-binding-4.10.2/plotly.js"></script><script src="libs/typedarray-0.1/typedarray.min.js"></script><link href="libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
+<script src="libs/crosstalk-1.2.0/js/crosstalk.min.js"></script><link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Delighted to have you!Welcome to:</a></li>
+<li><a class="" href="loading-datafiles.html"><span class="header-section-number">1</span> Loading datafiles</a></li>
+<li><a class="" href="communicate-with-others-a-quick-glance-at-r-projects-and-r-markdown.html"><span class="header-section-number">2</span> Communicate with others: a quick glance at R projects and R markdown</a></li>
+<li><a class="" href="data-cleaning-and-descriptive-statistics.html"><span class="header-section-number">3</span> Data cleaning and descriptive statistics</a></li>
+<li><a class="" href="data-visualisation.html"><span class="header-section-number">4</span> Data visualisation</a></li>
+<li><a class="" href="reliability-indicators-confirmatory-factor-analysis-and-exploratory-factor-analysis.html"><span class="header-section-number">5</span> Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis</a></li>
+<li><a class="" href="regression-analysis.html"><span class="header-section-number">6</span> Regression analysis</a></li>
+<li><a class="" href="anova.html"><span class="header-section-number">7</span> Anova</a></li>
+<li><a class="active" href="structural-equation-modelling-and-mediation.html"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></li>
+<li><a class="" href="missing-data-and-multiple-imputation.html"><span class="header-section-number">9</span> Missing data and multiple imputation</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="structural-equation-modelling-and-mediation" class="section level1" number="8">
+<h1>
+<span class="header-section-number">8</span> <strong>Structural Equation Modelling and mediation</strong><a class="anchor" aria-label="anchor" href="#structural-equation-modelling-and-mediation"><i class="fas fa-link"></i></a>
+</h1>
+<p>Structural Equation Modelling (SEM) can be used to test hypotheses about relations between latent and observed (or at least measured in some way) variables. We have already seen SEM in action when discussing <strong>c</strong>onfirmatory <strong>f</strong>actor <strong>a</strong>nalysis but now I want to end this guide briefly talking about <strong>mediation</strong>. In this part I will discuss</p>
+<ol style="list-style-type: decimal">
+<li><strong>The basic mediation using the lavaan package</strong></li>
+<li>
+<strong>How to visualize results from a mediation using the</strong> <a href="https://cran.r-project.org/web/packages/semPlot/index.html">semPlot package</a>
+</li>
+<li><strong>The moderated mediation with categorical and continuous moderators.</strong></li>
+</ol>
+<div id="basic-mediation" class="section level2" number="8.1">
+<h2>
+<span class="header-section-number">8.1</span> Basic mediation<a class="anchor" aria-label="anchor" href="#basic-mediation"><i class="fas fa-link"></i></a>
+</h2>
+<p>Have you heard about those spurious correlations that arise when you correlate everything with everything? A classic textbook example is the positive correlation between ice cream consumption and drowning. Of course, <strong>correlation is not causation</strong>. So what we have here is a typical “direct” relation between outcome and predictor, which can be represented by a correlation coefficient or a regression coefficient.
+<img src="images/Mediation/Mediation_1.png"></p>
+<p>But why does ice cream consumption (predictor) relates to drowning (outcome)? We could reason that this relation was likely brought by other <strong>indirect relations</strong>. Ice cream consumption could be related to another variable, <strong>the mediator</strong>, and this mediator could relate to drowning. Through these “indirect pathways”, ice cream consumption may appear to be associated with drowning. The common explanation is that you tend to eat more ice cream when it is hot. Hot weather can increase susceptibiliy to heatstroke symptoms (the mediator). If you experience heatstroke symptoms when you go for a swim… unfortunate outcomes may occur</p>
+<p>Mediation analysis allows us to test to what extent a (direct) relation between variables can be explained by the (indirect) relations with other variables. Do not to confuse <strong>mediation with moderation</strong>, which examines whether the strength of an association depends on other variables. When you learn about mediation, you typically encounter “the triangle” (or trapezium, whatever you prefer):
+<img src="images/Mediation/Mediation_2.png"></p>
+<p>Have you noticed that I talk a lot about the “direct” and “indirect” relations? The direct relation (henceforth referred to as <strong>direct effect</strong>) is the relation between predictor(s) and outcome after adjusting for the mediator (which I will denote using <em>beta</em> coefficients). <strong>Indirect effects</strong> is the relation between predictor and outcome <strong>through the mediator</strong> and consists of two parts. First is the association between predictor and the mediator. Second is the association between the mediatior and outcome. Our goal is to determine the extent the mediator explains the direct relation between predictor and outcome.</p>
+<p>Before we continue, I want to address a common misconception. At the time of writing this guide, mediation analysis itself <strong>cannot confirm causal relations</strong>. Causality is a methodological issue. My advice would be to look into properly(!) randomized and properly(!) controlled experimental designs for causal inference.</p>
+</div>
+<div id="basic-example" class="section level2" number="8.2">
+<h2>
+<span class="header-section-number">8.2</span> Basic example<a class="anchor" aria-label="anchor" href="#basic-example"><i class="fas fa-link"></i></a>
+</h2>
+<p>A mediation analysis typically involves the two steps. <strong>First</strong>, like we did with confirmatory factor analysis, we specify our variables and their relations in a model structure (the SEM model structure).Here, we will need to specify the indirect, direct, and optionally the total effects, as I discuss later on.<strong>Second</strong>, we estimate the model based on our SEM model structure.</p>
+<p>I have made a simple dataset and took the liberty to load the lavaan package.</p>
+<div class="sourceCode" id="cb176"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">lavaan</span><span class="op">)</span>  </span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">54321</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">=</span> <span class="fl">250</span>  <span class="co"># Sample size</span></span>
+<span><span class="va">cor_Y_X</span> <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># correlation between outcome Y and predictor X </span></span>
+<span><span class="va">cor_Y_M</span> <span class="op">=</span> <span class="fl">0.6</span> <span class="co"># correlation between outcome Y and mediator M</span></span>
+<span><span class="va">cor_X_M</span> <span class="op">=</span> <span class="fl">0.7</span> <span class="co"># correlation between predictor X and mediator M</span></span>
+<span></span>
+<span><span class="va">predictor</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">20</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># Create the predictor</span></span>
+<span><span class="va">mediator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">15</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_X_M</span><span class="op">)</span> <span class="co"># Create a mediator that is associated with the above predictor </span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  predictor <span class="op">=</span> <span class="va">predictor</span>,</span>
+<span>  mediator <span class="op">=</span> <span class="va">mediator</span>, </span>
+<span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">25</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">mediator</span> <span class="op">*</span> <span class="va">cor_Y_M</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_Y_X</span><span class="op">)</span> <span class="co"># Outcome that is associated with both the predictor and mediator</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure">Alright let’s make the SEM model structure. Let’s have a look again at the mediation.
+<img src="images/Mediation/Mediation_3.png">
+</div>
+<p>In essence, we need to model the regressions and define the direct effect and indirect effect.
+Notice that we have three regressions: <strong>predictor -&gt; outcome</strong>, <strong>predictor -&gt; mediator</strong>, and <strong>mediator -&gt; outcome</strong>. The direct “effect” reflects the relation between predictor -&gt; outcome. So here our regression coefficient β(PO). For convention with many other work, <strong>I will call this regression coefficient “c”</strong>. The indirect effect is the product between two regression coefficients: β(PM) from the predictor -&gt; mediator regression (<strong>hencefort called “a”</strong>), and β(MO) from the mediator -&gt; outcome regression (<strong>“b”</strong>). If we want, we can also define the <strong>total “effect”</strong> which is <strong>the sum</strong> of the direct and indirect effect.</p>
+<p>Note that within my SEM model structure, I use the above letters a,b, and c, to represent my three regression coefficients. I use these letters to give the regression coefficients a name so that I can use them to compute the (in)direct and total effects (e.g., c*predictor will name the regression coefficient β(MO) as “c”).</p>
+<div class="sourceCode" id="cb177"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mystructure</span> <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># Regression outcome - predictor</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  outcome ~ c*predictor # with c being the regression coefficient between the two, beta(PM) in my figure</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st"># Indirect relation:</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  mediator ~ a*predictor # with a being the regression coefficient, beta(PM)</span></span>
+<span><span class="st">  outcome ~ b*mediator # </span></span>
+<span><span class="st">  </span></span>
+<span><span class="st">  # Alternatively you can redo the above like (without the # of course)</span></span>
+<span><span class="st">    # outcome ~ b*mediator + c*predictor</span></span>
+<span><span class="st">    # mediator ~ a*predictor</span></span>
+<span><span class="st">    </span></span>
+<span><span class="st"># The above is needed to compute indirect </span></span>
+<span><span class="st"></span></span>
+<span><span class="st">indirect := a*b</span></span>
+<span><span class="st">direct := c</span></span>
+<span><span class="st">total := (a*b) + c</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">'</span></span></code></pre></div>
+<p>Now we use feed the above to the <strong>sem() function</strong> from <strong>lavaan</strong>. I will also ask for bootstrap simulations as these could be important for obtaining reliable confidence intervals in mediation analysis. Note that I set the number of bootstrap simulations to 5 just for demonstration purpose. However, consider to have more of them (e.g., 500 or more).</p>
+<div class="sourceCode" id="cb178"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mymodel</span><span class="op">=</span><span class="fu">sem</span><span class="op">(</span><span class="va">mystructure</span>,data<span class="op">=</span><span class="va">mydata</span>, se <span class="op">=</span> <span class="st">"bootstrap"</span>, iseed<span class="op">=</span><span class="fl">1234</span>, bootstrap <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># I take 5 bootstrap simulation but consider 500+ when doing it for real </span></span>
+<span><span class="co">#&gt; Warning in lav_model_vcov(lavmodel = lavmodel, lavsamplestats = lavsamplestats, : lavaan WARNING:</span></span>
+<span><span class="co">#&gt;     The variance-covariance matrix of the estimated parameters (vcov)</span></span>
+<span><span class="co">#&gt;     does not appear to be positive definite! The smallest eigenvalue</span></span>
+<span><span class="co">#&gt;     (= 8.463702e-17) is close to zero. This may be a symptom that the</span></span>
+<span><span class="co">#&gt;     model is not identified.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mymodel</span>,standardized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 1 iteration</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                           250</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                                 0.000</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                            Bootstrap</span></span>
+<span><span class="co">#&gt;   Number of requested bootstrap draws                5</span></span>
+<span><span class="co">#&gt;   Number of successful bootstrap draws               5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regressions:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   outcome ~                                           </span></span>
+<span><span class="co">#&gt;     predictor  (c)    0.230    0.122    1.885    0.059</span></span>
+<span><span class="co">#&gt;   mediator ~                                          </span></span>
+<span><span class="co">#&gt;     predictor  (a)    0.644    0.033   19.351    0.000</span></span>
+<span><span class="co">#&gt;   outcome ~                                           </span></span>
+<span><span class="co">#&gt;     mediator   (b)    0.760    0.148    5.121    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.230    0.140</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.644    0.713</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.760    0.417</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .outcome          47.380    5.939    7.977    0.000</span></span>
+<span><span class="co">#&gt;    .mediator          9.689    0.684   14.163    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;    47.380    0.723</span></span>
+<span><span class="co">#&gt;     9.689    0.491</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Defined Parameters:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     indirect          0.490    0.113    4.334    0.000</span></span>
+<span><span class="co">#&gt;     direct            0.230    0.136    1.686    0.092</span></span>
+<span><span class="co">#&gt;     total             0.720    0.033   22.118    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.490    0.297</span></span>
+<span><span class="co">#&gt;     0.230    0.140</span></span>
+<span><span class="co">#&gt;     0.720    0.437</span></span></code></pre></div>
+<p>Summary output time. I will focus on our three defined parameters. <em>Indirect</em>, as mentioned before, reflects the model’s estimated “effect” of our predictor on our outcome <strong>through our mediator</strong>. In other words, our mediation effect. <em>direct</em>, shows the relation between predictor and outcome but <strong>after accounting for the mediator</strong>. <em>total</em> is formula-wise the sum of our indirect and direct estimated “effects” so the total impact of the predictor on our outcome.</p>
+<p>In our example, we could report that the mediation (indirect effect) is statistically significant (based on <em>p value</em>) whereas the estimated direct “effect” is not. In other words, the predictor statistically significantly relates to the outcome through the mediator. Some people would describe our case as a “full” mediation while they would label it as “partial” mediation in case our direct effect was also statistically significant.</p>
+<p>Let’s return back to R code, I can also obtain the (standardized) estimated parameters using the parameterEstimates() function.</p>
+<div class="sourceCode" id="cb179"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">parameterEstimates</span><span class="op">(</span><span class="va">mymodel</span>, standardized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         lhs op       rhs    label    est    se      z</span></span>
+<span><span class="co">#&gt; 1   outcome  ~ predictor        c  0.230 0.122  1.885</span></span>
+<span><span class="co">#&gt; 2  mediator  ~ predictor        a  0.644 0.033 19.351</span></span>
+<span><span class="co">#&gt; 3   outcome  ~  mediator        b  0.760 0.148  5.121</span></span>
+<span><span class="co">#&gt; 4   outcome ~~   outcome          47.380 5.939  7.977</span></span>
+<span><span class="co">#&gt; 5  mediator ~~  mediator           9.689 0.684 14.163</span></span>
+<span><span class="co">#&gt; 6 predictor ~~ predictor          24.160 0.000     NA</span></span>
+<span><span class="co">#&gt; 7  indirect :=       a*b indirect  0.490 0.113  4.334</span></span>
+<span><span class="co">#&gt; 8    direct :=         c   direct  0.230 0.136  1.686</span></span>
+<span><span class="co">#&gt; 9     total :=   (a*b)+c    total  0.720 0.033 22.118</span></span>
+<span><span class="co">#&gt;   pvalue ci.lower ci.upper std.lv std.all std.nox</span></span>
+<span><span class="co">#&gt; 1  0.059   -0.006    0.365  0.230   0.140   0.028</span></span>
+<span><span class="co">#&gt; 2  0.000    0.600    0.697  0.644   0.713   0.145</span></span>
+<span><span class="co">#&gt; 3  0.000    0.560    0.986  0.760   0.417   0.417</span></span>
+<span><span class="co">#&gt; 4  0.000   36.165   53.789 47.380   0.723   0.723</span></span>
+<span><span class="co">#&gt; 5  0.000    8.815   10.709  9.689   0.491   0.491</span></span>
+<span><span class="co">#&gt; 6     NA   24.160   24.160 24.160   1.000  24.160</span></span>
+<span><span class="co">#&gt; 7  0.000    0.369    0.669  0.490   0.297   0.060</span></span>
+<span><span class="co">#&gt; 8  0.092   -0.006    0.365  0.230   0.140   0.028</span></span>
+<span><span class="co">#&gt; 9  0.000    0.663    0.734  0.720   0.437   0.089</span></span></code></pre></div>
+<p>However, the confidence intervals may not use the bootstrapped solutions so to have more accurate (percentile) confidence intervals, we can use the <strong>standardized_Solution_boot_ci() function</strong> from the <a href="https://cran.r-project.org/web/packages/semhelpinghands/index.html">semhelpinghands package</a>.</p>
+<div class="sourceCode" id="cb180"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sfcheung.github.io/semhelpinghands/">semhelpinghands</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://sfcheung.github.io/semhelpinghands/reference/standardizedSolution_boot_ci.html">standardizedSolution_boot_ci</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         lhs op       rhs    label est.std    se      z</span></span>
+<span><span class="co">#&gt; 1   outcome  ~ predictor        c   0.140 0.079  1.769</span></span>
+<span><span class="co">#&gt; 2  mediator  ~ predictor        a   0.713 0.022 31.727</span></span>
+<span><span class="co">#&gt; 3   outcome  ~  mediator        b   0.417 0.074  5.611</span></span>
+<span><span class="co">#&gt; 4   outcome ~~   outcome            0.723 0.033 21.637</span></span>
+<span><span class="co">#&gt; 5  mediator ~~  mediator            0.491 0.032 15.333</span></span>
+<span><span class="co">#&gt; 6 predictor ~~ predictor            1.000 0.000     NA</span></span>
+<span><span class="co">#&gt; 7  indirect :=       a*b indirect   0.297 0.051  5.791</span></span>
+<span><span class="co">#&gt; 8    direct :=         c   direct   0.140 0.079  1.769</span></span>
+<span><span class="co">#&gt; 9     total :=   (a*b)+c    total   0.437 0.038 11.444</span></span>
+<span><span class="co">#&gt;   pvalue ci.lower ci.upper boot.ci.lower boot.ci.upper</span></span>
+<span><span class="co">#&gt; 1  0.077   -0.015    0.294        -0.004         0.248</span></span>
+<span><span class="co">#&gt; 2  0.000    0.669    0.757         0.669         0.730</span></span>
+<span><span class="co">#&gt; 3  0.000    0.271    0.563         0.347         0.555</span></span>
+<span><span class="co">#&gt; 4  0.000    0.658    0.789         0.693         0.787</span></span>
+<span><span class="co">#&gt; 5  0.000    0.429    0.554         0.467         0.552</span></span>
+<span><span class="co">#&gt; 6     NA    1.000    1.000            NA            NA</span></span>
+<span><span class="co">#&gt; 7  0.000    0.197    0.398         0.251         0.399</span></span>
+<span><span class="co">#&gt; 8  0.077   -0.015    0.294        -0.004         0.248</span></span>
+<span><span class="co">#&gt; 9  0.000    0.362    0.512         0.394         0.499</span></span>
+<span><span class="co">#&gt;   boot.se</span></span>
+<span><span class="co">#&gt; 1   0.091</span></span>
+<span><span class="co">#&gt; 2   0.026</span></span>
+<span><span class="co">#&gt; 3   0.085</span></span>
+<span><span class="co">#&gt; 4   0.040</span></span>
+<span><span class="co">#&gt; 5   0.036</span></span>
+<span><span class="co">#&gt; 6      NA</span></span>
+<span><span class="co">#&gt; 7   0.059</span></span>
+<span><span class="co">#&gt; 8   0.091</span></span>
+<span><span class="co">#&gt; 9   0.045</span></span></code></pre></div>
+<div id="visualize-your-path-diagrams" class="section level3" number="8.2.1">
+<h3>
+<span class="header-section-number">8.2.1</span> Visualize your : path diagrams<a class="anchor" aria-label="anchor" href="#visualize-your-path-diagrams"><i class="fas fa-link"></i></a>
+</h3>
+<p>Using the summary() output, we could use the estimated parameters and make our own plots, in the context of mediation, our own <strong>path diagrams</strong>. However, you could also consider to use ^<strong>packages like semPlot to do the work for you</strong>. Basically, we will recreate “the triangle” but now we add the estimates of β(PM), β(MO), and β(PM). In my experience, it does take a bit of knowledge to make your path diagrams look aesthetically pleasing. Allow me to guide you through.</p>
+<p>A first concern is where the figure will put the labels for your variables. So where “predictor”, “mediator”, and “outcome” will be placed. I prefer that the predictor is placed on the left, the outcome on the right, and the mediator in the middle on top. To tell semPlot to use this layout, we will have to create a matrix that contains the position of these variables (see below in the R code chunk). Then we can use the <strong>semPaths() function</strong> to make our path diagrams.</p>
+<div class="sourceCode" id="cb181"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SachaEpskamp/semPlot">semPlot</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># To determine the location of the labels:</span></span>
+<span>  <span class="va">my_layout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">1</span>, <span class="fl">0</span>,   <span class="co"># To put the variable "predictor" to the RIGHT side and at the BOTTOM</span></span>
+<span>    <span class="fl">0.5</span>, <span class="fl">1</span>,   <span class="co"># Put the "mediator" in the MIDDLE at the TOP</span></span>
+<span>    <span class="fl">0</span>, <span class="fl">0</span>   <span class="co"># Put the "outcome" at the left side and at the BOTTOM</span></span>
+<span>  <span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create the path diagram</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/semPlot/man/semPaths.html">semPaths</a></span><span class="op">(</span><span class="va">mymodel</span>, </span>
+<span>         what <span class="op">=</span> <span class="st">"std"</span>,  <span class="co"># I want to use the standardized estimates</span></span>
+<span>         layout <span class="op">=</span> <span class="va">my_layout</span>,  <span class="co"># Use our above custom layout</span></span>
+<span>         edge.label.cex <span class="op">=</span> <span class="fl">1.3</span>,  <span class="co"># Set the font size for the estimates</span></span>
+<span>         label.cex <span class="op">=</span> <span class="fl">1.2</span>, <span class="co"># Set the font size for the labels ("predictor", "mediator", etc.)</span></span>
+<span>         sizeMan <span class="op">=</span> <span class="fl">15</span>,  <span class="co"># Set the sizes of the boxes</span></span>
+<span>         fade <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># TRUE will create make the larger estimates also thicker</span></span>
+<span>         residuals <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Hide residual variances of the variables</span></span>
+<span>         edge.color <span class="op">=</span> <span class="st">"black"</span>,  <span class="co"># Determine the color for the arrows ("edges")</span></span>
+<span>         nCharNodes <span class="op">=</span> <span class="fl">0</span>  <span class="co"># If Set to zero, it will display the full variable name instead of shorten it down</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-Mediation_files/figure-html/unnamed-chunk-6-1.png" width="672"></div>
+<p>Now, if you want, you can also add notifications of significance (asterisks) to our (standardized) estimates. To do so, we will need to extract the <em>p</em> values from our estimates. Since I want to plot standardized estimates, I will need to extract those of the standardized estimates. This can be done using the aforementioned parameterEstimates() function.</p>
+<p>Using these <em>p</em> values we now have to (a) transform them into significance notifications and (b) glue them to our original estimates. To do the first step “from value to asterisk” I will make a function that checks the <em>p</em> value and determines whether to asign no, one, two, or three asterisk Then I will actually apply this function to the <em>p</em> values and glue the asterixes (or lack thereoff) to my standardized estimates.</p>
+<p>This is how it looks like.</p>
+<div class="sourceCode" id="cb182"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Alright we need to acquire the estimates and corresponding p value</span></span>
+<span><span class="va">parameter_estimates</span> <span class="op">=</span> <span class="fu">parameterEstimates</span><span class="op">(</span><span class="va">mymodel</span>, standardized <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For our plot we only need the parameters for the a,b, and c-path so here I make sure to exclusive include these three</span></span>
+<span><span class="va">parameter_estimates</span> <span class="op">=</span> <span class="va">parameter_estimates</span><span class="op">[</span><span class="va">parameter_estimates</span><span class="op">$</span><span class="va">op</span> <span class="op">==</span> <span class="st">"~"</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Now we can translate these p values into significance labels, the famous asteriks (*, **, ***)</span></span>
+<span><span class="co"># To do so, I will create a function to add asterisks based on p value</span></span>
+<span></span>
+<span><span class="va">add_stars</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span><span class="op">)</span> <span class="op">{</span> <span class="co"># This function will take the p-value and determines what sign it should attribute to it (i.e., the number of asterix)</span></span>
+<span>  </span>
+<span>  <span class="co"># Functions are beyond of the scope of this guide</span></span>
+<span>  <span class="co"># However, functions apply anything contained within the function to whatever argument you feed it (here the argument called "p")</span></span>
+<span>  <span class="co"># So my function checks the value of the p value, and determines whether to transform it into a given number of asterisks or nothing</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>  <span class="co"># If the p value is NA, empty, return an empty string</span></span>
+<span>  <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">p</span> <span class="op">&lt;</span> <span class="fl">0.001</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="st">"***"</span><span class="op">)</span> <span class="co"># If the p-value is below .001 then return ***</span></span>
+<span>  <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">p</span> <span class="op">&lt;</span> <span class="fl">0.01</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="st">"**"</span><span class="op">)</span></span>
+<span>  <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">p</span> <span class="op">&lt;</span> <span class="fl">0.05</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="st">"*"</span><span class="op">)</span></span>
+<span>  <span class="kw">else</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="co"># If the p-value is 0.05 or larger then do not add an asterisk</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Alright I want to put the label and the asterisk on my path diagram (e.g., "0.71***") so I will need to glue them together</span></span>
+<span><span class="va">parameter_estimates</span><span class="op">$</span><span class="va">label</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">parameter_estimates</span><span class="op">$</span><span class="va">std.all</span>, <span class="fl">2</span><span class="op">)</span>, <span class="co"># round the estimates to two decimals</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">parameter_estimates</span><span class="op">$</span><span class="va">pvalue</span>, <span class="va">add_stars</span><span class="op">)</span> <span class="co"># apply the "p value to asterisks" function</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Finally, our path diagram with significance asterisks</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/semPlot/man/semPaths.html">semPaths</a></span><span class="op">(</span><span class="va">mymodel</span>, </span>
+<span>         what <span class="op">=</span> <span class="st">"std"</span>,  <span class="co"># I want to use the standardized estimates</span></span>
+<span>         layout <span class="op">=</span> <span class="va">my_layout</span>,  <span class="co"># Use our above custom layout</span></span>
+<span>         edge.label.cex <span class="op">=</span> <span class="fl">1.3</span>,  <span class="co"># Set the font size for the estimates</span></span>
+<span>         label.cex <span class="op">=</span> <span class="fl">1.2</span>, <span class="co"># Set the font size for the labels ("predictor", "mediator", etc.)</span></span>
+<span>         sizeMan <span class="op">=</span> <span class="fl">15</span>,  <span class="co"># Set the sizes of the boxes</span></span>
+<span>         fade <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>         residuals <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Hide residual variances of the variables</span></span>
+<span>         edge.color <span class="op">=</span> <span class="st">"black"</span>,  <span class="co"># Determine the color for the arrows ("edges")</span></span>
+<span>         nCharNodes <span class="op">=</span> <span class="fl">0</span>, <span class="co"># If Set to zero, it will display the full variable name instead of shorten it down</span></span>
+<span>         edgeLabels <span class="op">=</span> <span class="va">parameter_estimates</span><span class="op">$</span><span class="va">label</span><span class="op">)</span>  <span class="co"># Apply the significance labels (estimate + asterixes)</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-Mediation_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+</div>
+</div>
+<div id="moderated-mediation" class="section level2" number="8.3">
+<h2>
+<span class="header-section-number">8.3</span> Moderated mediation<a class="anchor" aria-label="anchor" href="#moderated-mediation"><i class="fas fa-link"></i></a>
+</h2>
+<p>What if the mediation relation (the extent of mediation, the variance explained by the mediator) depends on the level of yet another variable “the moderator”? Recall that we have three relations reflected by our three beta’s. The moderator can moderate <strong>any of these three relations</strong>. Let’s start with the most simple situation where only one relation (say the a-path) is moderated by a categorical variable. <strong>Crucially, we will need to compute and include the interaction in our dataset ourselves (which is just the predictor multiplied by the moderator) as lavaan will not accept something like “predictor:moderator” unlike in linear regression models</strong>.</p>
+<div class="sourceCode" id="cb183"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">54321</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">=</span> <span class="fl">250</span>  <span class="co"># Sample size</span></span>
+<span><span class="va">cor_Y_X</span> <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># correlation between outcome Y and predictor X </span></span>
+<span><span class="va">cor_Y_M</span> <span class="op">=</span> <span class="fl">0.6</span> <span class="co"># correlation between outcome Y and mediator M</span></span>
+<span><span class="va">cor_X_M</span> <span class="op">=</span> <span class="fl">0.7</span> <span class="co"># correlation between predictor X and mediator M</span></span>
+<span></span>
+<span></span>
+<span><span class="va">predictor</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">20</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># Create the predictor</span></span>
+<span><span class="va">mediator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">15</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_X_M</span><span class="op">)</span> <span class="co"># Create a mediator that is associated with the above predictor </span></span>
+<span><span class="va">moderator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">125</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  predictor <span class="op">=</span> <span class="va">predictor</span>,</span>
+<span>  mediator <span class="op">=</span> <span class="va">mediator</span>, </span>
+<span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">25</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">mediator</span> <span class="op">*</span> <span class="va">cor_Y_M</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_Y_X</span><span class="op">)</span>, <span class="co"># Outcome that is associated with both the predictor and mediator</span></span>
+<span>  moderator <span class="op">=</span> <span class="va">moderator</span>,</span>
+<span>  interaction_predictor_moderator <span class="op">=</span> <span class="va">moderator</span> <span class="op">*</span> <span class="va">predictor</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="images/Mediation/Mediation_4.png"></div>
+<p>We repeat the steps from before but now we need to remember that we need to add the moderator to the relation between predictor and mediator. Specifically, the mediator is now analytically predicted by predictor (main effect), the interaction term between the moderator and predictor, and as customary when you include interactions, the moderator (main effect) itself. So now we have three beta’s (two main effects, one interaction term) on that link to acknowledge. Our original “a-path” has now become a1 (say main effect predictor), a2 (say main effect moderator), and a3(say the interaction term). We acknowledge this when we define our regressions within our SEM structure.</p>
+<p>But now, the inclusion of our moderator has <strong>two repercussions</strong> on how we need to compute the indirect effect. <strong>First, the original “a * b” formula will not suffice anymore as we have multiple a’s</strong>. <strong>The “a” in the original formula changes to a1 + a3 or the main effect of the predictor and the interaction term between predictor and moderator</strong>. <strong>But this is incomplete</strong>, as <strong>the indirect effect is now dependent on the values of the moderator, which brings us to the second point</strong>. So what we will do is to compute the indirect effect when the value of our moderator is something, and a indirect effect when the value is something else. Since our moderator is a <strong>binary factor</strong>, we can just compute the indirect effect if the moderator is zero and also when the moderator is one. <strong>The final formula becomes a1 + (a3 * 0) * b when the moderator is zero and a1 + (a3 * 1) * b, when the moderator is one.</strong></p>
+<p>Finally, if you want to include the total effect, it becomes also different across the values of the moderator. So we have a total effect when the moderator is zero, and a total effect when the moderator is one.</p>
+<p>Let us implement the above in our SEM structure object.</p>
+<div class="sourceCode" id="cb184"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mystructure</span> <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># Direct relation</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  outcome ~ c*predictor</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st"># Indirect relation:</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  mediator ~ a1*predictor + a2*moderator + a3*interaction_predictor_moderator # Again, you need to compute and include the interaction in your dataset and use that</span></span>
+<span><span class="st">  outcome ~ b*mediator</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># The indirect </span></span>
+<span><span class="st"></span></span>
+<span><span class="st">indirect_0 := (a1 + (a3*0)) * b # when the moderator is zero</span></span>
+<span><span class="st">indirect_1 := (a1 + (a3*1)) * b # when the moderator is one</span></span>
+<span><span class="st">direct := c</span></span>
+<span><span class="st">total_0 := indirect_0 + c # when the moderator is zero (also "c" can be changed to "direct" if you want)</span></span>
+<span><span class="st">total_1 := indirect_1 + c # when the moderator is one</span></span>
+<span><span class="st">'</span></span>
+<span></span>
+<span><span class="va">mymodel</span><span class="op">=</span><span class="fu">sem</span><span class="op">(</span><span class="va">mystructure</span>,data<span class="op">=</span><span class="va">mydata</span>, se <span class="op">=</span> <span class="st">"bootstrap"</span>, iseed<span class="op">=</span><span class="fl">1234</span>, bootstrap <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># Again I take 5 but consider 500+ when doing it for real </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mymodel</span>,standardized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 1 iteration</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                         7</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                           250</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                                 0.787</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.675</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                            Bootstrap</span></span>
+<span><span class="co">#&gt;   Number of requested bootstrap draws                5</span></span>
+<span><span class="co">#&gt;   Number of successful bootstrap draws               5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regressions:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   outcome ~                                           </span></span>
+<span><span class="co">#&gt;     predictor  (c)    0.230    0.122    1.885    0.059</span></span>
+<span><span class="co">#&gt;   mediator ~                                          </span></span>
+<span><span class="co">#&gt;     predictor (a1)    0.696    0.048   14.510    0.000</span></span>
+<span><span class="co">#&gt;     moderator (a2)    1.546    1.589    0.973    0.331</span></span>
+<span><span class="co">#&gt;     intrctn__ (a3)   -0.093    0.068   -1.359    0.174</span></span>
+<span><span class="co">#&gt;   outcome ~                                           </span></span>
+<span><span class="co">#&gt;     mediator   (b)    0.760    0.148    5.121    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.230    0.140</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.696    0.770</span></span>
+<span><span class="co">#&gt;     1.546    0.174</span></span>
+<span><span class="co">#&gt;    -0.093   -0.226</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.760    0.417</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .outcome          47.380    5.939    7.977    0.000</span></span>
+<span><span class="co">#&gt;    .mediator          9.618    0.716   13.425    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;    47.380    0.723</span></span>
+<span><span class="co">#&gt;     9.618    0.488</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Defined Parameters:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     indirect_0        0.529    0.122    4.329    0.000</span></span>
+<span><span class="co">#&gt;     indirect_1        0.458    0.106    4.316    0.000</span></span>
+<span><span class="co">#&gt;     direct            0.230    0.136    1.686    0.092</span></span>
+<span><span class="co">#&gt;     total_0           0.759    0.042   18.263    0.000</span></span>
+<span><span class="co">#&gt;     total_1           0.688    0.050   13.744    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.529    0.321</span></span>
+<span><span class="co">#&gt;     0.458    0.227</span></span>
+<span><span class="co">#&gt;     0.230    0.140</span></span>
+<span><span class="co">#&gt;     0.759    0.461</span></span>
+<span><span class="co">#&gt;     0.688    0.367</span></span></code></pre></div>
+<p>Like before we can make a path diagram using the semPaths() function from the semPlot package. Remember that we made a layout ourselves to determine where are our labels will be placed? Now we have additional labels so we can determine their position if we want. Other than that nothing notably changes from before.</p>
+<div class="sourceCode" id="cb185"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/SachaEpskamp/semPlot">semPlot</a></span><span class="op">)</span></span>
+<span><span class="va">my_layout</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="fl">3</span>, <span class="fl">0</span>,   <span class="co"># Predictor (bottom right)</span></span>
+<span>  <span class="fl">1.5</span>, <span class="fl">3</span>,   <span class="co"># Mediator (middle top)</span></span>
+<span>  <span class="fl">0</span>, <span class="fl">0</span>,   <span class="co"># Outcome (bottom left)</span></span>
+<span>  <span class="fl">0.1</span>, <span class="fl">3</span>,   <span class="co"># Moderator (top right)</span></span>
+<span>  <span class="fl">1.25</span>, <span class="op">-</span><span class="fl">0.75</span> <span class="co"># Interaction (middle right)</span></span>
+<span><span class="op">)</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create the path diagram</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/semPlot/man/semPaths.html">semPaths</a></span><span class="op">(</span><span class="va">mymodel</span>, </span>
+<span>         what <span class="op">=</span> <span class="st">"std"</span>,  <span class="co"># Standardized estimates</span></span>
+<span>         layout <span class="op">=</span> <span class="va">my_layout</span>,  <span class="co"># Updated layout</span></span>
+<span>         edge.label.cex <span class="op">=</span> <span class="fl">1.3</span>,  <span class="co"># Font size for estimates</span></span>
+<span>         label.cex <span class="op">=</span> <span class="fl">1.2</span>,  <span class="co"># Font size for variable labels</span></span>
+<span>         sizeMan <span class="op">=</span> <span class="fl">15</span>,  <span class="co"># Size of the boxes</span></span>
+<span>         fade <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>         residuals <span class="op">=</span> <span class="cn">FALSE</span>,  <span class="co"># Hide residual variances</span></span>
+<span>         edge.color <span class="op">=</span> <span class="st">"black"</span>,  <span class="co"># Arrow color</span></span>
+<span>         nCharNodes <span class="op">=</span> <span class="fl">0</span>,  <span class="co"># Show full variable names</span></span>
+<span>         intercepts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># Hide intercepts for clarity</span></span></code></pre></div>
+<div class="inline-figure"><img src="08-Mediation_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<div id="on-all-pathways" class="section level3" number="8.3.1">
+<h3>
+<span class="header-section-number">8.3.1</span> On all pathways<a class="anchor" aria-label="anchor" href="#on-all-pathways"><i class="fas fa-link"></i></a>
+</h3>
+<p>What if you decide on theory or other that a moderation is plausible on all pathways? This case is not that different from before, we just need to adjust all of our linear regressions. <strong>Note however, that you do not need both a2 * moderator and b2 * moderator, only one of two (as they are the same)</strong>. The indirect effect remains the same but now we need to adjust the formula. The (only) change lies in the direct effect which now has two forms: when the moderator has value 0 and when it has value 1. <strong>Remember to compute and include an interaction term for every path way in your dataset and use that within your SEM structure object</strong>.
+<img src="images/Mediation/Mediation_5.png"></p>
+<div class="sourceCode" id="cb186"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">54321</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">=</span> <span class="fl">250</span>  <span class="co"># Sample size</span></span>
+<span><span class="va">cor_Y_X</span> <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># correlation between outcome Y and predictor X </span></span>
+<span><span class="va">cor_Y_M</span> <span class="op">=</span> <span class="fl">0.6</span> <span class="co"># correlation between outcome Y and mediator M</span></span>
+<span><span class="va">cor_X_M</span> <span class="op">=</span> <span class="fl">0.7</span> <span class="co"># correlation between predictor X and mediator M</span></span>
+<span></span>
+<span></span>
+<span><span class="va">predictor</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">20</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># Create the predictor</span></span>
+<span><span class="va">mediator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">15</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_X_M</span><span class="op">)</span> </span>
+<span><span class="va">moderator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>, times<span class="op">=</span><span class="fl">125</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  predictor <span class="op">=</span> <span class="va">predictor</span>,</span>
+<span>  mediator <span class="op">=</span> <span class="va">mediator</span>, </span>
+<span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">25</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">mediator</span> <span class="op">*</span> <span class="va">cor_Y_M</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_Y_X</span><span class="op">)</span>, <span class="co"># Outcome that is associated with both the predictor and mediator</span></span>
+<span>  moderator <span class="op">=</span> <span class="va">moderator</span>,</span>
+<span>  interaction_predictor_moderator <span class="op">=</span> <span class="va">moderator</span> <span class="op">*</span> <span class="va">predictor</span>,</span>
+<span>  interaction_mediator_outcome <span class="op">=</span> <span class="va">mediator</span> <span class="op">*</span> <span class="va">moderator</span>,</span>
+<span>  interaction_predictor_outcome <span class="op">=</span> <span class="va">predictor</span> <span class="op">*</span> <span class="va">moderator</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">mystructure</span> <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># Direct relation</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  outcome ~ c1*predictor + c2*moderator + c3*interaction_predictor_outcome</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st"># Indirect relation:</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  mediator ~ a1*predictor + a2*moderator + a3*interaction_predictor_moderator</span></span>
+<span><span class="st">  outcome ~ b1*mediator + b3*interaction_mediator_outcome # Note that there is no need for a b2*moderator term as this is captued in a2*moderator</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># indirect, direct, and total effects</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">indirect_0 := (a1 + (a3*0)) * (b1 + (b3*0)) # when the moderator is zero</span></span>
+<span><span class="st">indirect_1 := (a1 + (a3*1)) * (b1 + (b3*1)) # when the moderator is one</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">direct_0 := c1 + (c3*0)</span></span>
+<span><span class="st">direct_1 := c1 + (c3*1)</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">total_0 := indirect_0 + direct_0 </span></span>
+<span><span class="st">total_1 := indirect_1 + direct_1  </span></span>
+<span><span class="st">'</span></span>
+<span></span>
+<span><span class="va">mymodel</span><span class="op">=</span><span class="fu">sem</span><span class="op">(</span><span class="va">mystructure</span>,data<span class="op">=</span><span class="va">mydata</span>, se <span class="op">=</span> <span class="st">"bootstrap"</span>, iseed<span class="op">=</span><span class="fl">1234</span>, bootstrap <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># I take 5 bootstrap simulation but consider 500+ when doing it for real </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mymodel</span>,standardized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 did not run (perhaps do.fit = FALSE)?</span></span>
+<span><span class="co">#&gt; ** WARNING ** Estimates below are simply the starting values</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                        10</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                           250</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                            Bootstrap</span></span>
+<span><span class="co">#&gt;   Number of requested bootstrap draws                5</span></span>
+<span><span class="co">#&gt;   Number of successful bootstrap draws               0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regressions:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   outcome ~                                           </span></span>
+<span><span class="co">#&gt;     predictor (c1)    0.339       NA                  </span></span>
+<span><span class="co">#&gt;     moderator (c2)   -0.251       NA                  </span></span>
+<span><span class="co">#&gt;     intrctn__ (c3)   -0.181       NA                  </span></span>
+<span><span class="co">#&gt;   mediator ~                                          </span></span>
+<span><span class="co">#&gt;     predictor (a1)    0.696       NA                  </span></span>
+<span><span class="co">#&gt;     moderator (a2)    1.546       NA                  </span></span>
+<span><span class="co">#&gt;     intrctn__ (a3)   -0.093       NA                  </span></span>
+<span><span class="co">#&gt;   outcome ~                                           </span></span>
+<span><span class="co">#&gt;     mediator  (b1)    0.694       NA                  </span></span>
+<span><span class="co">#&gt;     intrctn__ (b3)    0.113       NA                  </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.339    0.207</span></span>
+<span><span class="co">#&gt;    -0.251   -0.016</span></span>
+<span><span class="co">#&gt;    -0.181   -0.244</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.696    0.770</span></span>
+<span><span class="co">#&gt;     1.546    0.174</span></span>
+<span><span class="co">#&gt;    -0.093   -0.226</span></span>
+<span><span class="co">#&gt;                   </span></span>
+<span><span class="co">#&gt;     0.694    0.383</span></span>
+<span><span class="co">#&gt;     0.113    0.209</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;    .outcome          47.201       NA                  </span></span>
+<span><span class="co">#&gt;    .mediator          9.618       NA                  </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;    47.201    0.729</span></span>
+<span><span class="co">#&gt;     9.618    0.488</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Defined Parameters:</span></span>
+<span><span class="co">#&gt;                    Estimate  Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     indirect_0        0.483                           </span></span>
+<span><span class="co">#&gt;     indirect_1        0.487                           </span></span>
+<span><span class="co">#&gt;     direct_0          0.339                           </span></span>
+<span><span class="co">#&gt;     direct_1          0.158                           </span></span>
+<span><span class="co">#&gt;     total_0           0.822                           </span></span>
+<span><span class="co">#&gt;     total_1           0.645                           </span></span>
+<span><span class="co">#&gt;    Std.lv  Std.all</span></span>
+<span><span class="co">#&gt;     0.483    0.295</span></span>
+<span><span class="co">#&gt;     0.487    0.322</span></span>
+<span><span class="co">#&gt;     0.339    0.207</span></span>
+<span><span class="co">#&gt;     0.158   -0.037</span></span>
+<span><span class="co">#&gt;     0.822    0.502</span></span>
+<span><span class="co">#&gt;     0.645    0.285</span></span></code></pre></div>
+</div>
+<div id="using-a-continuous-moderator" class="section level3" number="8.3.2">
+<h3>
+<span class="header-section-number">8.3.2</span> Using a continuous moderator<a class="anchor" aria-label="anchor" href="#using-a-continuous-moderator"><i class="fas fa-link"></i></a>
+</h3>
+<p>For my final example on a moderated mediation, we have a continuous moderator that moderates path “c” and path “b”. We will not encounter something that we have not seen before. However, remember that we defined multiple (in)direct effects depending on the values of the moderator? Now that we have a continuous moderator, we we will need to decide what values we want to include and how many. Remind yourself that every included moderator value is a pair of extra (in)direct effects to be estimated, hence taxing on the statistical power.</p>
+<p>In this example I will include three values of the moderator: “low” (i.e., a standard deviation below its mean); “moderate” (its mean), and “high” (i.e., a standard deviation above its mean). To include these values within my SEM model structure, I could add them to my dataset beforehand <strong>or</strong> I could compute them while inside the SEM structure. I will demonstrate the latter. To define and use the mean of the moderator, I add an additional regression in which the moderator is predicted by the intercept without any other predictors (<strong>hence the intercept will be the mean</strong>). I now simply have to give this intercept a name so that I can use it later (like with my letter a,b, and c) to define the (in)direct effects.</p>
+<p>To get the variance of the moderator, remember from confirmatory factor analysis that the notation <strong>~~</strong> defines a covariance within the SEM model structure? Well, if I let the moderator co-vary with itself, I get the variance and if give a name to this variance, I can use it later on to define the (in)direct effect. With both the mean and variance defined, I can now define a standard deviation below or above the mean. <strong>Note that I will need to take the square root of the variance</strong>, which can be easily done within the SEM model structure.</p>
+<div class="sourceCode" id="cb187"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">54321</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">=</span> <span class="fl">250</span>  <span class="co"># Sample size</span></span>
+<span><span class="va">cor_Y_X</span> <span class="op">=</span> <span class="fl">0.5</span> <span class="co"># correlation between outcome Y and predictor X </span></span>
+<span><span class="va">cor_Y_M</span> <span class="op">=</span> <span class="fl">0.6</span> <span class="co"># correlation between outcome Y and mediator M</span></span>
+<span><span class="va">cor_X_M</span> <span class="op">=</span> <span class="fl">0.7</span> <span class="co"># correlation between predictor X and mediator M</span></span>
+<span></span>
+<span></span>
+<span><span class="va">predictor</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">20</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># Create the predictor</span></span>
+<span><span class="va">mediator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">15</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_X_M</span><span class="op">)</span> <span class="co"># Create a mediator that is associated with the above predictor </span></span>
+<span><span class="va">moderator</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">17</span>, sd <span class="op">=</span> <span class="fl">4</span> <span class="op">)</span></span>
+<span><span class="va">outcome</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">25</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">mediator</span> <span class="op">*</span> <span class="va">cor_Y_M</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="va">predictor</span> <span class="op">*</span> <span class="va">cor_Y_X</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="va">mydata</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  predictor <span class="op">=</span> <span class="va">predictor</span>,</span>
+<span>  mediator <span class="op">=</span> <span class="va">mediator</span>, </span>
+<span>  outcome <span class="op">=</span> <span class="va">outcome</span>, <span class="co"># Outcome that is associated with both the predictor and mediator</span></span>
+<span>  moderator <span class="op">=</span> <span class="va">moderator</span>,</span>
+<span>  interaction_mediator_outcome <span class="op">=</span> <span class="va">moderator</span> <span class="op">*</span> <span class="va">mediator</span>,</span>
+<span>  interaction_predictor_outcome <span class="op">=</span> <span class="va">predictor</span> <span class="op">*</span> <span class="va">moderator</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">mystructure</span> <span class="op">=</span> <span class="st">'</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># Mean and SD to be used to compute indirect and direct effect</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  moderator ~ moderator_mean*1 # to define and use the intercept of the moderator/the mean</span></span>
+<span><span class="st">  moderator ~~ moderator_var*moderator # to define use the variance of the moderator</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># Direct relation</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  outcome ~ c1*predictor + c2*moderator + c3*interaction_predictor_outcome</span></span>
+<span><span class="st">  </span></span>
+<span><span class="st"># Indirect relation:</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">  mediator ~ a*predictor</span></span>
+<span><span class="st">  outcome ~ b1*mediator + b3*interaction_mediator_outcome # Note that there is no need for a b2*moderator term as this is captued in a2*moderator</span></span>
+<span><span class="st"></span></span>
+<span><span class="st"></span></span>
+<span><span class="st"># indirect, direct, and total effects</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">indirect_low := a * (b1 + b3*(moderator_mean - sqrt(moderator_var)))         # when the moderator is zero</span></span>
+<span><span class="st">indirect_moderate :=  a * (b1 + (b3*moderator_mean))</span></span>
+<span><span class="st">indirect_high := a * (b1 + b3*(moderator_mean + sqrt(moderator_var))) </span></span>
+<span><span class="st"></span></span>
+<span><span class="st">direct_low := c1 + c3*(moderator_mean - sqrt(moderator_var))</span></span>
+<span><span class="st">direct_moderate := c1 + c3*moderator_mean</span></span>
+<span><span class="st">direct_high := c1 + c3*(moderator_mean + sqrt(moderator_var))</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">total_low := indirect_low + direct_low </span></span>
+<span><span class="st">total_moderate := indirect_moderate + direct_moderate </span></span>
+<span><span class="st">total_high := indirect_high + direct_high</span></span>
+<span><span class="st"></span></span>
+<span><span class="st">'</span></span>
+<span></span>
+<span><span class="va">mymodel</span><span class="op">=</span><span class="fu">sem</span><span class="op">(</span><span class="va">mystructure</span>,data<span class="op">=</span><span class="va">mydata</span>, se <span class="op">=</span> <span class="st">"bootstrap"</span>, iseed<span class="op">=</span><span class="fl">1234</span>, bootstrap <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="co"># I take 5 bootstrap simulation but consider 500+ when doing it for real </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mymodel</span>,standardized<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; lavaan 0.6.16 ended normally after 13 iterations</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span><span class="co">#&gt;   Number of model parameters                        12</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Number of observations                           250</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model Test User Model:</span></span>
+<span><span class="co">#&gt;                                                       </span></span>
+<span><span class="co">#&gt;   Test statistic                              1502.466</span></span>
+<span><span class="co">#&gt;   Degrees of freedom                                 6</span></span>
+<span><span class="co">#&gt;   P-value (Chi-square)                           0.000</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter Estimates:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Standard errors                            Bootstrap</span></span>
+<span><span class="co">#&gt;   Number of requested bootstrap draws                5</span></span>
+<span><span class="co">#&gt;   Number of successful bootstrap draws               5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Regressions:</span></span>
+<span><span class="co">#&gt;                    Estimate   Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;   outcome ~                                            </span></span>
+<span><span class="co">#&gt;     predictor (c1)     1.114    0.547    2.039    0.041</span></span>
+<span><span class="co">#&gt;     moderator (c2)    -0.994    0.753   -1.321    0.186</span></span>
+<span><span class="co">#&gt;     intrctn__ (c3)    -0.044    0.034   -1.288    0.198</span></span>
+<span><span class="co">#&gt;   mediator ~                                           </span></span>
+<span><span class="co">#&gt;     predictor  (a)     0.644    0.033   19.350    0.000</span></span>
+<span><span class="co">#&gt;   outcome ~                                            </span></span>
+<span><span class="co">#&gt;     mediator  (b1)    -0.360    0.766   -0.470    0.639</span></span>
+<span><span class="co">#&gt;     intrctn__ (b3)     0.058    0.042    1.379    0.168</span></span>
+<span><span class="co">#&gt;    Std.lv   Std.all</span></span>
+<span><span class="co">#&gt;                    </span></span>
+<span><span class="co">#&gt;      1.114    0.551</span></span>
+<span><span class="co">#&gt;     -0.994   -0.398</span></span>
+<span><span class="co">#&gt;     -0.044   -0.470</span></span>
+<span><span class="co">#&gt;                    </span></span>
+<span><span class="co">#&gt;      0.644    0.713</span></span>
+<span><span class="co">#&gt;                    </span></span>
+<span><span class="co">#&gt;     -0.360   -0.161</span></span>
+<span><span class="co">#&gt;      0.058    0.783</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Intercepts:</span></span>
+<span><span class="co">#&gt;                    Estimate   Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     modertr (mdr_)    16.663    0.211   79.066    0.000</span></span>
+<span><span class="co">#&gt;    .outcome           43.243   14.415    3.000    0.003</span></span>
+<span><span class="co">#&gt;    .mediatr           15.996    0.847   18.877    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv   Std.all</span></span>
+<span><span class="co">#&gt;     16.663    4.196</span></span>
+<span><span class="co">#&gt;     43.243    4.354</span></span>
+<span><span class="co">#&gt;     15.996    3.603</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variances:</span></span>
+<span><span class="co">#&gt;                    Estimate   Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     modertr (mdr_)    15.772    2.083    7.570    0.000</span></span>
+<span><span class="co">#&gt;    .outcome           49.139    2.438   20.154    0.000</span></span>
+<span><span class="co">#&gt;    .mediatr            9.689    0.684   14.163    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv   Std.all</span></span>
+<span><span class="co">#&gt;     15.772    1.000</span></span>
+<span><span class="co">#&gt;     49.139    0.498</span></span>
+<span><span class="co">#&gt;      9.689    0.491</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Defined Parameters:</span></span>
+<span><span class="co">#&gt;                    Estimate   Std.Err  z-value  P(&gt;|z|)</span></span>
+<span><span class="co">#&gt;     indirect_low       0.238    0.205    1.163    0.245</span></span>
+<span><span class="co">#&gt;     indirect_modrt     0.386    0.098    3.916    0.000</span></span>
+<span><span class="co">#&gt;     indirect_high      0.533    0.133    4.011    0.000</span></span>
+<span><span class="co">#&gt;     direct_low         0.560    0.167    3.349    0.001</span></span>
+<span><span class="co">#&gt;     direct_moderat     0.387    0.087    4.469    0.000</span></span>
+<span><span class="co">#&gt;     direct_high        0.214    0.202    1.059    0.289</span></span>
+<span><span class="co">#&gt;     total_low          0.799    0.080   10.037    0.000</span></span>
+<span><span class="co">#&gt;     total_moderate     0.772    0.032   23.942    0.000</span></span>
+<span><span class="co">#&gt;     total_high         0.746    0.095    7.827    0.000</span></span>
+<span><span class="co">#&gt;    Std.lv   Std.all</span></span>
+<span><span class="co">#&gt;      0.238    1.669</span></span>
+<span><span class="co">#&gt;      0.386    2.228</span></span>
+<span><span class="co">#&gt;      0.533    2.786</span></span>
+<span><span class="co">#&gt;      0.560   -0.952</span></span>
+<span><span class="co">#&gt;      0.387   -1.422</span></span>
+<span><span class="co">#&gt;      0.214   -1.893</span></span>
+<span><span class="co">#&gt;      0.799    0.717</span></span>
+<span><span class="co">#&gt;      0.772    0.805</span></span>
+<span><span class="co">#&gt;      0.746    0.893</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="anova.html"><span class="header-section-number">7</span> Anova</a></div>
+<div class="next"><a href="missing-data-and-multiple-imputation.html"><span class="header-section-number">9</span> Missing data and multiple imputation</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#structural-equation-modelling-and-mediation"><span class="header-section-number">8</span> Structural Equation Modelling and mediation</a></li>
+<li><a class="nav-link" href="#basic-mediation"><span class="header-section-number">8.1</span> Basic mediation</a></li>
+<li>
+<a class="nav-link" href="#basic-example"><span class="header-section-number">8.2</span> Basic example</a><ul class="nav navbar-nav"><li><a class="nav-link" href="#visualize-your-path-diagrams"><span class="header-section-number">8.2.1</span> Visualize your : path diagrams</a></li></ul>
+</li>
+<li>
+<a class="nav-link" href="#moderated-mediation"><span class="header-section-number">8.3</span> Moderated mediation</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#on-all-pathways"><span class="header-section-number">8.3.1</span> On all pathways</a></li>
+<li><a class="nav-link" href="#using-a-continuous-moderator"><span class="header-section-number">8.3.2</span> Using a continuous moderator</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/08-Mediation.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/08-Mediation.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer>
+</body>
+</html>
