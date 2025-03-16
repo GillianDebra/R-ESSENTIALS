@@ -14,7 +14,7 @@ In this part I will be covering:
 
 ## Access different parts of a dataset
 Let's start with the demonstration or a refresher of the basics. For the examples below, I will generate my own dataset using the **data.frame()** function. As the values of this dataset will be generated at random, I will *set a seed* so that in each run, the generated data will be identical.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 set.seed(123) # Note, the number can be anything (but the results will be different )
 
 mydata = data.frame(
@@ -26,7 +26,7 @@ mydata = data.frame(
 
 ### Viewing the data
 Now that I have made a dataset, I'll briefly show you how to view your data as RStudio allows different ways to do so. With code:
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   mydata
   head(mydata) # shows the first 10 entries of a dataset
   View(mydata) # Prompts the dataset in a separate window
@@ -41,7 +41,7 @@ As shown in the image above, the "view window" allows to **quickly track any cha
 
 ### Several examples
 A dataset consists of rows and columns. In referring to these, R will **first look at the rows** and **then at the columns**. For example, *dataset*[1,2] will output the value at the cross point of the first row and second column (28.75775). Let's learn through example.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # If I want to see the first row of all columns:
   mydata[1,] # Again rows are on the left of the comma (columns on the right)
 
@@ -67,7 +67,7 @@ A dataset consists of rows and columns. In referring to these, R will **first lo
 
 ```
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
  # Suppose I want to look at certain values. For example, I want to look at scores but only from females:
   mydata$scores[mydata$gender=="female"] # Within the column scores, search for scores that "row-wise"   corresponds with "female"
   
@@ -93,7 +93,7 @@ Insight in the above was required to compute novel variables and filter data. **
 I will briefly show how to do different (basic) math calculations and how to make a correlation matrix in R. Although I have to note that there are different ways to do so.
 
 ## Mathematical calculations in R
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 # Defining a new dataset (with the same name)
 set.seed(0209)
 mydata = data.frame(v1 = runif(10,1,10),
@@ -102,7 +102,7 @@ mydata = data.frame(v1 = runif(10,1,10),
 ```
 
 ### Sum
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # Take the sum across all values of column v1
   sum(mydata$v1)
   
@@ -128,7 +128,7 @@ mydata = data.frame(v1 = runif(10,1,10),
 ```
 
 ### Average
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # Take the mean of column v1
   mean(mydata$v1)
   
@@ -140,7 +140,7 @@ mydata = data.frame(v1 = runif(10,1,10),
 ```
 
 ### Variance, standard deviation, and correlations
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # variance
   var(mydata$v1)
 
@@ -154,7 +154,7 @@ mydata = data.frame(v1 = runif(10,1,10),
 ```
 
 ### Other calculations and the describe function(!)
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # range
   range(mydata$v1)
   
@@ -172,7 +172,7 @@ mydata = data.frame(v1 = runif(10,1,10),
 ```
 
 **Or use the describe function from the [psych package](https://cran.r-project.org/web/packages/psych/index.html) to have a quick overview**
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 library(psych)
 describe(mydata)
 describe(mydata[,c("v1","v3")]) # If you want to use it for specific variables
@@ -180,7 +180,7 @@ describe(mydata[,c("v1","v3")]) # If you want to use it for specific variables
 
 ### What if there are missing values?
 As it turns out, taking the sum, mean, correlation, among other things, will output NA if I would apply the above methods. Therefore, I will both illustrate and correct this issue:
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   mini_data = data.frame(a = round(runif(30,1,10)),
                          b = round(runif(30,1,10))
   )
@@ -205,7 +205,7 @@ As it turns out, taking the sum, mean, correlation, among other things, will out
 
 It is often appreciated to show the correlations between all relevant variables in your dataset (personalliy, I frequently spot them in papers from social and behavioral disciplines). For this purpose I will create a new dataset in which variables are "taken from" a multivariate normal distribution and in which the correlations between variables are prespecified. For transparency I show how I made this dataset (in case you're interested).
 
-```{r eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=TRUE, message=FALSE, warning=FALSE, include=TRUE}
 # OPTIONAL, just if your interested in how to create a correlated dataset
   library(MASS)  
 
@@ -261,7 +261,7 @@ It is often appreciated to show the correlations between all relevant variables 
 ```
 
 Now, there are plethora of packages available to visualize correlations. I'll point you to a relatively recent one [corrtable](https://cran.r-project.org/web/packages/corrtable/index.html). This package makes it easy to create and save a correlation matrix provided with frequentist p-value significance indications ("the significance stars"). In this dataset, I want to have the correlations between all variables. **However**, if you want to do this with a smaller subset of variables, then extract those variables first in a separate dataset and use this smaller dataset to create your correlation matrix.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 
   new_correlation_matrix = corrtable::correlation_matrix(corr_data) # your correlations accompanied with the significance stars
   new_correlation_matrix[upper.tri(new_correlation_matrix)]="" # Remove the upper part, so we get the typical triangle shape
@@ -272,7 +272,7 @@ Now, there are plethora of packages available to visualize correlations. I'll po
 ```
 
 Note that you only get the significance stars. If you want the specific p-values from the above matrix you can use e.g., the cor_pmat() function from the [ggcorrplot package](https://cran.r-project.org/web/packages/ggcorrplot/index.html).
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   library(ggcorrplot)
   mycorr_pvalues = round(cor_pmat(corr_data),3) 
 ```
@@ -281,7 +281,7 @@ Note that you only get the significance stars. If you want the specific p-values
 We finally arrive at the **dplyr package**. This package contains a variety of functions to ease data preprocessing/cleaning. For the purpose of this guide, I will go through some functions that I frequently use on my adventures in data analysis. If you are hungry for more, **I highly recommend** to have a look at the [following cheat sheet (click here)](https://nyu-cdsc.github.io/learningr/assets/data-transformation.pdf). 
 
 In the various examples below, I will use a **fabricated dataset**. Next to the dplyr package, I will use the [stringr package](https://cran.r-project.org/web/packages/stringr/index.html) (simplifying operations with strings/"text" variables) and the [readxl package](https://cran.r-project.org/web/packages/readxl/index.html) (to load this fabricated dataset)
-```{r message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 pacman::p_load(dplyr,stringr,readxl)
 mydata = read_xlsx("data_files/mydata.xlsx")
 ```
@@ -292,7 +292,7 @@ do this
 do that
 do this...
 You can keep all of your code on the same line, *chaining your functions/calculations together* (**as shown in later examples and my demonstration at the end**). 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 
   # Suppose you want to only SHOW/KEEP rows that have a "1" in the variable "cond" (filtering out the rest)
   mydata %>% filter(cond==1) 
@@ -325,7 +325,7 @@ You can keep all of your code on the same line, *chaining your functions/calcula
 
 ### Dplyr: Select
 Similar to filter, but here we will select or exclude columns/variables so we go "column-wise" instead of row-wise.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # Select (KEEP) columns q_1 and r_2
   mydata %>% select(q_1, r_2 )
   
@@ -348,7 +348,7 @@ Similar to filter, but here we will select or exclude columns/variables so we go
 
 ### Dplyr: Mutate
 Now that we can include or exclude certain columns and rows, we want to start transforming our variables. in dplyr language we will **mutate** them. The beauty with mutate, is that we can do multiple *mutations* in one go. 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   
   # Suppose I want to create a novel variable containing the natural logarithm of the variable "rt". I do NOT want to overwrite the original "rt" variable
   # Since rt is a character (and not a number) I will FIRST transform/mutate it from character to numeric and THEN compute the natural logarithm
@@ -372,7 +372,7 @@ Now that we can include or exclude certain columns and rows, we want to start tr
 ```
 
 **Watch out if you use *across* in combination with another function that uses variables simultaneously (such as rowMeans or rowSums)!** Again, *across* works with variables "one at a time". Luckily, this can be easily fixed by knowing where to place *across*.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 # Lets take the row-wise average score of all variables starting with "q" (ignoring empty variables)
 # HOWEVER, doing it wrong first (so expect an error)
   mydata %>% mutate(average_score=across(starts_with("q")), ~ rowMeans(., na.rm=TRUE)) 
@@ -382,7 +382,7 @@ Now that we can include or exclude certain columns and rows, we want to start tr
 ```
 A final example
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
     # Similar example but a "bit more advanced". Say we want to have a sum score across variables starting with "q". However, now we want to set this sum score to NA (empty/not administered) if at least ONE value is NA/missing (row-wise).
   mydata %>% mutate(na_count=rowSums(is.na(across(starts_with("q")))),
                              average_score=ifelse(na_count>=1, NA, average_score)
@@ -391,13 +391,13 @@ A final example
 
 #### (Re)coding (questionnaire) items
 In surveys there is often a need to (re)code responses (like *agree* and *totally disagree*), giving these a numerical value. Fortunately, the mutate function is a versatile in this regard as well. One way is to use the versatile *ifelse* function within mutate (**but see a more straightforward approach afterwards**). In short, you first need to specify a condition (e.g., if the item is scored as *"agree"*), then you specify what should be done if so (the item should be given a value of...), and finally you indicate what value should be given if not. Lets give an *"easy"* example
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   # If the variable q_1 is scored as "heavily disagree", give it value a 1, else give it a value of 0
   mydata %>% mutate(q_1 = ifelse(q_1=="heavily disagree", 1, 0)       )
 ```
 
 Looks straightforward right? However, suppose you have five response categories:
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   mydata %>% mutate(q_1 = ifelse(
     q_1=="heavily disagree", 1, ifelse(
       q_1== "disagree", 2, ifelse(
@@ -411,7 +411,7 @@ Looks straightforward right? However, suppose you have five response categories:
 ```
 
 The above follows the same logic (if..., do ..., else do...) but a lot of brackets... and unnecessary in this case. Not to speak ill about about the ifelse() function, it is very flexible in numerous situations. Fortunately in this context, there exist a more straightforward alternative: **recode**. With recode I can give text ("agree") a numerical value, and a value (2) a textual value. Let us redo the above example and change text to numbers, and back.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
  # Take again the example with five response categories. 
  # Lets recode text to numbers:
   
@@ -448,7 +448,7 @@ The above follows the same logic (if..., do ..., else do...) but a lot of bracke
 
 ### Dplyr: Arrange
 Arrange data in ascending or descending order based on value or alphabetical order. 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 
   # Arrange reaction time (rt) from lowest value ascending to highest
   mydata %>% arrange(rt)
@@ -462,7 +462,7 @@ Arrange data in ascending or descending order based on value or alphabetical ord
 
 ### Dplyr: Group_by and Summarize
 Suppose we want to compute something like the sum or mean, per *"cluster variable"* such as per each participant, per each condition, per each plant or animal species... We can do so by grouping and then summarizing it, which will create **a tinier dataset including the desired computation(s)**. First we will need to define our "grouping/cluster" variables. Then we need to indicate what we want to do per this cluster variable. As an illustration, suppose you want to have an average per participant. 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 
 tempdata = data.frame(
   participant = rep(c(1:3), each = 3),
@@ -474,7 +474,7 @@ group_by(participant) %>% summarize(average_per_participant = mean(score) )
 You may "visualize" the above procedure as:
 ![](images/Data cleaning/Cleaning_3.png)
 Note that you can group by multiple variables (e.g., participants within countries). Below, some examples with group by and summarize.
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
   
   # Suppose we want to compute the mean and sd for rt per participant.
   mydata %>% group_by(participant) %>% summarize(aggr_rt=mean(rt), sd_rt=sd(rt)) 
@@ -494,7 +494,7 @@ There exist different types of join() such as inner_join, right_join. Personally
 
 My advice, after joining, **always check whether the amount of variables in your original dataset stayed the same**. Sometimes it could be that (unbeknownst to you) there are **duplicates** or **empty values (coded as NA)** in your variables. This may lead to left_join returning more values. So check for these if you would encounter this problem. What also could help is to make sure that your second dataset (the one to glued on the main one) is as small as possible (while withholding necessary information) and here group_by and summarize could help. Below, a small example of left_join, the last one before we move to a "live" demonstration of data preprocessing. 
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 
   # Say we want to "join/glue" the aggregated rt and sd from the previous code exaple to the main dataset 
   data_aggr = mydata %>% group_by(participant) %>% summarize(aggr_rt=mean(rt), sd_rt=sd(rt)) 
@@ -512,7 +512,7 @@ To conclude this section, I will demonstrate a complete example from scratch, in
   3. Join datasets
   4. Create the preprocessed dataset
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=TRUE}
 ############################
 # Preprocessing example    #
 ############################  
