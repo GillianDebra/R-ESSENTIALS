@@ -1,4 +1,4 @@
-book_filename: "R Essentials"
+book_filename: "R Core Basics Unleashed"
 new_session: true
 before_chapter_script: _common.R
 delete_merged_file: true

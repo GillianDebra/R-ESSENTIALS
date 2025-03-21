@@ -5,7 +5,7 @@ bookdown::bs4_book:
   output_dir: "docs"
   theme:
     primary: "#0d48a2"
-  repo: https://github.com/GillianDebra/R-ESSENTIALS.git
+  repo: https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git
 # bookdown::pdf_book:
 #  includes:
 #    in_header: preamble.tex
