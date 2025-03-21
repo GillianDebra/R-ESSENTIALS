@@ -92,62 +92,75 @@ a:hover {
 
 
 
-/* Default layout for larger screens */
-.book .book-body .page-wrapper .page-inner {
-  max-width: 1200px !important; 
-}
-
-
-.book .book-summary {
-  /* Table of content */
-  width: 220px;
-  left: -30px;
-}
-
-.book .book-body {
-  /* Adjust margins */
-  margin-left: 150px;
-  margin-right: 150px;
-}
-
-
-
-
-/* Medium-sized screens (tablets, smaller laptops) */
-@media (max-width: 1200px) {
-  .book .book-body .page-wrapper .page-inner {
-    max-width: 90%; /* Adjust content width relative to screen size */
-  }
-
-  .book .book-summary {
-    width: 220px;
-  }
-
-  .book .book-body {
-    margin-left: 150px;
-      margin-right: 150px;
-  }
-}
-
-
-
-
-
 /* Small screens (mobile phones) */
-@media (max-width: 768px) {
-  .book .book-body .page-wrapper .page-inner {
-    max-width: 100%; /* Use full width on small screens */
-    padding: 10px; /* Add some padding for readability */
-  }
 
-  .book .book-summary {
-    width: 100%; /* Allow TOC to span full width */
+
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 569px) and (orientation: portrait){
+  
+  
+  .book .book-body .page-wrapper .page-inner {
+    max-width: 33%; /* Use full width on small screens */
+    padding: 10px; /* Add some padding for readability */
     position: relative; /* Stack TOC above content */
   }
 
   .book .book-body {
     margin-left: 0;
+    margin-right: 0;
   }
-  
+ 
+ 
+ /* CUSTOMIZATION: Change Font & Text Size */
+body {
+    font-family: Georgia, serif;
+    font-size: 6px;
+    margin-left: 0px;
 }
 
+/*                  Customize Chapter Titles (With h1 = first level)          */
+
+/* h1 = first header (i.e., level 1) */
+h1 {
+    color: #0d48a2;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 2px;
+}
+
+h2 {
+    color: #0066cc;   
+    font-size: 10px;  
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 2px;
+}
+
+/* Style for H3 (Section Titles) */
+h3 {
+    color: #0066ff;
+    font-size: 8px;
+    margin-top: 3px;
+}
+
+/* Style for H4 (Section Titles) */
+h4 {
+    color: #0091ff;
+    font-size: 6px;
+    margin-top: 3px;
+}
+
+ 
+
+}
+
+
+
+
+
+  
+  
+  
+  

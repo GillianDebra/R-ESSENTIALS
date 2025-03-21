@@ -1,7 +1,7 @@
 --- 
-title: "R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights"
+title: "R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights"
 author: "Gillian Debra"
-date: "2025-03-16"
+date: "2025-03-21"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
@@ -12,7 +12,7 @@ description: |
   The HTML output format for this example is bookdown::gitbook,
   set in the _output.yml file.
 link-citations: yes
-github-repo: rstudio/bookdown-demo
+github-repo: https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git
 ---
 
 # Delighted to have you!<br>Welcome to: {-}

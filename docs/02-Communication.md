@@ -78,7 +78,7 @@ By default you see something like this:
 <br>
 ![](images/Prologue/Prologue_11.png) 
 
-I believe this is more or less self-explanatory. My advice would be to change the date to: *"2025-03-16"* so that the date automatically updates to the time you **knit** the document.
+I believe this is more or less self-explanatory. My advice would be to change the date to: *"2025-03-21"* so that the date automatically updates to the time you **knit** the document.
 Now with HTML documents we can add some extra customization options including a **t**able **o**f **c**ontent, and more. Behold the following example. 
 <br>
 <br>

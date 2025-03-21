@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<title>Chapter 3 Data cleaning and descriptive statistics | R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
 <meta name="author" content="Gillian Debra">
 <meta name="description" content="Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, merge datasets, and...">
 <meta name="generator" content="bookdown 0.42 with bs4_book()">
-<meta property="og:title" content="Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:title" content="Chapter 3 Data cleaning and descriptive statistics | R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
 <meta property="og:type" content="book">
 <meta property="og:description" content="Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, merge datasets, and...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 3 Data cleaning and descriptive statistics | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:title" content="Chapter 3 Data cleaning and descriptive statistics | R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
 <meta name="twitter:description" content="Opening data files is one thing, preprocessing (“cleaning”) them is something else entirely. You may need to restructure your data, change variable values, compute new ones, merge datasets, and...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 
     <div class="d-flex align-items-start justify-content-between">
       <h1>
-        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+        <a href="index.html" title="">R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
       </h1>
       <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
@@ -59,7 +59,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -657,8 +657,8 @@ Note that you can group by multiple variables (e.g., participants within countri
 <span>  <span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">anytime</span>,<span class="va">lubridate</span><span class="op">)</span></span>
 <span>  <span class="va">mydata</span> <span class="op">=</span> <span class="va">mydata</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>age <span class="op">=</span><span class="fu">time_length</span><span class="op">(</span></span>
 <span>    <span class="fu">interval</span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="fu">anytime</span><span class="op">(</span><span class="va">birth_date</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/zoo/man/yearmon.html">as.Date</a></span><span class="op">(</span><span class="st">"2023-04-01"</span><span class="op">)</span>  <span class="co"># Note, has to be in YYYY/MM/DD format.</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="fu">anytime</span><span class="op">(</span><span class="va">birth_date</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="st">"2023-04-01"</span><span class="op">)</span>  <span class="co"># Note, has to be in YYYY/MM/DD format.</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    unit <span class="op">=</span><span class="st">"year"</span> <span class="co"># To get the difference in years</span></span>
 <span>  <span class="op">)</span></span>
@@ -756,8 +756,8 @@ Note that you can group by multiple variables (e.g., participants within countri
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/03-Preprocessing.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/03-Preprocessing.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git/blob/master/03-Preprocessing.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git/edit/master/03-Preprocessing.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -769,7 +769,7 @@ Note that you can group by multiple variables (e.g., participants within countri
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+    <p>"<strong>R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-21.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

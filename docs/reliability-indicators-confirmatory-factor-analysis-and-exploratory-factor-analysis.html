@@ -4,15 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
+<title>Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</title>
 <meta name="author" content="Gillian Debra">
 <meta name="description" content="By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this...">
 <meta name="generator" content="bookdown 0.42 with bs4_book()">
-<meta property="og:title" content="Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta property="og:title" content="Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
 <meta property="og:type" content="book">
 <meta property="og:description" content="By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
+<meta name="twitter:title" content="Chapter 5 Reliability indicators, Confirmatory Factor Analysis, and Exploratory Factor Analysis | R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights">
 <meta name="twitter:description" content="By now you have some useful skills under your belt: data preprocessing/cleaning, calculations, data visualization… For the remaining parts, I shift the focus more into data analysis, and this...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -34,7 +34,7 @@
 
     <div class="d-flex align-items-start justify-content-between">
       <h1>
-        <a href="index.html" title="">R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
+        <a href="index.html" title="">R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</a>
       </h1>
       <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
@@ -59,7 +59,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/GillianDebra/R-ESSENTIALS.git">View book source <i class="fab fa-github"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git">View book source <i class="fab fa-github"></i></a></p>
         </div>
       </nav>
 </div>
@@ -307,13 +307,13 @@ Suppose I ran the following code:</p>
 <span><span class="co">#&gt; [1] 0.2725901</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $se</span></span>
-<span><span class="co">#&gt; [1] 0.03310795</span></span>
+<span><span class="co">#&gt; [1] 0.02965209</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $ci.lower</span></span>
-<span><span class="co">#&gt; [1] 0.2247075</span></span>
+<span><span class="co">#&gt; [1] 0.2528785</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $ci.upper</span></span>
-<span><span class="co">#&gt; [1] 0.3123625</span></span>
+<span><span class="co">#&gt; [1] 0.3229795</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $conf.level</span></span>
 <span><span class="co">#&gt; [1] 0.95</span></span>
@@ -1147,8 +1147,8 @@ Flora, D. B. (2020). Your coefficient alpha is probably wrong, but which coeffic
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/GillianDebra/R-ESSENTIALS.git/blob/master/05-Reliability_CFA_EFA.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/GillianDebra/R-ESSENTIALS.git/edit/master/05-Reliability_CFA_EFA.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git/blob/master/05-Reliability_CFA_EFA.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/GillianDebra/R_Core_Basics_Unleashed-Data-Preprocessing_Visualization_and_Analysis_using_R.git/edit/master/05-Reliability_CFA_EFA.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -1160,7 +1160,7 @@ Flora, D. B. (2020). Your coefficient alpha is probably wrong, but which coeffic
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>R Essentials: a Practical Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-16.</p>
+    <p>"<strong>R Core Basics Unleashed: a Step-by-Step Guide to Data Cleaning, Stunning Visuals, and Analytic Insights</strong>" was written by Gillian Debra. It was last built on 2025-03-21.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
