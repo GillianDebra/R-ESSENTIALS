@@ -1,13 +1,10 @@
 Welcome! 
 
-This is a minimal example of a book based on R Markdown and **bookdown** (https://github.com/rstudio/bookdown). 
+"R Core Basics Unleashed" is an R guide that covers the following topics: loading data files, R projects and R Markdown, data preprocessing, data visualisation, and data analysis (exploratory and confirmatory factor analysis, linear regression, mediation, ANOVA and MANOVA, and missing data)
 
-This template provides a skeleton file structure that you can edit to create your book. 
+This guide is made using R Markdown and **bookdown** (https://github.com/rstudio/bookdown).  
 
-The contents inside the .Rmd files provide some pointers to help you get started, but feel free to also delete the content in each file and start fresh.
-
-Additional resources:
+Additional resources for **bookdown**:
 
 The **bookdown** book: https://bookdown.org/yihui/bookdown/
-
 The **bookdown** package reference site: https://pkgs.rstudio.com/bookdown
