@@ -41,13 +41,13 @@ myplot = intro_data %>%
   geom_path(color="black", size = 1.5, alpha = 0.75) +
   geom_point(aes(group = move), size = 8) +  # Ensure points reveal synchronously
   coord_cartesian(xlim = c(1,6)) + 
-  geom_text(aes(label = mytext_essentials), x = 4, y = 3, size = 12, color = "black", alpha = 0.9) +
-  geom_text(aes(label=mytext_name),x=4, y=1.75, size =12, color="black", apha = 0.8) +
+  geom_text(aes(label = mytext_essentials), x = 4, y = 3, size = 10, color = "black", alpha = 0.9) +
+  geom_text(aes(label=mytext_name),x=4, y=1.75, size =10, color="black", apha = 0.8) +
   theme_void() +
   theme(legend.position = "None") +
   transition_reveal(along = move)  
 
-animate(myplot, duration = 5, fps = 10, end_pause = 13)  
+animate(myplot, duration = 5, fps = 10, end_pause = 14)  
 ```
 
 This guide will tackle **data preprocessing** (the various steps to obtain a *"clean and ready"* dataset using e.g., **dplyr**), **data visualization** (using **ggplot2**), and **data analysis** (**linear regression, analysis of variance, and structural equation modelling**), using **R and RStudio**.

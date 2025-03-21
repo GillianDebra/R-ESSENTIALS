@@ -261,13 +261,13 @@ You can also request a spread (e.g., confidence intervals) surrounding our omega
 #> [1] 0.2725901
 #> 
 #> $se
-#> [1] 0.02965209
+#> [1] 0.02179927
 #> 
 #> $ci.lower
-#> [1] 0.2528785
+#> [1] 0.2286402
 #> 
 #> $ci.upper
-#> [1] 0.3229795
+#> [1] 0.2844593
 #> 
 #> $conf.level
 #> [1] 0.95
